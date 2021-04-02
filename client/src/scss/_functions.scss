@@ -1,0 +1,82 @@
+// input autocomplete transparent mixin
+// must be inluded inside of input element
+@mixin removeAutoCompleteBG($fontColor) {
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus,
+	&:-webkit-autofill:active {
+		// the time it takes to remove the bg color
+		transition: background-color 5000s ease-in-out 0s;
+		// change the text color
+		-webkit-text-fill-color: $fontColor !important;
+	}
+}
+
+// ignore touch screen devices for hover
+// must be inluded inside of an element to be hovered
+@mixin trueHover($opacity) {
+	@media (hover: hover) {
+		&:hover {
+			opacity: $opacity;
+		}
+	}
+}
+
+// font size
+@function getFontSize($type, $target) {
+	@if $type == s {
+		@return map-get($font-size-s, $target);
+	} @else {
+		@error "Invalid type #{type}.";
+	}
+}
+@mixin setFontSize($type) {
+	.normal-1 {
+		font-size: getFontSize($type, normal-1);
+	}
+	.normal-2 {
+		font-size: getFontSize($type, normal-2);
+	}
+	.normal-3 {
+		font-size: getFontSize($type, normal-3);
+	}
+}
+
+// max width
+@function getMaxWidth($target) {
+	@return map-get($max-width, $target);
+}
+
+// responsive mixin
+@mixin media-md {
+	@media screen and (min-width: 48em) {
+		// 768px
+		@content;
+	}
+}
+@mixin media-lg {
+	@media screen and (min-width: 75em) {
+		// 1200px
+		@content;
+	}
+}
+@mixin media-xl {
+	@media screen and (min-width: 118.75em) {
+		// 1900px
+		@content;
+	}
+}
+
+// display flex
+@mixin setFlex($direction, $align1, $align2) {
+	display: flex;
+	flex-direction: $direction;
+	justify-content: $align1;
+	align-items: $align2;
+	align-content: $align2;
+}
+
+// get colors
+@function getColors($target) {
+	@return map-get($colors, $target);
+} ;

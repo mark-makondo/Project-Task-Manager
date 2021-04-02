@@ -1,0 +1,209 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+ul {
+  list-style: none;
+}
+
+.App {
+  position: relative;
+  font-family: "Open Sans", sans-serif;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  background: #82828290;
+  border-radius: 1rem;
+  max-width: 30rem;
+  width: 25rem;
+  height: 20rem;
+  margin: 1rem;
+  padding: 1.5rem 1rem;
+}
+
+.login-form__bg {
+  position: absolute;
+  max-width: 100%;
+  max-height: 100%;
+  bottom: 0;
+}
+
+.login-form .fa-spin {
+  margin: 1rem 0;
+  font-size: 2rem;
+  color: #2f2e41;
+}
+
+.login-form .error {
+  text-decoration: none;
+  margin-bottom: 0.3rem;
+  color: red;
+}
+
+.login-form .button {
+  padding: 0.35rem 0.8rem;
+  border-radius: 0.3rem;
+  border: none;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1px;
+  outline: none;
+  transition: 150ms linear;
+  z-index: 1;
+  cursor: pointer;
+  text-align: center;
+}
+
+.login-form .button.google-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  background: #277eef;
+  margin-bottom: 1.5rem;
+}
+
+.login-form .button.google-button svg {
+  margin-right: 0.2rem;
+}
+
+.login-form .button.form-button {
+  background: #6c63ff;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+@media (hover: hover) {
+  .login-form .button:hover {
+    opacity: 0.9;
+  }
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  width: 90%;
+  border-top: 2px solid;
+  border-color: #2f2e41;
+  padding-top: 1.5rem;
+}
+
+.login-form form .grouped-input {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background: #2f2e41;
+  color: white;
+  border-radius: 0.5rem;
+}
+
+.login-form form .grouped-input label {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 600;
+  pointer-events: none;
+  transition: 150ms all linear;
+  color: #82828290;
+}
+
+.login-form form .grouped-input:nth-of-type(1) {
+  margin-bottom: 0.5rem;
+}
+
+.login-form form .grouped-input input {
+  padding: 0 1rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-top: 1.2rem;
+  outline: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid;
+  text-align: center;
+  width: 100%;
+  border-color: #82828290;
+}
+
+.login-form form .grouped-input input:focus, .login-form form .grouped-input input:valid {
+  border-color: #82828290;
+  color: white;
+}
+
+.login-form form .grouped-input input:focus ~ label, .login-form form .grouped-input input:valid ~ label {
+  width: 30%;
+  height: 30%;
+  left: 0.2rem;
+  top: 0.2rem;
+  margin-bottom: 1rem;
+  color: #828282;
+  opacity: 1;
+  justify-content: flex-start;
+}
+
+.login-form form .grouped-input input:-webkit-autofill, .login-form form .grouped-input input:-webkit-autofill:hover, .login-form form .grouped-input input:-webkit-autofill:focus, .login-form form .grouped-input input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.home {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.home-bg {
+  position: absolute;
+  background-image: url(../../assets/none-svg/home/home-1280-medium.jpg);
+  background-color: #cccccc;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-blend-mode: difference;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  z-index: -1;
+}
+
+.normal-1 {
+  font-size: 1rem;
+}
+
+.normal-2 {
+  font-size: 0.75rem;
+}
+
+.normal-3 {
+  font-size: 0.75rem;
+}
+/*# sourceMappingURL=style.css.map */

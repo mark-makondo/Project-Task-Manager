@@ -1,0 +1,17 @@
+// initializations
+@import 'variables';
+@import 'init';
+@import 'functions';
+
+// components
+@import '../components/form/loginForm/loginForm';
+@import '../components/form/proceedForm//proceedForm';
+
+// component modal
+
+// pages
+@import '../pages/dashboard/dashboard';
+@import '../pages/home/home';
+
+// responsive
+@import 'globalResponsive';

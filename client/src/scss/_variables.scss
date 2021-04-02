@@ -1,0 +1,35 @@
+// font size variables
+$font-size-s: (
+	'normal-1': 1rem,
+	// 20px
+	'normal-2': 0.75rem,
+	// 16px
+	'normal-3': 0.75rem,
+	// 14px
+);
+
+// max width variables
+$max-width: (
+	's': 20rem,
+	'm': 40rem,
+	'l': 50rem,
+	'xl': 95rem,
+);
+
+// colors
+$colors: (
+	'primary': #2f2e41,
+	'secondary': #828282,
+	'secondary-fade': #82828290,
+	'button-1': #277eef,
+	'button-2': #6c63ff,
+	'selected': #cecece,
+	'fade-selected': #e5e5e5,
+	'border': #707070,
+	'btn-status-stuck': #ff0000,
+	'btn-status-working': #6c63ff,
+	'btn-status-completed': #59df62,
+);
+
+// custom
+$little-shadow: 0px 3px 8px #00000025;
