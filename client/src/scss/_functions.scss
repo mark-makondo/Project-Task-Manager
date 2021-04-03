@@ -14,11 +14,45 @@
 
 // ignore touch screen devices for hover
 // must be inluded inside of an element to be hovered
-@mixin trueHover($opacity) {
+@mixin responsiveHover() {
 	@media (hover: hover) {
 		&:hover {
-			opacity: $opacity;
+			@content;
 		}
+	}
+}
+
+// custom button for consistency
+// must be included insife of a button element
+@mixin customButtonWithHover($color, $bg) {
+	padding: 0.35rem 0.8rem;
+	border-radius: 0.4rem;
+	border: none;
+	color: $color;
+	font-weight: 600;
+	letter-spacing: 1px;
+	outline: none;
+	transition: 150ms linear;
+	z-index: 1;
+	cursor: pointer;
+	text-align: center;
+	background: $bg;
+	text-transform: uppercase;
+
+	@include responsiveHover {
+		@content;
+	}
+}
+
+// custom hovered elements for consistency
+// must be include inside of an element to be hovered
+@mixin customHover {
+	transition: 150ms linear;
+	padding: 0.5rem;
+	cursor: pointer;
+	border-radius: 0.3rem;
+	@include responsiveHover() {
+		background-color: getColors(fade-selected);
 	}
 }
 

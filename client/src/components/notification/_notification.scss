@@ -1,0 +1,116 @@
+.notif {
+	position: relative;
+	margin-top: 1rem;
+	&-bell-wrapper {
+		position: relative;
+		&:before,
+		&:after {
+			color: #fff;
+			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+		}
+
+		&:after {
+			font-family: Arial;
+			font-size: 0.7em;
+			font-weight: 700;
+			position: absolute;
+			top: -15px;
+			right: -15px;
+			padding: 5px 8px;
+			line-height: 100%;
+			border: 2px #fff solid;
+			border-radius: 60px;
+			background: #3498db;
+			opacity: 0;
+			content: attr(data-count);
+			opacity: 0;
+			transform: scale(0.5);
+			transition: transform, opacity;
+			transition-duration: 0.3s;
+			transition-timing-function: ease-out;
+		}
+
+		&.show-count:after {
+			transform: scale(1);
+			opacity: 1;
+		}
+	}
+	.wrapper {
+		position: relative;
+		transition: all 150ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+		svg {
+			display: inline-block;
+			position: relative;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			width: 2rem;
+			path,
+			circle {
+				cursor: pointer;
+			}
+			&.grey path {
+				fill: rgb(62, 83, 126) !important;
+			}
+			&.grey circle {
+				fill: rgb(62, 83, 126) !important;
+			}
+		}
+
+		.bell {
+			fill: #fff;
+			&.animate {
+				animation: clapper 1.7s ease-in-out infinite;
+			}
+		}
+		@keyframes clapper {
+			0% {
+				transform: translateX(10px);
+			}
+			25% {
+				transform: translateX(60px);
+			}
+			50% {
+				transform: translateX(-40px);
+			}
+			75% {
+				transform: translateX(-10px);
+			}
+			100% {
+				transform: translateX(10px);
+			}
+		}
+	}
+
+	.notification {
+		display: flex;
+		position: absolute;
+		background: #3e537e;
+		height: auto;
+		width: 15rem;
+		border-radius: 10px;
+		flex-direction: column;
+		transform: scale(1);
+		transition: all 150ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+		&.hide {
+			transform: scale(0);
+		}
+		&:before {
+			content: '';
+			position: absolute;
+			width: 40px;
+			height: 40px;
+			background: rgb(62, 83, 126);
+			transform: rotate(45deg);
+			top: -8px;
+			left: calc(50% - 2px);
+		}
+		.section {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			flex: 1;
+			border-bottom: 2px rgb(50, 70, 113) solid;
+		}
+	}
+}
+@import './notificationResponsive';

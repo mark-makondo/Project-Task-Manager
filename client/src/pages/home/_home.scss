@@ -1,22 +1,8 @@
 .home {
+	@include setFlex(row, center, center);
+
 	position: relative;
 	width: 100vw;
 	height: 100vh;
-	@include setFlex(row, center, center);
-	&-bg {
-		position: absolute;
-		background-image: url(../../assets/none-svg/home/home-1280-medium.jpg);
-		background-color: #cccccc;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-blend-mode: difference;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-		margin: auto;
-		z-index: -1;
-	}
 }
 @import './homeResponsive';

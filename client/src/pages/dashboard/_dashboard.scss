@@ -1,1 +1,16 @@
+.dashboard {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+
+	&-content {
+		position: relative;
+		display: flex;
+		flex: 1 1 auto;
+		max-height: 100%;
+		overflow: hidden;
+	}
+}
+
 @import './dashboardResponsive';

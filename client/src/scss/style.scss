@@ -3,15 +3,30 @@
 @import 'init';
 @import 'functions';
 
-// components
+// home components
+@import '../components/homeBackground/homeBackground';
 @import '../components/form/loginForm/loginForm';
-@import '../components/form/proceedForm//proceedForm';
+@import '../components/form/proceedForm/proceedForm';
+@import '../components/form/registerForm/registerForm';
+
+// dashboard components
+@import '../components/navbar/navbar';
+@import '../components/notification/notification';
+@import '../components/sidebar/sidebar';
+
+// table templates from dashboard
+@import '../components/tables/tableOverview/tableOverview';
 
 // component modal
+@import '../components/modal/profileModal/profileModal';
+@import '../components/modal/createProjectModal/createProjectModal';
+@import '../components/modal/detailsModal/detailsModal';
 
 // pages
 @import '../pages/dashboard/dashboard';
 @import '../pages/home/home';
+@import '../pages/overview/overview';
+@import '../pages/project/project';
 
 // responsive
 @import 'globalResponsive';

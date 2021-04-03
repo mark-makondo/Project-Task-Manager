@@ -1,0 +1,32 @@
+.navbar {
+	@include setFlex(row, center, center);
+	position: relative;
+	background: getColors(primary);
+	height: 4rem;
+
+	&-wrapper {
+		@include setFlex(row, space-between, center);
+
+		width: 100%;
+		margin: 0 1rem;
+	}
+	&__logo {
+		#project-tm {
+			fill: white;
+		}
+		#line {
+			stroke-width: 2px;
+			stroke: white;
+		}
+	}
+	&__right {
+		@include setFlex(row, flex-end, center);
+
+		button {
+			@include customButtonWithHover(white, getColors(button-2)) {
+				opacity: 0.8;
+			}
+			margin-left: 2rem;
+		}
+	}
+}

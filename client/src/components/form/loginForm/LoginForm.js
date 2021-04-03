@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // assets
 import { ReactComponent as Sleeping } from '../../../assets/svg/login-bg-svg.svg';
@@ -9,11 +10,11 @@ const LoginForm = ({ formClickhandler, inputChangeHandler }) => {
 	let error = false;
 
 	return (
-		<div className='login-form normal-1'>
+		<div className='login-form'>
 			<Sleeping className='login-form__bg' width='100%' height='85%' />
-			<figure className='google-button normal-3 button'>
-				<GoogleLogo width='1.5rem' height='1.5rem' />
 
+			<figure className='google-button normal-3'>
+				<GoogleLogo width='1.5rem' height='1.5rem' />
 				<figcaption> Login with Google</figcaption>
 			</figure>
 
@@ -47,14 +48,24 @@ const LoginForm = ({ formClickhandler, inputChangeHandler }) => {
 					</label>
 				</div>
 				{loading ? (
-					<i class='fas fa-spinner fa-spin'></i>
+					<i className='fas fa-spinner fa-spin'></i>
 				) : (
-					<button className='form-button normal-3 button' type='submit'>
+					<button className='form-button normal-3' type='submit'>
 						Login
 					</button>
 				)}
 			</form>
-			{error ? <span className='error'>{error}</span> : ''}
+			<Link to='/register' className='login-form__gotoreg normal-2'>
+				Don't have an account yet?
+			</Link>
+			{error ? (
+				<div className='error normal-2'>
+					<span>Login Error: </span>
+					{error}
+				</div>
+			) : (
+				''
+			)}
 		</div>
 	);
 };

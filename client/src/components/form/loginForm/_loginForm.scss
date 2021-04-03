@@ -15,6 +15,7 @@
 		max-width: 100%;
 		max-height: 100%;
 		bottom: 0;
+		z-index: 0;
 	}
 	.fa-spin {
 		margin: 1rem 0;
@@ -24,36 +25,28 @@
 	.error {
 		text-decoration: none;
 		margin-bottom: 0.3rem;
-		color: red;
+		color: getColors(btn-status-stuck);
+		font-weight: 600;
+		z-index: 1;
+		background-color: getColors(primary);
+		padding: 0.1rem 0.3rem;
+		border-radius: 0.2rem;
+		margin-top: 1rem;
+		span {
+			color: white;
+		}
 	}
 
-	.button {
-		padding: 0.35rem 0.8rem;
-		border-radius: 0.3rem;
-		border: none;
-		color: white;
-		font-weight: 600;
-		letter-spacing: 1px;
-		outline: none;
-		transition: 150ms linear;
-		z-index: 1;
-		cursor: pointer;
-		text-align: center;
-		&.google-button {
-			@include setFlex(row, space-evenly, center);
-			background: getColors(button-1);
-			margin-bottom: 1.5rem;
+	.google-button {
+		@include setFlex(row, space-evenly, center);
+		@include customButtonWithHover(white, getColors(button-1)) {
+			opacity: 0.8;
+		}
+		margin-bottom: 1.5rem;
 
-			svg {
-				margin-right: 0.2rem;
-			}
+		svg {
+			margin-right: 0.3rem;
 		}
-		&.form-button {
-			background: getColors(button-2);
-			text-transform: uppercase;
-			margin-top: 1rem;
-		}
-		@include trueHover(0.9);
 	}
 
 	form {
@@ -70,6 +63,7 @@
 			background: getColors(primary);
 			color: white;
 			border-radius: 0.5rem;
+			margin-bottom: 0.5rem;
 
 			label {
 				position: absolute;
@@ -82,9 +76,6 @@
 				pointer-events: none;
 				transition: 150ms all linear;
 				color: getColors(secondary-fade);
-			}
-			&:nth-of-type(1) {
-				margin-bottom: 0.5rem;
 			}
 
 			input {
@@ -100,7 +91,11 @@
 				width: 100%;
 				border-color: getColors(secondary-fade);
 				&:focus,
-				&:valid {
+				&:valid,
+				&:-webkit-autofill,
+				&:-webkit-autofill:hover,
+				&:-webkit-autofill:focus,
+				&:-webkit-autofill:active {
 					border-color: getColors(secondary-fade);
 					color: white;
 					& ~ label {
@@ -113,10 +108,32 @@
 						opacity: 1;
 						justify-content: flex-start;
 					}
+					// autofill bg config to remove the bg color
+					// The time it takes to remove the bg color
+					transition: background-color 5000s ease-in-out 0s;
+					-webkit-text-fill-color: #fff !important;
 				}
-
-				@include removeAutoCompleteBG(#fff);
 			}
+		}
+
+		button {
+			@include customButtonWithHover(white, getColors(button-2)) {
+				opacity: 0.8;
+			}
+			margin-top: 1rem;
+		}
+	}
+
+	&__gotoreg {
+		margin-top: 1rem;
+		z-index: 1;
+		color: white;
+		font-weight: 600;
+		transition: 200ms all linear;
+		text-decoration: underline transparent;
+		cursor: pointer;
+		@include responsiveHover {
+			text-decoration: underline;
 		}
 	}
 }

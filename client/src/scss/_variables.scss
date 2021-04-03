@@ -1,8 +1,8 @@
 // font size variables
 $font-size-s: (
-	'normal-1': 1rem,
+	'normal-1': 1.25rem,
 	// 20px
-	'normal-2': 0.75rem,
+	'normal-2': 1rem,
 	// 16px
 	'normal-3': 0.75rem,
 	// 14px
@@ -21,6 +21,7 @@ $colors: (
 	'primary': #2f2e41,
 	'secondary': #828282,
 	'secondary-fade': #82828290,
+	'secondary-more-fade': #f3f3f3,
 	'button-1': #277eef,
 	'button-2': #6c63ff,
 	'selected': #cecece,
@@ -33,3 +34,4 @@ $colors: (
 
 // custom
 $little-shadow: 0px 3px 8px #00000025;
+$more-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
