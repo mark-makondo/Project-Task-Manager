@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 // ui
-import TableOverview from './TableOverview.js';
+import TableTemplate from './TableTemplate.js';
 
 // modal components
 import DetailsModalContainer from '../../modal/detailsModal/DetailsModalContainer.js';
 
-const TableOverviewContainer = ({ project, img, text }) => {
+const TableTemplateContainer = ({ project, img, text }) => {
 	const [isDetailsModalActive, setIsDetailsModalActive] = useState(false);
 
 	const messageClickHandler = () => {};
@@ -49,7 +49,7 @@ const TableOverviewContainer = ({ project, img, text }) => {
 
 	return (
 		<>
-			<TableOverview
+			<TableTemplate
 				project={project}
 				img={img}
 				text={text}
@@ -65,4 +65,4 @@ const TableOverviewContainer = ({ project, img, text }) => {
 	);
 };
 
-export default TableOverviewContainer;
+export default TableTemplateContainer;

@@ -1,8 +1,7 @@
 import React from 'react';
 
 // components
-import TableOverviewContainer from '../../components/tables/tableOverview/TableOverviewContainer.js';
-// projectTemplate,
+import TableTemplateContainer from '../../components/tables/tableTemplate/TableTemplateContainer.js';
 
 // assets
 import { ReactComponent as EmptySvg } from '../../assets/svg/empty-svg.svg';
@@ -18,7 +17,7 @@ const Overview = ({ projectTemplate, img, text }) => {
 			>
 				{!!projectTemplate.length ? (
 					projectTemplate.map((project) => (
-						<TableOverviewContainer
+						<TableTemplateContainer
 							key={`pro-${project.id}`}
 							project={project}
 							img={img}

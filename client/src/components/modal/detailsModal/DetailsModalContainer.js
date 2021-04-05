@@ -22,7 +22,10 @@ const DetailsModalContainer = ({ isActive, setIsActive }) => {
 		}
 	}, [isActive, setIsActive]);
 
-	return <DetailsModal />;
+	if (isActive) {
+		return <DetailsModal />;
+	}
+	return <></>;
 };
 
 export default DetailsModalContainer;

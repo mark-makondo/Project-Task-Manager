@@ -35,6 +35,12 @@ ul {
   z-index: -1;
 }
 
+.login-loading {
+  margin: 1rem 0;
+  font-size: 3rem;
+  color: white;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -46,7 +52,7 @@ ul {
   border-radius: 1rem;
   max-width: 30rem;
   width: 25rem;
-  height: 20rem;
+  height: auto;
   margin: 1rem;
   padding: 1.5rem 1rem;
 }
@@ -57,12 +63,6 @@ ul {
   max-height: 100%;
   bottom: 0;
   z-index: 0;
-}
-
-.login-form .fa-spin {
-  margin: 1rem 0;
-  font-size: 2rem;
-  color: #2f2e41;
 }
 
 .login-form .error {
@@ -220,7 +220,7 @@ ul {
   }
 }
 
-.proceed-form {
+.proceed {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -229,6 +229,12 @@ ul {
   position: relative;
   width: 100vw;
   height: 100vh;
+}
+
+.proceed-loading {
+  margin: 1rem 0;
+  font-size: 3rem;
+  color: white;
 }
 
 .proceed-form-card {
@@ -252,12 +258,6 @@ ul {
   max-width: 100%;
   max-height: 100%;
   bottom: 0;
-}
-
-.proceed-form-card .fa-spin {
-  margin: 1rem 0;
-  font-size: 2rem;
-  color: #2f2e41;
 }
 
 .proceed-form-card .error {
@@ -366,7 +366,7 @@ ul {
   }
 }
 
-.register-form {
+.register {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -375,6 +375,12 @@ ul {
   position: relative;
   width: 100vw;
   height: 100vh;
+}
+
+.register-loading {
+  margin: 1rem 0;
+  font-size: 3rem;
+  color: white;
 }
 
 .register-form-card {
@@ -1127,6 +1133,10 @@ ul {
   }
 }
 
+.table-project {
+  position: relative;
+}
+
 .profile-modal {
   display: flex;
   flex-direction: row;
@@ -1355,14 +1365,24 @@ ul {
   min-height: min-content;
 }
 
-.overview-bg {
-  background: url(../../assets/svg/empty-svg.svg);
-}
-
 .project {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   position: relative;
   flex: 1 1;
   width: 100%;
+  padding: 0 2rem;
+}
+
+.project-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 .normal-1 {

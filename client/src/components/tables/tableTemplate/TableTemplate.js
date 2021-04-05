@@ -117,7 +117,7 @@ const TableRow = ({ task, text, img, messageClickHandler }) => {
  * @param {*} props
  * @returns
  */
-const TableOverview = ({
+const TableTemplate = ({
 	project,
 	img,
 	text,
@@ -150,4 +150,4 @@ const TableOverview = ({
 	);
 };
 
-export default TableOverview;
+export default TableTemplate;

@@ -24,7 +24,10 @@ const CreateProjectModalContainer = ({ isActive, setIsActive }) => {
 		}
 	}, [isActive, setIsActive]);
 
-	return <CreateProjectModal />;
+	if (isActive) {
+		return <CreateProjectModal />;
+	}
+	return <></>;
 };
 
 export default CreateProjectModalContainer;

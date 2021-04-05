@@ -1,12 +1,18 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 
-const Project = () => {
-	let params = useParams();
+// components
+import TableTemplateContainer from '../../components/tables/tableTemplate/TableTemplateContainer.js';
 
+const Project = ({ projectTemplate, img, text }) => {
 	return (
 		<div className='project'>
-			<h1>{params.name}</h1>
+			<div className='project-container'>
+				<TableTemplateContainer
+					project={projectTemplate[0]}
+					img={img}
+					text={text}
+				/>
+			</div>
 		</div>
 	);
 };

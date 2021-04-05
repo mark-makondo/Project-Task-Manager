@@ -11,8 +11,5 @@
 		@include setFlex(column, center, center);
 		min-height: min-content;
 	}
-	&-bg {
-		background: url(../../assets/svg/empty-svg.svg);
-	}
 }
 @import './overviewResponsive';

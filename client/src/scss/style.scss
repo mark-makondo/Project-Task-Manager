@@ -15,7 +15,8 @@
 @import '../components/sidebar/sidebar';
 
 // table templates from dashboard
-@import '../components/tables/tableOverview/tableOverview';
+@import '../components/tables/tableTemplate/tableTemplate';
+@import '../components/tables/tableProject/tableProject';
 
 // component modal
 @import '../components/modal/profileModal/profileModal';

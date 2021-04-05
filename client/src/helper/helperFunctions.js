@@ -1,4 +1,5 @@
 import Moment from 'moment';
+import jwt_decode from 'jwt-decode';
 
 /**
  * A helper functions for getting the first two initials
@@ -79,4 +80,26 @@ export const getStatusColor = (status) => {
 		default:
 			return '#fff';
 	}
+};
+
+/**
+ * Validate the jwt and returns two properties:
+ * isValid returns a boolean && result returns the
+ * decoded jwt if isValid is true.
+ */
+export const decodedJwt = () => {
+	let storedJwt = localStorage.jwt_token;
+
+	let undefinedStringJwt = storedJwt === 'undefined';
+	let jwtDoesntExist = storedJwt === undefined;
+	let emptyJwt = storedJwt === '';
+
+	let validJwt = !undefinedStringJwt && !jwtDoesntExist && !emptyJwt;
+
+	if (validJwt) {
+		let decode = jwt_decode(storedJwt);
+		return { isValid: true, result: decode };
+	}
+
+	return { isValid: false, result: null };
 };

@@ -20,7 +20,10 @@ const ProfileModalContainer = ({ isActive, setIsActive }) => {
 		}
 	}, [isActive, setIsActive]);
 
-	return <ProfileModal />;
+	if (isActive) {
+		return <ProfileModal />;
+	}
+	return <></>;
 };
 
 export default ProfileModalContainer;

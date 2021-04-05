@@ -1,17 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-//pages
+// pages
 import HomeContainer from './pages/home/HomeContainer.js';
 import DashboardContainer from './pages/dashboard/DashboardContainer.js';
 
-//components
+// components
 import ProceedFormContainer from './components/form/proceedForm/ProceedFormContainer.js';
 import RegisterFormContainer from './components/form/registerForm/RegisterFormContainer.js';
 
+// context
+import AppState from './context/AppState.js';
+
 const App = () => {
 	return (
-		<>
+		<AppState>
 			<Router>
 				<div className='App'>
 					<Route exact path='/' component={HomeContainer} />
@@ -24,7 +27,7 @@ const App = () => {
 					<Route path='/:userid/dashboard' component={DashboardContainer} />
 				</div>
 			</Router>
-		</>
+		</AppState>
 	);
 };
 
