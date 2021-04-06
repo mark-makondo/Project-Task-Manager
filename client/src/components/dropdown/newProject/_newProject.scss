@@ -1,0 +1,74 @@
+.dropdown-content-new-project {
+	display: block;
+	opacity: 0;
+	position: absolute;
+	background-color: white;
+	font-family: $main;
+	width: auto;
+	top: -100%;
+	left: 108%;
+	text-align: center;
+	box-shadow: $little-shadow;
+	border: 2px solid;
+	border-color: getColors(btn-status-working);
+	border-radius: 0.5rem;
+	transition: 150ms ease-in-out;
+	z-index: 1;
+	text-transform: capitalize;
+	cursor: pointer;
+	padding: 1rem;
+	text-align: left;
+	&.active {
+		opacity: 1;
+	}
+
+	&::after {
+		position: absolute;
+		display: block;
+		content: '';
+		height: 10px;
+		width: 10px;
+		background-color: getColors(btn-status-working);
+		z-index: -1;
+		left: -2%;
+		transform: rotate(40deg);
+		top: 16%;
+		box-shadow: $more-shadow;
+	}
+
+	form {
+		@include setFlex(column, center, center);
+
+		.input-group {
+			@include setFlex(column, center, center);
+			width: 100%;
+			margin-bottom: 1rem;
+			&__label {
+				@include setFlex(row, center, center);
+				color: getColors(primary-fade);
+				margin-right: auto;
+				margin-bottom: 0.5rem;
+				label {
+					width: max-content;
+					margin-right: 0.5rem;
+				}
+				i {
+					@include responsiveHover() {
+						color: getColors(primary);
+					}
+				}
+			}
+			input {
+				color: getColors(primary);
+				width: 100%;
+				padding: 0.3rem;
+				outline: none;
+			}
+		}
+		button {
+			@include customButtonWithHover(white, getColors(btn-status-working));
+			text-transform: capitalize;
+		}
+	}
+}
+@import './newProjectResponsive';

@@ -22,7 +22,7 @@
 	&__right {
 		@include setFlex(row, flex-end, center);
 
-		button {
+		&-logout {
 			@include customButtonWithHover(white, getColors(button-2)) {
 				opacity: 0.8;
 			}

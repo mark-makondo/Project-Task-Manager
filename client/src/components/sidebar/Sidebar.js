@@ -1,10 +1,18 @@
 import React from 'react';
 import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 
+// helper function
+import { getStringInitials } from '../../helper/helperFunctions.js';
+
+// dropdown
+import NewProjectContainer from '../dropdown/newProject/NewProjectContainer.js';
+import ProfileSettingsContainer from '../dropdown/profileSettings/ProfileSettingsContainer.js';
+
 const Sidebar = ({
 	collapseClickHandler,
-	profileModalClickHandler,
-	createProjectModalClickHandler,
+	showProfileSettingsDropdown,
+	showCreateProjectDropdown,
+	userData,
 }) => {
 	let temp = 2;
 	let match = useRouteMatch();
@@ -13,6 +21,7 @@ const Sidebar = ({
 		{ projectName: 'Test Project' },
 	];
 
+	// this is used for making the home nav not always active since it is not exact.
 	let homeUrl = match.url;
 	let currentUrl = useHistory().location.pathname;
 	let isHome = homeUrl === currentUrl ? 'selected' : '';
@@ -21,7 +30,7 @@ const Sidebar = ({
 		<aside className='sidebar normal-1'>
 			<div className='sidebar-wrapper'>
 				<div className='sidebar-top'>
-					<div className='sidebar-top__home'>
+					<div className='sidebar-top__home sidebar-top--title'>
 						<NavLink
 							to={homeUrl}
 							activeClassName={isHome}
@@ -30,7 +39,7 @@ const Sidebar = ({
 							home
 						</NavLink>
 					</div>
-					<div className='sidebar-top__overview'>
+					<div className='sidebar-top__overview sidebar-top--title'>
 						<NavLink
 							to={`${homeUrl}/project-overview`}
 							activeClassName='selected'
@@ -39,7 +48,7 @@ const Sidebar = ({
 							overview
 						</NavLink>
 					</div>
-					<div className='sidebar-top__projects'>
+					<div className='sidebar-top__projects sidebar-top--title'>
 						<span className='title'>
 							projects <span className='project-num'>{`(${temp})`}</span>
 						</span>
@@ -57,15 +66,27 @@ const Sidebar = ({
 								))}
 						</ul>
 					</div>
-					<button onClick={createProjectModalClickHandler} className='normal-2'>
-						+ NEW{' '}
-					</button>
+					<div
+						onClick={(e) => showCreateProjectDropdown(e)}
+						className='sidebar-top__newProject dropdown'
+					>
+						<button className='dropdown-button normal-2'>+ NEW</button>
+						<NewProjectContainer />
+					</div>
 				</div>
 				<div className='sidebar-bottom'>
-					<div className='sidebar-bottom__profile'>
-						<span onClick={profileModalClickHandler} className='sidebar-hover'>
-							profile
-						</span>
+					<div
+						onClick={(e) => showProfileSettingsDropdown(e)}
+						className='sidebar-bottom__profile dropdown'
+					>
+						<div className='dropdown-button sidebar-bottom__profile-avatar'>
+							{userData && userData?.avatar !== 'no-avatar' ? (
+								<img src={userData?.avatar} alt='' />
+							) : (
+								<span>{getStringInitials(userData?.name)}</span>
+							)}
+						</div>
+						<ProfileSettingsContainer />
 					</div>
 				</div>
 			</div>

@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+
+// helper function
+import Query from '../../helper/query.js';
+import { dropdownHandler } from '../../helper/helperFunctions.js';
 
 // ui
 import Sidebar from './Sidebar.js';
 
-// modal components
-import ProfileModalContainer from '../modal/profileModal/ProfileContainer.js';
-import CreateProjectModalContainer from '../modal/createProjectModal/CreateProjectModalContainer.js';
+// context actions
+import Context from '../../context/Context.js';
 
 const SidebarContainer = () => {
-	const [isModalProfileActive, setIsModalProfileActive] = useState(false);
-	const [isModalCreateProjectActive, setIsModalCreateProjectActive] = useState(
-		false
-	);
+	const {
+		userState: {
+			user: { data },
+		},
+	} = useContext(Context);
 
+	/**
+	 * Click handler for collapsing the sidebar
+	 */
 	const collapseClickHandler = (e) => {
 		const sidebar = document.querySelector('.sidebar');
 		const value = e.target.classList.toggle('rotate');
@@ -24,28 +31,37 @@ const SidebarContainer = () => {
 		}
 	};
 
-	const profileModalClickHandler = () => {
-		setIsModalProfileActive(!isModalProfileActive);
-	};
-	const createProjectModalClickHandler = () => {
-		setIsModalCreateProjectActive(!isModalCreateProjectActive);
+	/**
+	 * Click handler for showing the dropdown content
+	 */
+	const showProfileSettingsDropdown = (e) => {
+		// query
+		const dropdownContentQuery = Query.dropdownProfileSettingsContent();
+		const dropdownButtonQuery = Query.dropdownProfileSettingsButton();
+
+		// dropdown helper function
+		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
 
-	useEffect(() => {}, []);
+	/**
+	 * Click handler for showing the dropdown create project
+	 */
+	const showCreateProjectDropdown = (e) => {
+		// query
+		const dropdownContentQuery = Query.dropdownCreateProjectContent();
+		const dropdownButtonQuery = Query.dropdownCreateProjectButton();
+
+		// dropdown helper function
+		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
+	};
+
 	return (
 		<>
 			<Sidebar
 				collapseClickHandler={collapseClickHandler}
-				profileModalClickHandler={profileModalClickHandler}
-				createProjectModalClickHandler={createProjectModalClickHandler}
-			/>
-			<ProfileModalContainer
-				isActive={isModalProfileActive}
-				setIsActive={setIsModalProfileActive}
-			/>
-			<CreateProjectModalContainer
-				isActive={isModalCreateProjectActive}
-				setIsActive={setIsModalCreateProjectActive}
+				showProfileSettingsDropdown={showProfileSettingsDropdown}
+				showCreateProjectDropdown={showCreateProjectDropdown}
+				userData={data}
 			/>
 		</>
 	);

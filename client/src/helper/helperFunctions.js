@@ -1,5 +1,7 @@
 import Moment from 'moment';
 import jwt_decode from 'jwt-decode';
+import Query from './query.js';
+import query from './query.js';
 
 /**
  * A helper functions for getting the first two initials
@@ -8,18 +10,19 @@ import jwt_decode from 'jwt-decode';
  * @returns
  */
 export const getStringInitials = (fullname) => {
-	let fullName = fullname.split(' ');
-	let initials = '';
-
-	fullName.map((name) => {
-		let splitName = name.split('');
-		let shiftInitials = splitName.shift();
-		let getInitials = shiftInitials.charAt(0);
-		initials += getInitials;
-		return initials;
-	});
-
-	return initials.substr(0, 2);
+	if (fullname) {
+		let fullName = fullname.split(' ');
+		let initials = '';
+		fullName.map((name) => {
+			let splitName = name.split('');
+			let shiftInitials = splitName.shift();
+			let getInitials = shiftInitials.charAt(0);
+			initials += getInitials;
+			return initials;
+		});
+		return initials.substr(0, 2);
+	}
+	return <i className='helper-loading fas fa-spinner fa-spin'></i>;
 };
 
 /**
@@ -102,4 +105,46 @@ export const decodedJwt = () => {
 	}
 
 	return { isValid: false, result: null };
+};
+
+/**
+ * Make sure the click handler is placed on the 'parent' of the
+ * dropdown button and dropdown content. If you want to control you dropdown
+ * content from disapearing add 'focus-dropdown' in your class.
+ *
+ * @param {e: button event} event
+ * @param {query: dropdown content query} dropdownContent
+ * @param {query:  dropdown button query} dropdownButton
+ */
+export const dropdownHandler = (event, dropdownContent, dropdownButton) => {
+	try {
+		// this was used for removing of active class of our dropdown
+		// when dashboard is clicked
+		let dashboard = Query.dashboard();
+
+		// the dropdown button of a dropdown must be called 'dropdown-button'.
+		const isDropDownButton = event.target.classList.contains('dropdown-button');
+
+		if (isDropDownButton) dropdownContent.classList.add('active');
+
+		// conditional active class toggle if dropdown content is active
+		if (dropdownContent.classList.contains('active')) {
+			dropdownButton.classList.add('active');
+		} else {
+			dropdownButton.classList.remove('active');
+		}
+
+		// used for exemption of click events when removing active class
+		// from dropdown content through adding 'focus-dropdown' class.
+		dashboard.addEventListener('click', (e) => {
+			if (dropdownContent.classList.contains('active')) {
+				if (e.target.classList.contains('focus-dropdown') === false) {
+					dropdownContent.classList.remove('active');
+					dropdownButton.classList.remove('active');
+				}
+			}
+		});
+	} catch (error) {
+		return console.log(`@Helper: Invalid parameters: ${error}`);
+	}
 };

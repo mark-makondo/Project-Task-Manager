@@ -17,6 +17,7 @@ const { User } = require('../model/UserModel');
  *
  * @param {*} req
  * @param {*} res
+ * @returns
  */
 exports.initial = async (req, res) => {
 	res.send('user routes initials');
@@ -28,6 +29,7 @@ exports.initial = async (req, res) => {
  *
  * @param {*} req
  * @param {*} res
+ * @returns
  */
 exports.googleLogin = async (req, res, next) => {
 	try {
@@ -85,6 +87,8 @@ exports.googleLogin = async (req, res, next) => {
  *
  * @param {*} req
  * @param {*} res
+ * @param {*} next
+ * @returns
  */
 exports.register = async (req, res, next) => {
 	try {
@@ -158,6 +162,8 @@ exports.register = async (req, res, next) => {
  *
  * @param {*} req
  * @param {*} res
+ * @param {*} next
+ * @returns
  */
 exports.login = async (req, res, next) => {
 	try {
@@ -168,12 +174,12 @@ exports.login = async (req, res, next) => {
 		if (error) return res.status(400).send(error.details[0].message);
 
 		// if email exist
-		const user = await User.findOne({ email: req.body.email });
+		const user = await User.findOne({ email: req.body.input.email });
 		if (!user) return res.status(400).send(`Email doesn't exist.`);
 
 		// valid password
 		const validPassword = await bcrypt.compare(
-			req.body.password,
+			req.body.input.password,
 			user.password
 		);
 		if (!validPassword) return res.status(400).send('Invalid password.');
@@ -202,6 +208,65 @@ exports.login = async (req, res, next) => {
 		return next();
 	} catch (error) {
 		console.error(error);
+		return next(error);
+	}
+};
+
+/**
+ * Query users
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
+exports.find = async (req, res, next) => {
+	try {
+		// I can also use the req.user from the verify here instead of params
+		if (req.params.id) {
+			let id = req.params.id;
+			let findSingleUser = await User.findById(id);
+
+			if (!findSingleUser) return res.status(400).send('User not found.');
+
+			res.send(findSingleUser);
+		}
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
+
+/**
+ * Update user
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
+exports.update = async (req, res, next) => {
+	try {
+		if (!req.user) return res.status(400).send('No data to update');
+
+		// get the id decoded jwt from the middle ware verify
+		let id = req.user._id;
+
+		let findUserAndUpdate = await User.findOneAndUpdate({ _id: id }, req.body, {
+			new: true,
+			useFindAndModify: false,
+		});
+
+		if (!findUserAndUpdate)
+			return res.status(400).send(`Unable to update user with ${id}`);
+
+		res.send('Update Success');
+
+		return next();
+	} catch (error) {
+		// console.error(error)
 		return next(error);
 	}
 };

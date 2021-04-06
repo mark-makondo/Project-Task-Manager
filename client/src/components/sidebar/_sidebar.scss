@@ -8,8 +8,9 @@
 	padding-bottom: 2rem;
 	text-transform: uppercase;
 	letter-spacing: 0.03rem;
-	transition: all 400ms linear;
+	transition: width 400ms linear;
 	flex-grow: 0;
+
 	.selected {
 		background-color: getColors(fade-selected);
 		border-bottom: none;
@@ -20,7 +21,7 @@
 		height: 100%;
 		width: 100%;
 		margin-left: 0;
-		transition: all 600ms linear;
+		transition: margin-left 600ms linear;
 	}
 
 	.title {
@@ -37,10 +38,10 @@
 
 	&-top {
 		width: 100%;
-		div {
+		&--title {
 			margin-bottom: 1.5rem;
-			transition: 1s all linear;
 		}
+
 		&__projects {
 			.project-num {
 				color: getColors(button-2);
@@ -56,27 +57,74 @@
 				}
 			}
 		}
-		button {
-			@include customButtonWithHover(white, getColors(button-2)) {
-				opacity: 0.8;
-			}
+		&__newProject {
+			position: relative;
+			outline: none;
+			.dropdown-button {
+				@include customButtonWithHover(white, getColors(button-2)) {
+					opacity: 0.8;
+				}
 
-			display: flex;
-			margin-left: auto;
-			font-family: $sub;
-			letter-spacing: 0.1rem;
+				display: flex;
+				margin-left: auto;
+				font-family: $sub;
+				letter-spacing: 0.1rem;
+
+				&.active {
+					opacity: 0.8;
+				}
+			}
 		}
 	}
-
 	&-bottom {
 		border-top: 1px solid;
 		border-color: getColors(secondary-fade);
 		width: 100%;
 		&__profile {
+			@include setFlex(row, center, center);
 			margin-top: 0.7rem;
-			span {
-				display: block;
-				width: 100%;
+			outline: none;
+
+			&-avatar {
+				@include setFlex(row, center, center);
+				border-radius: 50%;
+				margin: 0 0.5rem;
+				letter-spacing: 0.15rem;
+				background: getColors(btn-status-working);
+				width: 5.5rem;
+				height: 5.5rem;
+				font-size: 2rem;
+				padding: 0.2rem;
+				cursor: pointer;
+				transition: 150ms ease-in-out;
+
+				img {
+					border-radius: 50%;
+					width: 100%;
+					height: auto;
+					pointer-events: none;
+				}
+				span {
+					color: white;
+					padding: 0.6rem;
+					pointer-events: none;
+				}
+				.helper-loading {
+					font-size: 2rem;
+				}
+				@include responsiveHover() {
+					transform: scale(1.05);
+				}
+			}
+
+			&.dropdown {
+				.dropdown-button {
+					outline: none;
+					&.active {
+						transform: scale(1.05);
+						background-color: getColors(fade-selected);
+					}
+				}
 			}
 		}
 	}

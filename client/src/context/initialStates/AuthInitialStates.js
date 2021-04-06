@@ -1,4 +1,4 @@
-const authInitialStates = {
+const AuthInitialStates = {
 	auth: {
 		loading: false,
 		user: null,
@@ -6,4 +6,4 @@ const authInitialStates = {
 	},
 };
 
-export default authInitialStates;
+export default AuthInitialStates;

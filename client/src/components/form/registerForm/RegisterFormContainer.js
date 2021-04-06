@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 // ui
 import RegisterForm from './RegisterForm.js';
@@ -15,9 +15,11 @@ const RegisterFormContainer = () => {
 		password: '',
 	});
 
+	let history = useHistory();
+
 	const {
 		authState: {
-			auth: { loading, error, user },
+			auth: { loading, error },
 		},
 		authDispatch,
 	} = useContext(Context);
@@ -25,7 +27,7 @@ const RegisterFormContainer = () => {
 	const formClickhandler = (e) => {
 		e.preventDefault();
 
-		RegisterAction(input)(authDispatch);
+		RegisterAction(input, history)(authDispatch);
 	};
 	const inputChangeHandler = (e) => {
 		setInput({
@@ -34,8 +36,6 @@ const RegisterFormContainer = () => {
 			[e.target.name]: e.target.value,
 		});
 	};
-
-	if (!!user) return <Redirect to='/' />;
 
 	return (
 		<RegisterForm

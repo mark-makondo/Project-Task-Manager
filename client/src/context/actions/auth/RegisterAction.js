@@ -7,7 +7,9 @@ import {
 	COULD_NOT_CONNECT,
 } from '../../../constants/actionTypes/ActionTypes.js';
 
-export const RegisterAction = (input) => async (authDispatch) => {
+export const RegisterAction = (input, history = null) => async (
+	authDispatch
+) => {
 	try {
 		authDispatch({
 			type: REGISTER_LOADING,
@@ -21,6 +23,12 @@ export const RegisterAction = (input) => async (authDispatch) => {
 		 */
 		if (input.path === 'google-proceed')
 			localStorage.jwt_token = res.data.jwt_token;
+
+		if (history) {
+			if (!!res) {
+				history.push('/');
+			}
+		}
 
 		authDispatch({
 			type: REGISTER_SUCCESS,

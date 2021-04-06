@@ -1,0 +1,61 @@
+.dropdown-content-profile-settings {
+	display: block;
+	opacity: 0;
+	position: absolute;
+	background-color: #f9f9f9;
+	font-family: $main;
+	width: 60%;
+	left: 75%;
+	text-align: center;
+	box-shadow: $little-shadow;
+	border: 2px solid;
+	border-color: getColors(btn-status-working);
+	z-index: 1;
+	cursor: pointer;
+	border-radius: 0.5rem;
+	transition: 150ms ease-in-out;
+
+	&.active {
+		opacity: 1;
+	}
+
+	&::after {
+		position: absolute;
+		display: block;
+		content: '';
+		height: 10px;
+		width: 10px;
+		background-color: getColors(btn-status-working);
+		z-index: -1;
+		left: -3.61%;
+		transform: rotate(40deg);
+		bottom: 30%;
+		box-shadow: $more-shadow;
+	}
+
+	li {
+		margin: 0.2rem 1rem;
+		color: getColors(primary-fade);
+		padding: 12px 16px;
+		text-decoration: none;
+		text-transform: capitalize;
+		font-weight: 600;
+		transition: 150ms ease-in-out;
+
+		@include responsiveHover() {
+			color: getColors(primary);
+			font-weight: 600;
+		}
+
+		&:nth-child(odd) {
+			border-bottom: 1px solid;
+			border-color: getColors(fade-selected);
+		}
+		&:not(:last-child) {
+			@include responsiveHover() {
+				border-color: getColors(selected);
+			}
+		}
+	}
+}
+@import './profileSettingsResponsive';

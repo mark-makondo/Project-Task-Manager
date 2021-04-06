@@ -13,6 +13,9 @@ const LoginForm = ({
 	loading,
 	error,
 }) => {
+	const clientId =
+		'934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com';
+
 	if (loading) {
 		return <i className='login-loading fas fa-spinner fa-spin'></i>;
 	} else {
@@ -21,7 +24,7 @@ const LoginForm = ({
 				<Sleeping className='login-form__bg' width='100%' height='85%' />
 
 				<GoogleLogin
-					clientId='934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com'
+					clientId={clientId}
 					render={(renderProps) => (
 						<figure
 							onClick={renderProps.onClick}
