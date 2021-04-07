@@ -11,7 +11,6 @@ const userSchema = mongoose.Schema(
 			type: String,
 			max: 255,
 			required: true,
-			index: { unique: true },
 		},
 		password: {
 			type: String,
@@ -22,12 +21,12 @@ const userSchema = mongoose.Schema(
 		avatar: {
 			type: String,
 			max: 1024,
-			required: true,
 		},
+		projects: [{ type: mongoose.Schema.ObjectId, ref: 'project' }],
 	},
-	{ timeStamps: true }
+	{ timestamps: true }
 );
 
-const User = mongoose.model('users', userSchema);
+const User = mongoose.model('user', userSchema);
 
 module.exports = { User };

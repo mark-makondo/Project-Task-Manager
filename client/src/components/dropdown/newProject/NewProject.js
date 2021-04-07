@@ -9,7 +9,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler }) => {
 						<label htmlFor='projectName'>What is your project name?</label>
 
 						<span title='Name for your project.'>
-							<i class='fas fa-info-circle'></i>
+							<i className='fas fa-info-circle'></i>
 						</span>
 					</div>
 
@@ -26,7 +26,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler }) => {
 						<label htmlFor='companyName'>Company Email:</label>
 
 						<span title='This will be used for auto transfer of ownership of files in google drive.'>
-							<i class='fas fa-info-circle'></i>
+							<i className='fas fa-info-circle'></i>
 						</span>
 					</div>
 

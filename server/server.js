@@ -7,6 +7,7 @@ const Mongoose = require('./mongodb.js');
 
 // require routes
 const userRoutes = require('./routes/UserRouters');
+const projectRoutes = require('./routes/ProjectRouters');
 
 // assign modules to variables
 const mongoose = new Mongoose();
@@ -21,6 +22,7 @@ app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.use('/api/auth/user', userRoutes);
+app.use('/api/auth/project', projectRoutes);
 
 // run mongo db class
 mongoose.run(app, PORT);

@@ -24,6 +24,11 @@ export const GetUserInfo = (history, id) => async (userDispatch) => {
 			payload: res.data,
 		});
 	} catch (err) {
+		if (err.response.data === 'User not found.') {
+			window.location.replace('/');
+			localStorage.removeItem('jwt_token');
+		}
+
 		userDispatch({
 			type: USER_NOT_FOUND,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
