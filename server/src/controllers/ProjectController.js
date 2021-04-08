@@ -1,8 +1,8 @@
-// model
-const { Project } = require('../model/ProjectModel');
-const { User } = require('../model/UserModel');
+// models
+const { Project } = require('../models/ProjectModel');
+const { User } = require('../models/UserModel');
 
-//#region Query for projects : Create, Find all, Find one, Delete
+//#region Query for projects : Create, Find all, Find one, Delete.
 /**
  * Create a project for the user and push
  * the the project id to the user.
@@ -14,28 +14,22 @@ const { User } = require('../model/UserModel');
  */
 exports.create = async (req, res, next) => {
 	try {
-		// check if id exist on jwt token from verify middleware.
 		let id = req.user._id;
 		if (!id) res.status(400).send('Id not found from jwt token.');
 
-		// check if the user exist in the database.
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
 
-		// insert new project.
 		let project = new Project({
 			projectName: req.body.projectName,
 			companyEmail: req.body.companyEmail,
 			owner: user._id,
 		});
 
-		// save the new data to project collection.
 		let savedProject = await project.save();
 
-		// then push the data to projects property of user collection.
 		user.projects.push(savedProject);
 
-		// save the user to update our user collection.
 		await user.save();
 
 		res.status(200).send(savedProject);
@@ -59,15 +53,13 @@ exports.create = async (req, res, next) => {
  */
 exports.findAllUserProjects = async (req, res, next) => {
 	try {
-		// check if id exist on jwt token from verify middleware.
 		let id = req.user._id;
 		if (!id) res.status(400).send('Id not found from jwt token.');
 
-		// check if the user exist in the database
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
 
-		// then do deep populate for projects and members property of project and user collection.
+		// do deep populate for projects and members property of project and user collection.
 		let projects = await user.execPopulate({
 			path: 'projects',
 			model: Project,
@@ -93,11 +85,9 @@ exports.findAllUserProjects = async (req, res, next) => {
  */
 exports.findOne = async (req, res, next) => {
 	try {
-		// check if id params exist in requested path.
 		let pid = req.params.pid;
 		if (!params) res.status(400).send('Parameter id not found.');
 
-		// check if project exists in the projects collection.
 		let project = await Project.findById(pid);
 		if (!project) res.status(400).send('Project not found.');
 
@@ -121,18 +111,13 @@ exports.findOne = async (req, res, next) => {
  */
 exports.deleteProject = async (req, res, next) => {
 	try {
-		// check if pid exist in path parameters.
 		let pid = req.params.pid;
 		if (!pid) return res.status(400).send('pid not found from path parameters.');
 
-		// delete the corresponding project using pid.
 		let project = await Project.findOneAndDelete({ _id: pid }, { useFindAndModify: false });
 		if (!project) return res.send.status(400).send('Project removal failed.');
 
-		// map the members array to get the id.
 		let membersId = project.members.map((id) => id._id);
-
-		// assign the owners id to a variable.
 		let ownerId = project.owner;
 
 		// get all the matching id using $in and pull out the project from the users collection.
@@ -167,32 +152,25 @@ exports.deleteProject = async (req, res, next) => {
  */
 exports.addMember = async (req, res, next) => {
 	try {
-		// check if user id exists.
 		let id = req.body._id;
 		if (!id) return res.status(400).send('id not found.');
 
-		// check if project id exists.
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('pid not found.');
 
-		// check if user was found.
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('User not found.');
 
-		// check if the project exists.
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		// check if the user is already a member.
 		let findFilter = { _id: pid, 'members._id': user._id };
 		let findMember = await Project.find(findFilter);
 		if (findMember.length !== 0) return res.status(400).send('User is already a member.');
 
-		// push the updates to user and project collection.
 		project.members.push(user);
 		user.projects.push(project);
 
-		// save to update the project and user collection.
 		await user.save();
 		await project.save();
 
@@ -220,11 +198,9 @@ exports.addMember = async (req, res, next) => {
  */
 exports.removeMember = async (req, res, next) => {
 	try {
-		// check if members id exists.
 		let mid = req.body._mid;
 		if (!mid) return res.status(400).send('mid path not found from body.');
 
-		// check if project id exists.
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('pid not found not found from body.');
 
@@ -236,7 +212,7 @@ exports.removeMember = async (req, res, next) => {
 			}
 		);
 
-		// then also remove the specified project's id from our user collection.
+		// remove the specified project's id from our user collection.
 		await User.updateOne({ _id: mid }, { $pull: { projects: pid } });
 
 		res.status(200).send('Members update successfull.');
@@ -262,22 +238,17 @@ exports.removeMember = async (req, res, next) => {
  */
 exports.addTask = async (req, res, next) => {
 	try {
-		// check if _pid paramater exist on the body.
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		// check if taskName parameter exist on the body.
 		let taskName = req.body.taskName;
 		if (!taskName) return res.status(400).send('TaskName not found from the body.');
 
-		// check if project id exist on the project collection.
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		// push new data to tasks property of our project collection.
 		project.tasks.push({ taskName });
 
-		// save to update the project collection.
 		let savedProject = await project.save();
 
 		res.status(200).send({ message: 'Added task successfully.', result: savedProject });
@@ -300,11 +271,9 @@ exports.addTask = async (req, res, next) => {
  */
 exports.removeTask = async (req, res, next) => {
 	try {
-		// check if _pid exists on the body.
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		// check if _tid exists on the body.
 		let tid = req.body._tid;
 		if (!tid) return res.status(400).send('_tid not found from the body.');
 
@@ -340,36 +309,25 @@ exports.removeTask = async (req, res, next) => {
  */
 exports.updateTask = async (req, res, next) => {
 	try {
-		// check if _pid exists on the body.
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		// check if _tid exists on the body.
 		let tid = req.body._tid;
 		if (!tid) return res.status(400).send('_tid not found from the body.');
 
-		// check if project id exist on the project collection.
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		// organize the received data to be used for update.
-		let taskContent = {
-			taskName: req.body.taskName,
-			status: req.body.status,
-			assigned: req.body.assigned,
-			deadline: req.body.deadline,
-		};
+		let { taskName, status, assigned, deadline } = req.body;
 
 		// get the sub documents of our task property of project collection using the task id.
 		let subdoc = project.tasks.id(tid);
 
-		// destructure the resulted object and update the values.
-		subdoc['taskName'] = taskContent.taskName;
-		subdoc['status'] = taskContent.status;
-		subdoc['assigned'] = taskContent.assigned;
-		subdoc['deadline'] = taskContent.deadline;
+		subdoc['taskName'] = taskName;
+		subdoc['status'] = status;
+		subdoc['assigned'] = assigned;
+		subdoc['deadline'] = deadline;
 
-		// save to update the values of project collection.
 		let savedProject = project.save();
 
 		res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
@@ -380,4 +338,5 @@ exports.updateTask = async (req, res, next) => {
 		return next(error);
 	}
 };
+
 //#endregion

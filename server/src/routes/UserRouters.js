@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-// controller
-const userController = require('../controller/UserController');
+// controllers
+const userController = require('../controllers/UserController');
 
-// middleware
-const verifyToken = require('../middleware/VerifyToken.js');
+// middlewares
+const verifyToken = require('../middlewares/VerifyToken.js');
 
 // user routes
-router.route('/').get(userController.initial);
 router.route('/google').post(userController.googleLogin);
 router.route('/register').post(userController.register);
 router.route('/login').post(userController.login);

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-// controller
-const projectController = require('../controller/ProjectController');
+// controllers
+const projectController = require('../controllers/ProjectController');
 
-// middleware
-const verifyToken = require('../middleware/VerifyToken.js');
+// middlewares
+const verifyToken = require('../middlewares/VerifyToken.js');
 
 // project routes
 router.route('/create').post(verifyToken, projectController.create);

@@ -33,10 +33,11 @@ class Mongoose {
 	async run(server, port) {
 		try {
 			let connect = await this.connect();
+			if (!connect) console.log('Database MongoDB connection failed.');
 
-			if (connect) console.log('Database MongoDB Connected');
+			console.log('Database MongoDB is connected.');
 
-			server.listen(port, () => console.log(`Running on PORT ${port}`));
+			server.listen(port, () => console.log(`Server running on port: ${port}.`));
 		} catch (error) {
 			return console.error(error);
 		}
