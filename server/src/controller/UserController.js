@@ -7,7 +7,7 @@ const {
 	registerValidation,
 	loginValidation,
 	changePassValidation,
-} = require('../middleware/JoiValidation.js');
+} = require('../validation/JoiValidation.js');
 
 // model
 const { User } = require('../model/UserModel');
@@ -22,6 +22,8 @@ const { User } = require('../model/UserModel');
 exports.initial = async (req, res) => {
 	res.send('user routes initials');
 };
+
+//#region Login and Register for users.
 
 /**
  * Receives a post request google token
@@ -208,6 +210,9 @@ exports.login = async (req, res, next) => {
 		return next(error);
 	}
 };
+//#endregion
+
+//#region User operations: Find, Update, Change password.
 
 /**
  * Find method for a single user.
@@ -319,3 +324,4 @@ exports.changePassword = async (req, res, next) => {
 		return next(error);
 	}
 };
+//#endregion

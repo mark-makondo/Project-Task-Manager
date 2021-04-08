@@ -1,5 +1,11 @@
 const Joi = require('@hapi/joi');
 
+/**
+ * Checks if the incomming data has a name, email and password.
+ *
+ * @param {data: Object} data
+ * @returns
+ */
 exports.registerValidation = (data) => {
 	const validation = Joi.object({
 		name: Joi.string().max(255).required(),
@@ -9,13 +15,20 @@ exports.registerValidation = (data) => {
 			.required(),
 		password: Joi.string().min(6).required(),
 		avatar: Joi.string(),
-		// only used for determining /user-not-found/register
+		// only used for determining /user-not-found/register.
 		path: Joi.string().max(255),
 	});
 
 	return validation.validate(data);
-}; // validation for register
+};
 
+/**
+ * Checks if the incomming data contains email and password.
+ * And if the email is valid or not.
+ *
+ * @param {data: Object} data
+ * @returns
+ */
 exports.loginValidation = (data) => {
 	const validation = Joi.object({
 		email: Joi.string()
@@ -26,8 +39,15 @@ exports.loginValidation = (data) => {
 	});
 
 	return validation.validate(data);
-}; // validation for register
+};
 
+/**
+ * Checks if the incomming data has a current, new and confirm password,
+ * then checks if new and confirm password is equal or not.
+ *
+ * @param {data: Object} data
+ * @returns
+ */
 exports.changePassValidation = (data) => {
 	const validation = Joi.object({
 		currentPassword: Joi.string().min(6).required().label('Current Password'),
@@ -40,4 +60,4 @@ exports.changePassValidation = (data) => {
 	});
 
 	return validation.validate(data);
-}; // validation for changing password
+};
