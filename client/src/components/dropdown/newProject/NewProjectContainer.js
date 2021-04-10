@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 // ui
 import NewProject from './NewProject.js';
+
+// context
+import Context from '../../../context/Context.js';
+import { CreateProjectAction } from '../../../context/actions/project/CreateProjectAction.js';
 
 const NewProjectContainer = () => {
 	const [input, setInput] = useState({
@@ -9,11 +13,19 @@ const NewProjectContainer = () => {
 		companyEmail: '',
 	});
 
+	const {
+		projectState: {
+			project: { error, isLoading },
+		},
+		projectDispatch,
+	} = useContext(Context);
+
 	const formSubmitHandler = (e) => {
 		e.preventDefault();
 
-		console.log(input);
+		CreateProjectAction(input)(projectDispatch);
 	};
+
 	const inputOnChangeHandler = (e) => {
 		setInput({
 			...input,
@@ -23,6 +35,8 @@ const NewProjectContainer = () => {
 
 	return (
 		<NewProject
+			error={error}
+			isLoading={isLoading}
 			formSubmitHandler={formSubmitHandler}
 			inputOnChangeHandler={inputOnChangeHandler}
 		/>

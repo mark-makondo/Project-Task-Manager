@@ -6,16 +6,12 @@ const query = {
 	dashboard: () => document.querySelector('.dashboard'),
 
 	// dropdown query for profile settings @sidebar
-	dropdownProfileSettingsContent: () =>
-		document.querySelector('.dropdown-content-profile-settings'),
-	dropdownProfileSettingsButton: () =>
-		document.querySelector('.sidebar-bottom .dropdown-button'),
+	dropdownProfileSettingsContent: () => document.querySelector('.dropdown-content-profile-settings'),
+	dropdownProfileSettingsButton: () => document.querySelector('.sidebar-bottom .dropdown-button'),
 
 	// dropdown query for creating project @sidebar
-	dropdownCreateProjectContent: () =>
-		document.querySelector('.dropdown-content-new-project'),
-	dropdownCreateProjectButton: () =>
-		document.querySelector('.sidebar-top__newProject button'),
+	dropdownCreateProjectContent: () => document.querySelector('.dropdown-content-new-project'),
+	dropdownCreateProjectButton: () => document.querySelector('.sidebar-top__newProject button'),
 
 	// more here
 };

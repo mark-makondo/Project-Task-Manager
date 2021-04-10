@@ -940,6 +940,7 @@ ul {
   padding: 0.6rem;
   background: #707070;
   color: white;
+  overflow: hidden;
 }
 
 .table__title {

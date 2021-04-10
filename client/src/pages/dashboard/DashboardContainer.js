@@ -4,11 +4,7 @@ import React from 'react';
 import Dashboard from './Dashboard.js';
 
 const DashboardContainer = () => {
-	return (
-		<>
-			<Dashboard />
-		</>
-	);
+	return <Dashboard />;
 };
 
 export default DashboardContainer;

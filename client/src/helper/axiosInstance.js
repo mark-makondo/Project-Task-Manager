@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = (history = null) => {
-	const baseURL = `http://localhost:5000/api/auth/user`;
+	const baseURL = `http://localhost:5000/api/auth`;
 
 	let headers = {};
 

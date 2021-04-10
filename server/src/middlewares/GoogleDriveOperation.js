@@ -9,21 +9,27 @@ exports.createProjectFolder = async (req, res, next) => {
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
 
-		let googleDrive = new GoogleDrive();
+		let projectName = req.body.projectName;
+		if (!projectName) return res.status(400).send('Project name is required.');
 
-		let folderName = req.body.projectName;
-		let parentFolderName = `PTM-${req.user._id}`;
-		let ownerEmail = req.user.email;
 		let companyEmail = req.body.companyEmail;
+		if (!companyEmail) return res.status(400).send('Company email is required.');
 
-		let response = await googleDrive.createFolderAndMoveWithPermission(
-			folderName,
-			parentFolderName,
-			ownerEmail,
-			companyEmail
-		);
+		// let googleDrive = new GoogleDrive();
 
-		req.projectFolderId = response.result;
+		// let folderName = req.body.projectName;
+		// let parentFolderName = `PTM-${req.user._id}`;
+		// let ownerEmail = req.user.email;
+		// let companyEmail = req.body.companyEmail;
+
+		// let response = await googleDrive.createFolderAndMoveWithPermission(
+		// 	folderName,
+		// 	parentFolderName,
+		// 	ownerEmail,
+		// 	companyEmail
+		// );
+
+		// req.projectFolderId = response.result;
 
 		return next();
 	} catch (error) {

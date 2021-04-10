@@ -6,24 +6,20 @@ import TableTemplateContainer from '../../components/tables/tableTemplate/TableT
 // assets
 import { ReactComponent as EmptySvg } from '../../assets/svg/empty-svg.svg';
 
-const Overview = ({ projectTemplate, img, text }) => {
+const Overview = ({ isLoading, data }) => {
+	let isDataExist = data && !!data.projects.length;
+
 	return (
 		<div className='overview'>
-			<div
-				style={
-					!!projectTemplate.length ? { height: 'unset' } : { height: '100%' }
-				}
-				className='overview-container'
-			>
-				{!!projectTemplate.length ? (
-					projectTemplate.map((project) => (
-						<TableTemplateContainer
-							key={`pro-${project.id}`}
-							project={project}
-							img={img}
-							text={text}
-						/>
-					))
+			<div style={isDataExist ? { height: 'unset' } : { height: '100%' }} className='overview-container'>
+				{isDataExist ? (
+					isLoading ? (
+						<i className='overview-loading fas fa-spinner fa-spin'></i>
+					) : (
+						data.projects.map((project) => (
+							<TableTemplateContainer key={`pro-${project._id}`} project={project} originalData={data} />
+						))
+					)
 				) : (
 					<div className='overview-bg'>
 						<EmptySvg />

@@ -21,9 +21,9 @@ const projectSchema = mongoose.Schema(
 			{
 				_id: { type: mongoose.Schema.ObjectId, auto: true },
 				taskName: { type: String },
-				status: { type: String },
+				status: { type: String, default: 'N/A' },
 				assigned: { type: mongoose.Schema.ObjectId, ref: 'user' },
-				deadline: { type: String },
+				deadline: { type: String, default: 'N/A' },
 				created_at: { type: Date, default: Date.now() },
 				fileUpload: [{ googlelink: { type: mongoose.SchemaTypes.Url }, fileName: { type: String } }],
 			},

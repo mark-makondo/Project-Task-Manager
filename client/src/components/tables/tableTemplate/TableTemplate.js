@@ -2,18 +2,9 @@ import React from 'react';
 import Moment from 'moment';
 
 // helper functions
-import {
-	getStringInitials,
-	getComparedDatePercent,
-	getStatusColor,
-} from '../../../helper/helperFunctions.js';
+import { getStringInitials, getComparedDatePercent, getStatusColor } from '../../../helper/helperFunctions.js';
 
-const TableTitle = ({
-	project,
-	img,
-	dropdownClickHandler,
-	detailsModalClickHandler,
-}) => {
+const TableTitle = ({ project, originalData, dropdownClickHandler, detailsModalClickHandler }) => {
 	return (
 		<div className='table__title '>
 			<div className='table__title-name normal-1'>{project.projectName}</div>
@@ -22,13 +13,13 @@ const TableTitle = ({
 					<span>Owner: </span>
 					<figure>
 						<div className='avatar avatar-global'>
-							{img ? (
-								<img src='' alt='' />
+							{originalData.avatar !== 'no-avatar' ? (
+								<img className='normal-3' src={originalData.avatar} alt='avatar' />
 							) : (
-								<span>{getStringInitials(project.owner)}</span>
+								<span>{getStringInitials(project.owner.name)}</span>
 							)}
 						</div>
-						<figcaption>You</figcaption>
+						<figcaption>{originalData.name === project.owner.name ? 'You' : project.owner.name} </figcaption>
 					</figure>
 				</div>
 				<div
@@ -37,9 +28,7 @@ const TableTitle = ({
 					data-id={project.id}
 					tabIndex='-1'
 				>
-					<i
-						className={`fas fa-ellipsis-v normal-1 dropdown-button dropdown-button-${project.id}`}
-					></i>
+					<i className={`fas fa-ellipsis-v normal-1 dropdown-button dropdown-button-${project.id}`}></i>
 					<div className={`dropdown-content dropdown-content-${project.id}`}>
 						<span onClick={(e) => detailsModalClickHandler(e)}>Details</span>
 					</div>
@@ -47,7 +36,7 @@ const TableTitle = ({
 			</div>
 		</div>
 	);
-}; // Title content of the table
+};
 
 const TableHeader = () => {
 	return (
@@ -58,57 +47,47 @@ const TableHeader = () => {
 			<span>deadline</span>
 		</div>
 	);
-}; // Header of the table
+};
 
-const TableRow = ({ task, text, img, messageClickHandler }) => {
-	let calculatedDatePercent = `${getComparedDatePercent(
-		task.dateCreated,
-		task.deadline
-	)}%`;
+const TableRow = ({ task, messageClickHandler }) => {
+	let calculatedDatePercent = `${getComparedDatePercent(task.created_at, task.deadline)}%`;
 	let getCurrentStatusColor = getStatusColor(task.status);
 
 	return (
 		<div className='table__content-tr table__content--grid'>
 			<div className='table__content-tr__task cell'>
-				<div
-					style={{ backgroundColor: getCurrentStatusColor }}
-					className='indicator'
-				></div>
+				<div style={{ backgroundColor: getCurrentStatusColor }} className='indicator'></div>
 				<div className='content-wrapper'>
-					<span className='content' title={text}>
-						{text}
+					<span className='content' title={task.taskName}>
+						{task.taskName}
 					</span>
 				</div>
 
-				<i
-					onClick={messageClickHandler}
-					className='message-dot far fa-comment-dots'
-				></i>
+				<i onClick={messageClickHandler} className='message-dot far fa-comment-dots'></i>
 			</div>
 			<div className='table__content-tr__avatar cell'>
 				<div className='avatar avatar-global'>
-					{img ? (
-						<img src='' alt='' />
+					{!!task.assigned ? (
+						task.assigned.avatar !== 'no-avatar' ? (
+							<img src={task.assigned.avatar} alt='avatar' />
+						) : (
+							<span>{getStringInitials(task.assigned.name)}</span>
+						)
 					) : (
-						<span>{getStringInitials(task.personName)}</span>
+						''
 					)}
 				</div>
 			</div>
 			<div className='table__content-tr__status cell'>
-				<span style={{ backgroundColor: getCurrentStatusColor }}>
-					{task.status}
-				</span>
+				<span style={{ backgroundColor: getCurrentStatusColor }}>{task.status}</span>
 			</div>
 			<div className='table__content-tr__deadline cell'>
-				<div
-					style={{ width: calculatedDatePercent }}
-					className='deadline-progress'
-				></div>
-				<span>{Moment(task.deadline).format('MMM Do YY')}</span>
+				<div style={{ width: calculatedDatePercent }} className='deadline-progress'></div>
+				<span>{task.deadline !== 'N/A' && Moment(task.deadline).format('MMM Do YY')}</span>
 			</div>
 		</div>
 	);
-}; // Row of the table
+};
 
 /**
  * Main Component of TableOverview
@@ -119,8 +98,7 @@ const TableRow = ({ task, text, img, messageClickHandler }) => {
  */
 const TableTemplate = ({
 	project,
-	img,
-	text,
+	originalData,
 	messageClickHandler,
 	dropdownClickHandler,
 	detailsModalClickHandler,
@@ -128,22 +106,15 @@ const TableTemplate = ({
 	return (
 		<div className='table'>
 			<TableTitle
+				originalData={originalData}
 				project={project}
-				img={img}
 				dropdownClickHandler={dropdownClickHandler}
 				detailsModalClickHandler={detailsModalClickHandler}
 			/>
 			<div className='table__content normal-2'>
 				<TableHeader />
 				{project.tasks.map((task, i) => (
-					<TableRow
-						key={`pr-${task.id}-${i}`}
-						task={task}
-						i={i}
-						text={text}
-						img={img}
-						messageClickHandler={messageClickHandler}
-					/>
+					<TableRow key={`pr-${task.id}-${i}`} task={task} messageClickHandler={messageClickHandler} />
 				))}
 			</div>
 		</div>

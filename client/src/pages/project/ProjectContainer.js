@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 
 // ui
 import Project from './Project.js';
 
-// tempdata
-import projectTemplate from '../../projectOverviewTemp.json';
+// context
+import Context from '../../context/Context.js';
+import { GetOneProjectAction } from '../../context/actions/project/GetOneProjectAction.js';
 
 const ProjectContainer = () => {
-	let img = false;
-	let text = `Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-	Quibusdam doloribus, facere ad vero ea in dignissimos
-	excepturi repudiandae temporibus nisi magnam officia
-	assumenda, consectetur quod sint nemo ex magni aperiam.`;
+	const {
+		getOneProjectState: {
+			getOneProject: { isLoading, data },
+		},
+		getOneProjectDispatch,
+	} = useContext(Context);
+
+	const trackChanges = useRef(false);
+
+	const params = useParams();
+
+	useEffect(() => {
+		if (!trackChanges.current) {
+			let pid = params.pid;
+			GetOneProjectAction(pid)(getOneProjectDispatch);
+			trackChanges.current = true;
+		}
+	}, [params, getOneProjectDispatch]);
 
 	return (
 		<>
-			<Project projectTemplate={projectTemplate} img={img} text={text} />
+			<Project isLoading={isLoading} data={data} />{' '}
 		</>
 	);
 };

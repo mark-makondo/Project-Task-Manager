@@ -7,22 +7,19 @@ import {
 	COULD_NOT_CONNECT,
 } from '../../../constants/actionTypes/ActionTypes.js';
 
-export const RegisterAction = (input, history = null) => async (
-	authDispatch
-) => {
+export const RegisterAction = (input, history = null) => async (authDispatch) => {
 	try {
 		authDispatch({
 			type: REGISTER_LOADING,
 		}); // call dispatch to set loading to true
 
-		const res = await axiosInstance().post('/register', input);
+		const res = await axiosInstance().post('/user/register', input);
 
 		/**
 		 * if this is true that means we are on /user-not-found/register,
 		 * then store jwt token to make it redirect to dashboard
 		 */
-		if (input.path === 'google-proceed')
-			localStorage.jwt_token = res.data.jwt_token;
+		if (input.path === 'google-proceed') localStorage.jwt_token = res.data.jwt_token;
 
 		if (history) {
 			if (!!res) {

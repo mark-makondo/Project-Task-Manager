@@ -13,7 +13,7 @@ export const GetUserInfo = (history, id) => async (userDispatch) => {
 			type: USER_LOADING,
 		});
 
-		const res = await axiosInstance(history).get(`/${id}`, {
+		const res = await axiosInstance(history).get(`/user/${id}`, {
 			headers: {
 				jwt_token: localStorage.jwt_token,
 			},

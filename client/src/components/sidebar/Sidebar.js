@@ -13,15 +13,11 @@ const Sidebar = ({
 	showProfileSettingsDropdown,
 	showCreateProjectDropdown,
 	userData,
+	allProjects,
+	projectsIsLoading,
 }) => {
-	let temp = 2;
+	// to prevent 'home' from always being active since home is not 'exact'.
 	let match = useRouteMatch();
-	let tempProject = [
-		{ projectName: 'Sample Project' },
-		{ projectName: 'Test Project' },
-	];
-
-	// this is used for making the home nav not always active since it is not exact.
 	let homeUrl = match.url;
 	let currentUrl = useHistory().location.pathname;
 	let isHome = homeUrl === currentUrl ? 'selected' : '';
@@ -31,54 +27,47 @@ const Sidebar = ({
 			<div className='sidebar-wrapper'>
 				<div className='sidebar-top'>
 					<div className='sidebar-top__home sidebar-top--title'>
-						<NavLink
-							to={homeUrl}
-							activeClassName={isHome}
-							className='title sidebar-hover'
-						>
+						<NavLink to={homeUrl} activeClassName={isHome} className='title sidebar-hover'>
 							home
 						</NavLink>
 					</div>
 					<div className='sidebar-top__overview sidebar-top--title'>
-						<NavLink
-							to={`${homeUrl}/project-overview`}
-							activeClassName='selected'
-							className='title sidebar-hover'
-						>
+						<NavLink to={`${homeUrl}/project-overview`} activeClassName='selected' className='title sidebar-hover'>
 							overview
 						</NavLink>
 					</div>
 					<div className='sidebar-top__projects sidebar-top--title'>
 						<span className='title'>
-							projects <span className='project-num'>{`(${temp})`}</span>
+							projects-
+							<span className='project-num'>{`(${
+								!!allProjects && allProjects.projects.length ? allProjects.projects.length : 0
+							})`}</span>
 						</span>
-						<ul className='normal-2'>
-							{tempProject &&
-								tempProject.map((data, i) => (
-									<NavLink
-										key={i}
-										to={`${homeUrl}/${data.projectName.replace(/\s+/g, '')}`}
-										activeClassName='selected'
-										className='project-list normal-2 sidebar-hover'
-									>
-										<span>{data.projectName}</span>
-									</NavLink>
-								))}
-						</ul>
+						{projectsIsLoading ? (
+							<i className='project-loading fas fa-spinner fa-spin'></i>
+						) : (
+							<ul className='normal-2'>
+								{!!allProjects &&
+									allProjects.projects.map((project, i) => (
+										<NavLink
+											key={i}
+											to={`${homeUrl}/${project._id}`}
+											activeClassName='selected'
+											className='project-list normal-2 sidebar-hover'
+										>
+											<span>{project.projectName}</span>
+										</NavLink>
+									))}
+							</ul>
+						)}
 					</div>
-					<div
-						onClick={(e) => showCreateProjectDropdown(e)}
-						className='sidebar-top__newProject dropdown'
-					>
+					<div onClick={(e) => showCreateProjectDropdown(e)} className='sidebar-top__newProject dropdown'>
 						<button className='dropdown-button normal-2'>+ NEW</button>
 						<NewProjectContainer />
 					</div>
 				</div>
 				<div className='sidebar-bottom'>
-					<div
-						onClick={(e) => showProfileSettingsDropdown(e)}
-						className='sidebar-bottom__profile dropdown'
-					>
+					<div onClick={(e) => showProfileSettingsDropdown(e)} className='sidebar-bottom__profile dropdown'>
 						<div className='dropdown-button sidebar-bottom__profile-avatar'>
 							{userData && userData?.avatar !== 'no-avatar' ? (
 								<img src={userData?.avatar} alt='' />
@@ -91,10 +80,7 @@ const Sidebar = ({
 				</div>
 			</div>
 
-			<i
-				onClick={(e) => collapseClickHandler(e)}
-				className='sidebar-collapsed fas fa-chevron-circle-left'
-			></i>
+			<i onClick={(e) => collapseClickHandler(e)} className='sidebar-collapsed fas fa-chevron-circle-left'></i>
 		</aside>
 	);
 };

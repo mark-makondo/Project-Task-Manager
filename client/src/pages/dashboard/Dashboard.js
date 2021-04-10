@@ -18,16 +18,8 @@ const Dashboard = () => {
 			<div className='dashboard-content'>
 				<SidebarContainer />
 				<Switch>
-					<Route
-						exact
-						path={`${match.url}/project-overview`}
-						component={OverviewContainer}
-					/>
-					<Route
-						exact
-						path={`${match.url}/:name`}
-						component={ProjectContainer}
-					/>
+					<Route exact path={`${match.url}/project-overview`} component={OverviewContainer} />
+					<Route exact path={`${match.url}/:pid`} component={(props) => <ProjectContainer {...props} />} />
 				</Switch>
 			</div>
 		</div>

@@ -1,8 +1,8 @@
 import { LOGOUT_USER } from '../../../constants/actionTypes/ActionTypes.js';
 
-export const LogoutAction = () => (dispatch) => {
+export const LogoutAction = () => (authDispatch) => {
 	localStorage.removeItem('jwt_token');
-	dispatch({
+	authDispatch({
 		type: LOGOUT_USER,
 	});
 };

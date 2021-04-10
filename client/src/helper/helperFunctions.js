@@ -1,7 +1,6 @@
 import Moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import Query from './query.js';
-import query from './query.js';
 
 /**
  * A helper functions for getting the first two initials
@@ -36,31 +35,31 @@ export const getStringInitials = (fullname) => {
  * @returns
  */
 export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
-	// convert date params to time
-	let dateCreated = Moment(dateCreatedParams);
-	let setDate = Moment(setDateParams);
-	let currentDate = Moment();
-	// let currentDate = Moment('04/04/2021');
+	if (setDateParams) {
+		if (setDateParams !== 'N/A') {
+			let dateCreated = Moment.utc(dateCreatedParams);
+			let setDate = Moment.utc(setDateParams);
+			let currentDate = Moment.utc();
+			// let currentDate = Moment.utc('04/12/2021');
 
-	// get total days // date created - deadline
-	let totalDaysTimeDiff = setDate - dateCreated;
-	let totalDaysDayDiff = totalDaysTimeDiff / (1000 * 3600 * 24);
-	let totalDays = Math.round(totalDaysDayDiff);
+			let totalDays = setDate.diff(dateCreated, 'days');
+			let remainingDays = currentDate.diff(dateCreated, 'days');
 
-	// get remaining days // date now - deadline
-	let remainingDaysTimeDiff = currentDate - dateCreated;
-	let remainingDaysDayDiff = remainingDaysTimeDiff / (1000 * 3600 * 24);
-	let remainingDays = Math.round(remainingDaysDayDiff);
+			let remainingDaysPercent = Math.round((remainingDays / totalDays) * 100);
 
-	// get remaning days in percent
-	let remainingDaysPercent = Math.round((remainingDays / totalDays) * 100);
+			// console.log('dateCreated', Moment.utc(dateCreatedParams).toDate());
+			// console.log('setDateParams', Moment.utc(setDateParams).toDate());
 
-	if (remainingDaysPercent > 100) {
-		return 100;
-	} else if (remainingDays <= 0) {
-		return 0;
-	} else {
-		return remainingDaysPercent;
+			// console.log('remainingDays', remainingDays);
+
+			if (remainingDaysPercent > 100) {
+				return 100;
+			} else if (remainingDaysPercent <= 0) {
+				return 0;
+			} else {
+				return remainingDaysPercent;
+			}
+		}
 	}
 };
 
@@ -71,18 +70,21 @@ export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
  * @returns
  */
 export const getStatusColor = (status) => {
-	let lowerCaseStatus = status.toLowerCase();
+	if (status) {
+		let lowerCaseStatus = status.toLowerCase();
 
-	switch (lowerCaseStatus) {
-		case 'stuck':
-			return '#ff0000';
-		case 'working':
-			return '#6c63ff';
-		case 'completed':
-			return '#59df62';
-		default:
-			return '#fff';
+		switch (lowerCaseStatus) {
+			case 'stuck':
+				return '#ff0000';
+			case 'working':
+				return '#6c63ff';
+			case 'completed':
+				return '#59df62';
+			default:
+				return '#fff';
+		}
 	}
+	return <i className='helper-loading fas fa-spinner fa-spin'></i>;
 };
 
 /**

@@ -12,14 +12,15 @@ import Context from '../../context/Context.js';
 
 const SidebarContainer = () => {
 	const {
+		projectState: { project },
+	} = useContext(Context);
+
+	const {
 		userState: {
 			user: { data },
 		},
 	} = useContext(Context);
 
-	/**
-	 * Click handler for collapsing the sidebar
-	 */
 	const collapseClickHandler = (e) => {
 		const sidebar = document.querySelector('.sidebar');
 		const value = e.target.classList.toggle('rotate');
@@ -31,27 +32,17 @@ const SidebarContainer = () => {
 		}
 	};
 
-	/**
-	 * Click handler for showing the dropdown content
-	 */
 	const showProfileSettingsDropdown = (e) => {
-		// query
 		const dropdownContentQuery = Query.dropdownProfileSettingsContent();
 		const dropdownButtonQuery = Query.dropdownProfileSettingsButton();
 
-		// dropdown helper function
 		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
 
-	/**
-	 * Click handler for showing the dropdown create project
-	 */
 	const showCreateProjectDropdown = (e) => {
-		// query
 		const dropdownContentQuery = Query.dropdownCreateProjectContent();
 		const dropdownButtonQuery = Query.dropdownCreateProjectButton();
 
-		// dropdown helper function
 		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
 
@@ -62,6 +53,8 @@ const SidebarContainer = () => {
 				showProfileSettingsDropdown={showProfileSettingsDropdown}
 				showCreateProjectDropdown={showCreateProjectDropdown}
 				userData={data}
+				allProjects={project.data}
+				projectsIsLoading={project.isLoading}
 			/>
 		</>
 	);

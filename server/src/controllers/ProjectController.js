@@ -4,8 +4,8 @@ const { User } = require('../models/UserModel');
 
 //#region Query for projects : Create, Find all, Find one, Delete.
 /**
- * Create a project for the user and push
- * the project id to the user. The req.projectFolderId
+ * Create a project for the user and push.
+ * the project id to the user. The req.projectFolderId.
  * and req.user came from the middleware.
  */
 exports.create = async (req, res, next) => {
@@ -53,6 +53,8 @@ exports.findAllUserProjects = async (req, res, next) => {
 			path: 'projects',
 			model: Project,
 			populate: { path: 'members._id', model: User },
+			populate: { path: 'owner', model: User },
+			populate: { path: 'tasks.assigned', model: User },
 		});
 
 		res.status(200).send(projects);
@@ -69,13 +71,24 @@ exports.findAllUserProjects = async (req, res, next) => {
  */
 exports.findOne = async (req, res, next) => {
 	try {
+		let user = req.user;
+
 		let pid = req.params.pid;
-		if (!params) res.status(400).send('Parameter id not found.');
+		if (!pid) res.status(400).send('Parameter id not found.');
 
-		let project = await Project.findById(pid);
-		if (!project) res.status(400).send('Project not found.');
+		let findProject = await Project.findById(pid);
+		if (!findProject) res.status(400).send('Project not found.');
 
-		res.status(200).send(project);
+		let project = await findProject.execPopulate({
+			path: 'owner',
+			populate: {
+				path: 'members._id',
+				model: User,
+			},
+			populate: { path: 'tasks.assigned', model: User },
+		});
+
+		res.status(200).send({ project, user });
 
 		return next();
 	} catch (error) {
@@ -212,7 +225,9 @@ exports.addTask = async (req, res, next) => {
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		project.tasks.push({ taskName });
+		project.tasks.push({
+			taskName,
+		});
 
 		let savedProject = await project.save();
 

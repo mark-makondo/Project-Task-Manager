@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 // ui
 import Overview from './Overview.js';
 
-// tempdata
-import projectTemplate from '../../projectOverviewTemp.json';
+// context actions
+import Context from '../../context/Context.js';
 
 const OverviewContainer = () => {
-	let img = false;
-	let text = `Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-	Quibusdam doloribus, facere ad vero ea in dignissimos
-	excepturi repudiandae temporibus nisi magnam officia
-	assumenda, consectetur quod sint nemo ex magni aperiam.`;
+	const {
+		projectState: {
+			project: { isLoading, data },
+		},
+	} = useContext(Context);
 
-	return (
-		<>
-			<Overview projectTemplate={projectTemplate} img={img} text={text} />
-		</>
-	);
+	return <Overview isLoading={isLoading} data={data} />;
 };
 
 export default OverviewContainer;

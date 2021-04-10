@@ -11,34 +11,30 @@ import Navbar from './Navbar.js';
 import Context from '../../context/Context.js';
 import { GetUserInfo } from '../../context/actions/user/GetUserInfo.js';
 import { LogoutAction } from '../../context/actions/auth/LogoutAction.js';
+import { GetAllProjectAction } from '../../context/actions/project/GetAllProjectAction.js';
 
 const NavbarContainer = () => {
-	// use this to store user information and use the state on all dashboard components
 	const { userDispatch } = useContext(Context);
-
-	// logout context
 	const { authDispatch } = useContext(Context);
+	const { projectDispatch } = useContext(Context);
 
-	// this is for es lint fix since react doesn't handle object equality
-	const trackChanges = useRef();
+	const trackChanges = useRef(false);
 
 	const history = useHistory();
-	const { userid } = useParams();
+	const params = useParams();
 
 	const logoutClickHandler = () => {
-		/**
-		 * handles google logout through module and normal logout
-		 * at the same time by clearing local storage
-		 */
 		LogoutAction()(authDispatch);
 	};
 
 	useEffect(() => {
 		if (!trackChanges.current) {
-			GetUserInfo(history, userid)(userDispatch);
+			GetUserInfo(history, params.userid)(userDispatch);
+			GetAllProjectAction()(projectDispatch);
+
 			trackChanges.current = true;
 		}
-	}, [history, userid, userDispatch]);
+	}, [history, params.userid, userDispatch, projectDispatch]);
 
 	if (!decodedJwt().isValid) {
 		return <Redirect to='/' />;

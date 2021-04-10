@@ -13,7 +13,7 @@ export const UpdateUser = () => async (updateUserDispatch) => {
 			type: UPDATE_USER_LOADING,
 		});
 
-		const res = await axiosInstance().get(`/update`, {
+		const res = await axiosInstance().get(`/user/update`, {
 			headers: {
 				jwt_token: localStorage.jwt_token,
 			},

@@ -11,7 +11,7 @@ export const LoginAction = (input) => async (authDispatch) => {
 	try {
 		authDispatch({
 			type: LOGIN_LOADING,
-		}); // call dispatch to set loading to true
+		});
 
 		let res;
 
@@ -19,9 +19,9 @@ export const LoginAction = (input) => async (authDispatch) => {
 		let isGoogleProceedPath = input.path === 'google-proceed';
 
 		if (isLoginPath) {
-			res = await axiosInstance().post('/login', input);
+			res = await axiosInstance().post('/user/login', input);
 		} else if (isGoogleProceedPath) {
-			res = await axiosInstance().post('/google', {
+			res = await axiosInstance().post('/user/google', {
 				token: input.response.tokenId,
 			});
 		}
@@ -31,11 +31,11 @@ export const LoginAction = (input) => async (authDispatch) => {
 		authDispatch({
 			type: LOGIN_SUCCESS,
 			payload: res.data,
-		}); // call dispatch and store data to payload
+		});
 	} catch (err) {
 		authDispatch({
 			type: LOGIN_ERROR,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
-		}); // call dispatch and store error to payload
+		});
 	}
 };

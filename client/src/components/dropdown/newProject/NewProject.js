@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NewProject = ({ formSubmitHandler, inputOnChangeHandler }) => {
+const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading }) => {
 	return (
 		<div className='dropdown-content-new-project'>
 			<form onSubmit={(e) => formSubmitHandler(e)}>
@@ -38,7 +38,25 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler }) => {
 						name='companyEmail'
 					/>
 				</div>
-				<button type='submit'>Create Project</button>
+				{error ? (
+					<div className='error normal-2'>
+						<span>Error: </span>
+						{error}
+					</div>
+				) : (
+					''
+				)}
+
+				{isLoading ? (
+					<span className='normal-2'>
+						<i className='project-create-loading fas fa-spinner fa-spin'></i>
+						<span className='normal-3'>Please Wait...</span>
+					</span>
+				) : (
+					<button className='focus-dropdown' type='submit'>
+						Create Project
+					</button>
+				)}
 			</form>
 		</div>
 	);
