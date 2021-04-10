@@ -9,8 +9,6 @@ class Mongoose {
 	}
 
 	/**
-	 * Connect method for mongodb
-	 *
 	 * @returns
 	 */
 	async connect() {
@@ -22,7 +20,6 @@ class Mongoose {
 	}
 
 	/**
-	 * Run method for mongodb.
 	 * Call this method when initializing mongodb
 	 * in the the server.
 	 *

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "project-task-manager-309409",
+  "private_key_id": "b44a5b9b29a90fd2b5e8714a73a9ceeb9467edd6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDHiBM4jtNCl4Ch\nJwmFoqopdq5tmOHkcd0rQl9rpk9ZWEfKQNySlDVJSsPC/98eZ5EaVOa2uio4Axjz\nEjkem+HbUxwdAyz+TGPU6qMnmXDnOGNMBpokWZ8ImLFvA3qAbQjEMuYsvMztjEz7\nBSfGXQYtcHyCP8JnqhKrsjQDqWVSEc0uM+khVA7WlI6V7jxrmc1ub2hZjA+LCtRJ\n2/6HgVInRX+WD7UR7T1s3kiTqHr0sm3p6R8UzKgADiwsZ/IPIyjclLyKFuyY0Jjr\nqT6HzSXmoEBorRud2dRZnGjZnabTgfvMlkPi07hxF3aPjGwpwff2JJDwykXdBdyg\neyoD/rBXAgMBAAECggEAEC3GcTWTh7jFI0wJB57y8T3AUv6sgluBNXrCRfZMRNBV\nsd6kg/Ykg/bd/LfGna6EI4By3Kontjb6FOuLWiIFpEUO6INTaKNFDQShihp0/yqh\nUo7OfNgPfyDyci/0BOnSZiZCZ6o/a5uOumPmn7z3PUP7tIv69XDi5q0ibpGTt525\nPK2Z5zWEmzIhAxjm+6fpkpwXfuNZnRNCK2FGJJM64bhSdnqNouyJPgm+UL7/AgkY\nrcY0zz5DcIC8UoZqBsJzGrpx08Jcfh3Ym7RdQBfYQV2IXbuYVW6er1gHfbOwngYc\nN7O0vb8jpsdpsn4FdzjxxPmO4bvsMZz1oQ4l8Q4mkQKBgQDohnzRS0yUBiG1w164\njOQIrZseYGLwjwdjCAupo1FzFqkdyB8rGLrTLlvIS0NjlMHAo2R/r+Y+r7cM2AIq\nGjOJbE+2KflQQakD75DYLbdzILuxQxwdNmzPrLA1j+ArohzdbzWQWrCPccXwW8+K\nHjIIyqhumXFe/WtP2Bg0SaIv2wKBgQDbrOCwIA2nrbo7VCeM5l/1YmxSsaD0kfy7\n/ky90q6AHXazX6rGy4ThyTSJmucstvBBzdicbw+2WzgnjhNHkCG7IWGdJviyYaPv\nF8wLkaAirC2CLMtg0s8xSXSv4W7w8g74gi/Us8oQ6flXei7FFJls0C2dzHgfW0K3\nRaa94j7YNQKBgB2yX2qThVo6Vj/SjdxgEheRpIgCo2A5xCW/t02ZECP0tvCYyHJG\nnEWwXAR+qEKlkwE5XPJ50pwa8PPw+oXKBt78OEn5nl/DowRfqk4RuKY5ff8rpQGO\nG+OCGJceovCvqaQWOe8PxhDr5O3Hq//lz1oUF+LYMgSBtRzjamPzK4WVAoGANyqA\n+nnyM+uy2vdVP1MTQgJHhbTJ4OFQgL1p9DmWTOIZTw51SpsNcc4ffXcDGv2N9FiH\nTzGs1nSt83EAcnZFokLNyrNgvRs8Gez19unJNyvZ+djZ8iS+l3gE765DOArxq4K2\nFEpaMkkvrsImQKPdq6/T5M7WU7mNVY0ORJ0ufwkCgYBUT+HsCPbquDWULlb/zWCa\nyYrPPEOBlYf+xRSAQueGmcrxc9ma+itqGqrUxM/4D2TtpGekb1gRFmfN/KlqZ+vs\nRdgIVayJcfBq2op2/qAJcrgfSnfLZ6aVjEZUxcs2nAi0IPiaMqo/Z3WYj9GgPiVH\nFKhQpY0RDdUS/LFIoJ5zhw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "project-task-manager-service@project-task-manager-309409.iam.gserviceaccount.com",
+  "client_id": "102753276825179903037",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/project-task-manager-service%40project-task-manager-309409.iam.gserviceaccount.com"
+}

@@ -5,25 +5,19 @@ const { User } = require('../models/UserModel');
 //#region Query for projects : Create, Find all, Find one, Delete.
 /**
  * Create a project for the user and push
- * the the project id to the user.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
+ * the project id to the user. The req.projectFolderId
+ * and req.user came from the middleware.
  */
 exports.create = async (req, res, next) => {
 	try {
 		let id = req.user._id;
-		if (!id) res.status(400).send('Id not found from jwt token.');
-
 		let user = await User.findById(id);
-		if (!user) return res.status(400).send('No user found.');
 
 		let project = new Project({
 			projectName: req.body.projectName,
 			companyEmail: req.body.companyEmail,
 			owner: user._id,
+			projectFolderId: req.projectFolderId,
 		});
 
 		let savedProject = await project.save();
@@ -45,11 +39,6 @@ exports.create = async (req, res, next) => {
  * populate all the users project property to get all the project informations,
  * then do populate again for the project's member property to get all the
  * member's information.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.findAllUserProjects = async (req, res, next) => {
 	try {
@@ -77,11 +66,6 @@ exports.findAllUserProjects = async (req, res, next) => {
 
 /**
  * Get one project data from our projects collection.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.findOne = async (req, res, next) => {
 	try {
@@ -103,11 +87,6 @@ exports.findOne = async (req, res, next) => {
 /**
  * requires a params of pid, deletes the corresponding project document together with
  * its references from user collection.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.deleteProject = async (req, res, next) => {
 	try {
@@ -140,15 +119,10 @@ exports.deleteProject = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project members: Add, Remove
+//#region Query for project members: Add, Remove.
 /**
- * Add and update member property to our project
- * collection. Requires user 'id' and project 'pid' parameters from body.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
+ * Add and update member property to our project collection.
+ * Requires user 'id' and project 'pid' parameters from body.
  */
 exports.addMember = async (req, res, next) => {
 	try {
@@ -190,11 +164,6 @@ exports.addMember = async (req, res, next) => {
  * Required a body parameters of '_mid' member's id and project's id '_pid'.
  * Removes a member from a project collection as well as removing the
  * project on  user collection.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.removeMember = async (req, res, next) => {
 	try {
@@ -226,15 +195,11 @@ exports.removeMember = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project tasks: Add, Remove, Update
+//#region Query for project tasks: Add, Remove, Update, File upload.
 /**
  * Requires '_pid' and 'taskName' parameter on the body.
- * Add a task to the project collection.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
+ * Add a task to the project collection, then send a new req
+ * property 'projectFolderId' to next middleware.
  */
 exports.addTask = async (req, res, next) => {
 	try {
@@ -253,6 +218,8 @@ exports.addTask = async (req, res, next) => {
 
 		res.status(200).send({ message: 'Added task successfully.', result: savedProject });
 
+		req.savedProject = savedProject;
+
 		return next();
 	} catch (error) {
 		// console.error(error);
@@ -263,11 +230,6 @@ exports.addTask = async (req, res, next) => {
 /**
  * Requires '_pid' project id and '_tid' task id from the body.
  * Removes a task from project collection.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.removeTask = async (req, res, next) => {
 	try {
@@ -301,11 +263,6 @@ exports.removeTask = async (req, res, next) => {
  * Update a set of values in the tasks property of project collection.
  * The default value of 'assigned' value must be the owner's
  * id in the client side.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 exports.updateTask = async (req, res, next) => {
 	try {
@@ -331,6 +288,22 @@ exports.updateTask = async (req, res, next) => {
 		let savedProject = project.save();
 
 		res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
+
+//#endregion
+
+//#region Query for project tasks upload: upload, delete, generate a link.
+exports.fileUploadTask = async (req, res, next) => {
+	try {
+		// if (!pid) return res.status(400).send('_pid not found from the body.');
+
+		// res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
 
 		return next();
 	} catch (error) {

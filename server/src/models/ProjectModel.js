@@ -5,6 +5,7 @@ const projectSchema = mongoose.Schema(
 	{
 		projectName: { type: String, required: true },
 		companyEmail: { type: String, required: true },
+		projectFolderId: { type: String },
 		owner: {
 			type: mongoose.Schema.ObjectId,
 			required: true,
@@ -24,9 +25,7 @@ const projectSchema = mongoose.Schema(
 				assigned: { type: mongoose.Schema.ObjectId, ref: 'user' },
 				deadline: { type: String },
 				created_at: { type: Date, default: Date.now() },
-				fileUpload: [
-					{ googlelink: { type: mongoose.SchemaTypes.Url }, fileName: { type: String } },
-				],
+				fileUpload: [{ googlelink: { type: mongoose.SchemaTypes.Url }, fileName: { type: String } }],
 			},
 		],
 	},
