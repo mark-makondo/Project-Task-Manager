@@ -20,11 +20,13 @@
 
 // component modal
 @import '../components/modal/profileModal/profileModal';
-@import '../components/modal/detailsModal/detailsModal';
+@import '../components/modal/dialogue/dialogue';
 
 // component dropdown
 @import '../components/dropdown/profileSettings/profileSettings';
 @import '../components/dropdown/newProject/newProject';
+@import '../components/dropdown/select/select';
+@import '../components/dropdown/details/details';
 
 // pages
 @import '../pages/dashboard/dashboard';

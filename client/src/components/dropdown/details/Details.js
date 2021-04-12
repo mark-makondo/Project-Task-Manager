@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DetailsModal = () => {
+const Details = () => {
 	return (
 		<div className='details-modal'>
 			<div className='details-modal__wrapper'>
@@ -10,4 +10,4 @@ const DetailsModal = () => {
 	);
 };
 
-export default DetailsModal;
+export default Details;

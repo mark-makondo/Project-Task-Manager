@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // ui
-import DetailsModal from './DetailsModal.js';
+import Details from './Details.js';
 
 const DetailsModalContainer = ({ isActive, setIsActive }) => {
 	useEffect(() => {
@@ -23,7 +23,7 @@ const DetailsModalContainer = ({ isActive, setIsActive }) => {
 	}, [isActive, setIsActive]);
 
 	if (isActive) {
-		return <DetailsModal />;
+		return <Details />;
 	}
 	return <></>;
 };

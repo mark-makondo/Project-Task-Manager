@@ -8,6 +8,7 @@
 
 	&-container {
 		@include setFlex(column, center, center);
+		width: 100%;
 	}
 }
 @import './projectResponsive';

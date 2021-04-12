@@ -6,7 +6,7 @@ import { getStringInitials, getComparedDatePercent, getStatusColor } from '../..
 
 const TableTitle = ({ project, originalData, dropdownClickHandler, detailsModalClickHandler }) => {
 	return (
-		<div className='table__title '>
+		<div className='table__title'>
 			<div className='table__title-name normal-1'>{project.projectName}</div>
 			<div className='table__title-right'>
 				<div className='table__title-avatar normal-2'>
@@ -19,7 +19,7 @@ const TableTitle = ({ project, originalData, dropdownClickHandler, detailsModalC
 								<span>{getStringInitials(project.owner.name)}</span>
 							)}
 						</div>
-						<figcaption>{originalData.name === project.owner.name ? 'You' : project.owner.name} </figcaption>
+						<figcaption>{originalData.email === project.owner.email ? 'You' : project.owner.name} </figcaption>
 					</figure>
 				</div>
 				<div
@@ -83,7 +83,7 @@ const TableRow = ({ task, messageClickHandler }) => {
 			</div>
 			<div className='table__content-tr__deadline cell'>
 				<div style={{ width: calculatedDatePercent }} className='deadline-progress'></div>
-				<span>{task.deadline !== 'N/A' && Moment(task.deadline).format('MMM Do YY')}</span>
+				<span>{task.deadline !== '' && Moment.utc(task.deadline, 'MM DD YYY').format('MMM Do YY')}</span>
 			</div>
 		</div>
 	);
@@ -113,8 +113,8 @@ const TableTemplate = ({
 			/>
 			<div className='table__content normal-2'>
 				<TableHeader />
-				{project.tasks.map((task, i) => (
-					<TableRow key={`pr-${task.id}-${i}`} task={task} messageClickHandler={messageClickHandler} />
+				{project.tasks.map((task) => (
+					<TableRow key={`pr-${task._id}`} task={task} messageClickHandler={messageClickHandler} />
 				))}
 			</div>
 		</div>

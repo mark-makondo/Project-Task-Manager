@@ -54,7 +54,6 @@ const SidebarContainer = () => {
 				showCreateProjectDropdown={showCreateProjectDropdown}
 				userData={data}
 				allProjects={project.data}
-				projectsIsLoading={project.isLoading}
 			/>
 		</>
 	);

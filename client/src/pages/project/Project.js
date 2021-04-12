@@ -1,13 +1,13 @@
 import React from 'react';
 
 // components
-import TableTemplateContainer from '../../components/tables/tableTemplate/TableTemplateContainer.js';
+import TableProjectContainer from '../../components/tables/tableProject/TableProjectContainer.js';
 
-const Project = ({ project, data }) => {
+const Project = () => {
 	return (
 		<div className='project'>
 			<div className='project-container'>
-				{/* <TableTemplateContainer project={project} originalData={data} /> */}
+				<TableProjectContainer />
 			</div>
 		</div>
 	);

@@ -22,7 +22,7 @@ router.route('/member/remove').delete(verifyToken, projectController.removeMembe
 // router.route('/task/add').post(verifyToken, projectController.addTask, googleDrive.createTaskFolder);
 // router.route('/task/remove').delete(verifyToken, projectController.removeTask, googleDrive.deleteTaskFolder);
 router.route('/task/add').post(verifyToken, projectController.addTask);
-router.route('/task/remove').delete(verifyToken, projectController.removeTask);
+router.route('/task/remove/:pid/:tid').delete(verifyToken, projectController.removeTask);
 
 router.route('/task/update').put(verifyToken, projectController.updateTask);
 

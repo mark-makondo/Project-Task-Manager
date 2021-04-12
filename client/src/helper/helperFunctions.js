@@ -36,21 +36,17 @@ export const getStringInitials = (fullname) => {
  */
 export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
 	if (setDateParams) {
-		if (setDateParams !== 'N/A') {
-			let dateCreated = Moment.utc(dateCreatedParams);
-			let setDate = Moment.utc(setDateParams);
+		if (setDateParams !== '') {
+			let dateCreated = Moment.utc(dateCreatedParams, Moment.ISO_8601);
+			let setDate = Moment.utc(setDateParams, 'MM/DD/YYYY');
 			let currentDate = Moment.utc();
-			// let currentDate = Moment.utc('04/12/2021');
+			// let currentDate = Moment.utc('04/13/2021');
 
 			let totalDays = setDate.diff(dateCreated, 'days');
 			let remainingDays = currentDate.diff(dateCreated, 'days');
-
 			let remainingDaysPercent = Math.round((remainingDays / totalDays) * 100);
 
-			// console.log('dateCreated', Moment.utc(dateCreatedParams).toDate());
-			// console.log('setDateParams', Moment.utc(setDateParams).toDate());
-
-			// console.log('remainingDays', remainingDays);
+			// console.log('valid', dateCreated.isValid());
 
 			if (remainingDaysPercent > 100) {
 				return 100;
@@ -81,7 +77,7 @@ export const getStatusColor = (status) => {
 			case 'completed':
 				return '#59df62';
 			default:
-				return '#fff';
+				return '#707070';
 		}
 	}
 	return <i className='helper-loading fas fa-spinner fa-spin'></i>;

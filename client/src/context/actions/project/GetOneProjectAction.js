@@ -15,7 +15,6 @@ export const GetOneProjectAction = (pid) => async (getOneProjectDispatch) => {
 
 		let res = await axiosInstance().get(`/project/find/${pid}`);
 
-		console.log(res.data);
 		getOneProjectDispatch({
 			type: GET_PROJECT_SUCCESS,
 			payload: res.data,

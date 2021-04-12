@@ -9,12 +9,7 @@ import Context from '../../context/Context.js';
 import { GetOneProjectAction } from '../../context/actions/project/GetOneProjectAction.js';
 
 const ProjectContainer = () => {
-	const {
-		getOneProjectState: {
-			getOneProject: { isLoading, data },
-		},
-		getOneProjectDispatch,
-	} = useContext(Context);
+	const { getOneProjectDispatch } = useContext(Context);
 
 	const trackChanges = useRef(false);
 
@@ -28,11 +23,7 @@ const ProjectContainer = () => {
 		}
 	}, [params, getOneProjectDispatch]);
 
-	return (
-		<>
-			<Project isLoading={isLoading} data={data} />{' '}
-		</>
-	);
+	return <Project />;
 };
 
 export default ProjectContainer;

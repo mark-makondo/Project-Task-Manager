@@ -14,7 +14,6 @@ const Sidebar = ({
 	showCreateProjectDropdown,
 	userData,
 	allProjects,
-	projectsIsLoading,
 }) => {
 	// to prevent 'home' from always being active since home is not 'exact'.
 	let match = useRouteMatch();
@@ -43,23 +42,19 @@ const Sidebar = ({
 								!!allProjects && allProjects.projects.length ? allProjects.projects.length : 0
 							})`}</span>
 						</span>
-						{projectsIsLoading ? (
-							<i className='project-loading fas fa-spinner fa-spin'></i>
-						) : (
-							<ul className='normal-2'>
-								{!!allProjects &&
-									allProjects.projects.map((project, i) => (
-										<NavLink
-											key={i}
-											to={`${homeUrl}/${project._id}`}
-											activeClassName='selected'
-											className='project-list normal-2 sidebar-hover'
-										>
-											<span>{project.projectName}</span>
-										</NavLink>
-									))}
-							</ul>
-						)}
+						<ul className='normal-2'>
+							{!!allProjects &&
+								allProjects.projects.map((project, i) => (
+									<NavLink
+										key={i}
+										to={`${homeUrl}/${project._id}`}
+										activeClassName='selected'
+										className='project-list normal-2 sidebar-hover'
+									>
+										<span>{project.projectName}</span>
+									</NavLink>
+								))}
+						</ul>
 					</div>
 					<div onClick={(e) => showCreateProjectDropdown(e)} className='sidebar-top__newProject dropdown'>
 						<button className='dropdown-button normal-2'>+ NEW</button>

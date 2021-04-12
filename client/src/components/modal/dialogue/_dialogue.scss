@@ -1,0 +1,38 @@
+.confirm-dialogue {
+	@include setFlex(row, center, center);
+	position: fixed;
+	background: #80808040;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 99;
+	&-wrapper {
+		@include setFlex(column, center, center);
+		border-radius: 0.5rem;
+		position: relative;
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		background-color: white;
+		padding: 1rem;
+		margin: 1rem;
+		box-shadow: $little-shadow;
+		text-align: center;
+	}
+	&-buttons {
+		@include setFlex(row, space-evenly, center);
+		margin-top: 1rem;
+		width: 100%;
+		button {
+			@include customButtonWithHover(white, getColors(btn-status-working)) {
+				opacity: 0.8;
+			}
+			&:first-of-type {
+				background-color: getColors(primary-fade);
+			}
+		}
+	}
+}

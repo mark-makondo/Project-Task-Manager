@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import TableTemplate from './TableTemplate.js';
 
 // modal components
-import DetailsModalContainer from '../../modal/detailsModal/DetailsModalContainer.js';
+import DetailsModalContainer from '../../dropdown/details/DetailsContainer.js';
 
 const TableTemplateContainer = ({ project, originalData }) => {
 	const [isDetailsModalActive, setIsDetailsModalActive] = useState(false);

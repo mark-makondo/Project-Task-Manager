@@ -1,4 +1,368 @@
 .table-project {
 	position: relative;
+	width: 100%;
+	margin: auto 0;
+
+	&-loading {
+		@include setFlex(row, center, center);
+		font-size: 3rem;
+		color: getColors(btn-status-working);
+	}
+	.avatar-global {
+		letter-spacing: 0.15rem;
+		border-radius: 50%;
+		padding: 0.6rem;
+		background: getColors(border);
+		color: white;
+		overflow: hidden;
+		font-family: $sub;
+		span {
+			text-align: center;
+		}
+	}
+
+	&__title {
+		@include setFlex(row, space-between, center);
+		width: 100%;
+		margin-bottom: 1rem;
+		font-family: $main;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+
+		&-right {
+			@include setFlex(row, space-between, center);
+
+			.dropdown-ellipsis {
+				position: relative;
+				display: inline-block;
+				.dropdown-button {
+					@include customHover();
+					color: getColors(button-2);
+
+					&.active {
+						background-color: getColors(fade-selected);
+					}
+				}
+				.dropdown-content-select {
+					right: 5px;
+					margin-top: 0.5rem;
+					&::after {
+						left: unset;
+						margin: unset;
+					}
+				}
+			}
+		}
+
+		&-name {
+			font-weight: 600;
+			text-transform: capitalize;
+		}
+		&-avatar {
+			@include setFlex(row, center, center);
+			margin-right: 3rem;
+			span {
+				font-family: $sub;
+			}
+			figure {
+				@include setFlex(row, center, center);
+				figcaption {
+					font-weight: 600;
+					text-transform: capitalize;
+				}
+				.avatar {
+					@include setFlex(row, center, center);
+					width: 2.5rem;
+					height: 2.5rem;
+					margin: 0 0.5rem;
+				}
+			}
+		}
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		border-top: 1px solid;
+		border-color: getColors(selected);
+		padding-top: 1rem;
+
+		&--grid {
+			display: grid;
+			grid-template-columns: 5fr repeat(3, 1fr);
+			gap: 0.5rem;
+			text-align: center;
+		}
+		&-th {
+			font-family: $sub;
+			letter-spacing: 1px;
+			margin-bottom: 0.5rem;
+		}
+
+		&-tr {
+			text-transform: capitalize;
+			font-weight: 600;
+			width: 100%;
+			height: 3rem;
+			margin-bottom: 0.5rem;
+
+			&__avatar {
+				.avatar {
+					@include setFlex(row, center, center);
+					width: 2.3rem;
+					height: 2.3rem;
+				}
+			}
+
+			&__task {
+				@include setFlex(row, flex-start, center);
+				overflow: hidden;
+				.indicator {
+					display: inline;
+					width: 1rem;
+					height: 100%;
+				}
+				.content {
+					width: 100%;
+					height: 100%;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					padding-left: 0.5rem;
+					font-weight: 300;
+					&-wrapper {
+						display: flex;
+						flex: 1;
+						min-width: 0;
+						text-align: left;
+
+						.content--input {
+							display: none;
+							outline: none;
+							width: 100%;
+							height: 100%;
+							border: none;
+							background-color: getColors(secondary-more-fade);
+							padding: 0 0.5rem;
+							color: getColors(primary);
+							&::placeholder {
+								opacity: 1;
+								color: getColors(secondary-fade);
+							}
+							&:focus {
+								&::placeholder {
+									opacity: 1;
+									color: getColors(primary);
+								}
+							}
+						}
+
+						&.enable-edit {
+							.content--input {
+								display: block;
+								border: 1px dashed;
+							}
+							.content--span {
+								display: none !important;
+							}
+						}
+					}
+				}
+				.edit {
+					&-wrapper {
+						&.editing {
+							.fa-edit {
+								display: none !important;
+							}
+							.fa-check {
+								display: block;
+								color: getColors(primary);
+								@include responsiveHover() {
+									color: getColors(btn-status-working);
+								}
+							}
+						}
+					}
+				}
+				.message-dot {
+					margin-left: auto;
+					font-size: 1.46rem;
+					color: getColors(secondary-fade);
+					margin-right: 0.5rem;
+					margin-left: 0.8rem;
+					transition: 200ms linear;
+
+					@include responsiveHover() {
+						color: getColors(btn-status-working);
+					}
+				}
+				.icon {
+					font-size: 1.25rem;
+					color: getColors(secondary-fade);
+					transition: 150ms linear;
+
+					.edit,
+					.save,
+					&.delete {
+						display: none;
+					}
+
+					.edit,
+					.save {
+						margin: 0 0.5rem;
+					}
+
+					@include responsiveHover() {
+						color: getColors(btn-status-working);
+					}
+				}
+
+				@include responsiveHover() {
+					.icon {
+						.edit,
+						&.delete {
+							display: block;
+						}
+					}
+					.content-wrapper {
+						border: 1px dashed;
+						border-color: getColors(secondary-fade);
+					}
+				}
+			}
+
+			&__status {
+				position: relative;
+
+				.status-wrapper {
+					@include setFlex(row, center, center);
+					border: 1px solid;
+					border-color: getColors(secondary-fade);
+					padding: 0 0.3rem;
+					margin: 0 0.3rem;
+					width: 100%;
+					min-height: 1.75rem;
+					font-weight: 600;
+					span {
+						flex: 1;
+						text-align: center;
+
+						color: white;
+					}
+					.fa-angle-down {
+						color: white;
+					}
+					@include responsiveHover() {
+						border-color: getColors(primary);
+						.fa-angle-down {
+							color: getColors(primary);
+						}
+					}
+					&.active {
+						border-color: getColors(primary) !important;
+					}
+				}
+			}
+
+			&__deadline {
+				position: relative;
+
+				.deadline-progress {
+					position: absolute;
+					left: 0;
+					z-index: 0;
+					height: 100%;
+					background-color: getColors(btn-status-completed);
+				}
+				.deadline-input {
+					cursor: pointer;
+					z-index: 1;
+					min-height: 1.75rem;
+					text-align: center;
+					background: transparent;
+					outline: none;
+					border-color: getColors(secondary-fade);
+					font-weight: 600;
+					width: 80%;
+					border: none;
+					font-size: 16px;
+					margin: 0 1rem;
+					@include responsiveHover() {
+						border: 1px dashed;
+					}
+				}
+			}
+
+			.cell {
+				@include customHover();
+				@include setFlex(row, center, center);
+				background: getColors(secondary-more-fade);
+				padding: unset;
+				border-radius: unset;
+			}
+
+			&-adder {
+				position: relative;
+				height: 3rem;
+				margin-top: 1rem;
+				@include setFlex(row, flex-start, center);
+				.indicator {
+					display: inline;
+					width: 1rem;
+					height: 100%;
+					background: getColors(selected);
+					border: 1px solid;
+					border-color: getColors(selected);
+					transition: 150ms linear;
+				}
+				form {
+					@include setFlex(row, flex-start, center);
+					width: 100%;
+					height: 100%;
+					input {
+						outline: none;
+						width: 100%;
+						height: 100%;
+						border: none;
+						background-color: getColors(secondary-more-fade);
+						padding: 0 0.5rem;
+						color: getColors(primary);
+						&::placeholder {
+							opacity: 1;
+							color: getColors(secondary-fade);
+						}
+						&:focus {
+							&::placeholder {
+								opacity: 1;
+								color: getColors(primary);
+							}
+						}
+					}
+					button {
+						padding: 0.35rem 0.8rem;
+						border-radius: 0.4rem;
+						border: none;
+						background: getColors(fade-selected);
+						font-weight: 600;
+						letter-spacing: 1px;
+						outline: none;
+						transition: 150ms linear;
+						height: 100%;
+						width: 5rem;
+						margin-left: 0.5rem;
+						text-transform: uppercase;
+						color: getColors(secondary-fade);
+					}
+				}
+				@include responsiveHover() {
+					.indicator,
+					button {
+						background: getColors(primary);
+						color: white;
+					}
+				}
+			}
+		}
+	}
 }
 @import './tableProjectResponsive';

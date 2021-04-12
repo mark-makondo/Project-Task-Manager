@@ -1,11 +1,11 @@
-.dropdown-content-profile-settings {
+.dropdown-content-select {
 	display: none;
 	opacity: 0;
 	position: absolute;
 	background-color: #f9f9f9;
 	font-family: $main;
-	width: 60%;
-	left: 75%;
+	width: auto;
+	top: 100%;
 	text-align: center;
 	box-shadow: $little-shadow;
 	border: 2px solid;
@@ -14,6 +14,7 @@
 	cursor: pointer;
 	border-radius: 0.5rem;
 	transition: 150ms ease-in-out;
+	list-style: none;
 
 	&.active {
 		display: block;
@@ -28,7 +29,10 @@
 		width: 10px;
 		background-color: getColors(btn-status-working);
 		z-index: -1;
-		left: -3.61%;
+		top: -5px;
+		right: 0;
+		left: 0;
+		margin: 0 auto;
 		transform: rotate(40deg);
 		bottom: 30%;
 		box-shadow: $more-shadow;
@@ -48,15 +52,13 @@
 			font-weight: 600;
 		}
 
-		&:nth-child(odd) {
+		&:not(:last-child) {
 			border-bottom: 1px solid;
 			border-color: getColors(fade-selected);
-		}
-		&:not(:last-child) {
 			@include responsiveHover() {
 				border-color: getColors(selected);
 			}
 		}
 	}
 }
-@import './profileSettingsResponsive';
+@import './selectResponsive';

@@ -13,6 +13,9 @@ const query = {
 	dropdownCreateProjectContent: () => document.querySelector('.dropdown-content-new-project'),
 	dropdownCreateProjectButton: () => document.querySelector('.sidebar-top__newProject button'),
 
+	// dropdown select component for tasks @dashboard project
+	dropdownContentSelect: () => document.querySelector('.dropdown-content-select'),
+
 	// more here
 };
 

@@ -79,20 +79,20 @@ exports.findOne = async (req, res, next) => {
 		let findProject = await Project.findById(pid);
 		if (!findProject) res.status(400).send('Project not found.');
 
-		let project = await findProject.execPopulate({
-			path: 'owner',
-			populate: {
-				path: 'members._id',
-				model: User,
-			},
-			populate: { path: 'tasks.assigned', model: User },
-		});
+		let project = await findProject
+			.populate('owner')
+			.populate('members._id')
+			.populate({
+				path: 'tasks.assigned',
+				select: 'name email avatar',
+			})
+			.execPopulate();
 
 		res.status(200).send({ project, user });
 
 		return next();
 	} catch (error) {
-		// console.error(error);
+		console.error(error);
 		return next(error);
 	}
 };
@@ -103,6 +103,7 @@ exports.findOne = async (req, res, next) => {
  */
 exports.deleteProject = async (req, res, next) => {
 	try {
+		console.log(req.params);
 		let pid = req.params.pid;
 		if (!pid) return res.status(400).send('pid not found from path parameters.');
 
@@ -219,14 +220,19 @@ exports.addTask = async (req, res, next) => {
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		let taskName = req.body.taskName;
-		if (!taskName) return res.status(400).send('TaskName not found from the body.');
+		// let taskName = req.body.taskName;
+		// if (!taskName) return res.status(400).send('TaskName not found from the body.');
 
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
+		let { taskName, status, assigned, deadline } = req.body;
+
 		project.tasks.push({
 			taskName,
+			assigned,
+			status,
+			deadline,
 		});
 
 		let savedProject = await project.save();
@@ -248,10 +254,10 @@ exports.addTask = async (req, res, next) => {
  */
 exports.removeTask = async (req, res, next) => {
 	try {
-		let pid = req.body._pid;
+		let pid = req.params.pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		let tid = req.body._tid;
+		let tid = req.params.tid;
 		if (!tid) return res.status(400).send('_tid not found from the body.');
 
 		// find the project and remove the task property using pull from the project collection.
@@ -267,17 +273,14 @@ exports.removeTask = async (req, res, next) => {
 
 		return next();
 	} catch (error) {
-		// console.error(error);
+		console.error(error);
 		return next(error);
 	}
 };
 
 /**
- * Requires '_pid' and '_tid' on body parameters.
- * Requires 'taskName', 'status', 'assigned', 'deadline' as well.
- * Update a set of values in the tasks property of project collection.
- * The default value of 'assigned' value must be the owner's
- * id in the client side.
+ * body format must contain _pid and_tid property and one object that contains
+ * the property that we are going to update.
  */
 exports.updateTask = async (req, res, next) => {
 	try {
@@ -290,15 +293,11 @@ exports.updateTask = async (req, res, next) => {
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		let { taskName, status, assigned, deadline } = req.body;
-
-		// get the sub documents of our task property of project collection using the task id.
 		let subdoc = project.tasks.id(tid);
 
-		subdoc['taskName'] = taskName;
-		subdoc['status'] = status;
-		subdoc['assigned'] = assigned;
-		subdoc['deadline'] = deadline;
+		for (let el in req.body.update) {
+			subdoc[el] = req.body.update[el];
+		}
 
 		let savedProject = project.save();
 
