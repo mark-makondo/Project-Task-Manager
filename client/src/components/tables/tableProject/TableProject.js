@@ -13,6 +13,10 @@ const TableProjectTitle = ({ data, ellipsisClickHandler, showEllipsisDropdown })
 		<div className='table-project__title'>
 			<div className='table-project__title-name normal-1'>{data.project.projectName}</div>
 			<div className='table-project__title-right'>
+				<button className='table-project__title-members-add normal-2'>
+					<i className='fas fa-user-plus'></i>
+					<span>Members</span>
+				</button>
 				<div className='table-project__title-avatar normal-2'>
 					<span>Owner: </span>
 					<figure>
@@ -64,13 +68,14 @@ const TableRow = ({
 	showStatusDropdown,
 	selectedStatusClickHandler,
 	dateSelectHandler,
+	showMessageSidebar,
 }) => {
 	let calculatedDatePercent = `${getComparedDatePercent(task.created_at, task.deadline)}%`;
 	let getCurrentStatusColor = getStatusColor(!!task.status && task.status);
 
 	return (
 		<div className='table-project__content-tr table-project__content--grid'>
-			<div className='table-project__content-tr__task cell'>
+			<div onClick={(e) => showMessageSidebar(e)} className='table-project__content-tr__task cell'>
 				<div style={{ backgroundColor: getCurrentStatusColor }} className='indicator'></div>
 				<div className={`content-wrapper content-wrapper--${task._id}`}>
 					<span className='content content--span' title={task.taskName}>
@@ -82,7 +87,7 @@ const TableRow = ({
 						className='content content--input normal-2'
 						onChange={(e) => taskNameEditOnChange(e)}
 						name='taskName'
-						placeholder={task.taskName}
+						defaultValue={task.taskName}
 					/>
 				</div>
 				<div className={`edit-wrapper icon edit-wrapper--${task._id}`}>
@@ -95,7 +100,11 @@ const TableRow = ({
 					onClick={(e) => taskDeleteClickHandler(e)}
 					className='icon delete fas fa-trash-alt'
 				></i>
-				<i data-tid={task._id} className='message-dot far fa-comment-dots'></i>
+				<i
+					data-tid={task._id}
+					onClick={(e) => showMessageSidebar(e)}
+					className='message-dot far fa-comment-dots'
+				></i>
 			</div>
 			<div className='table-project__content-tr__avatar cell'>
 				<div className='avatar avatar-global'>
@@ -203,6 +212,7 @@ const TableProject = ({
 	dateSelectHandler,
 	ellipsisClickHandler,
 	showEllipsisDropdown,
+	showMessageSidebar,
 }) => {
 	return (
 		<div className='table-project'>
@@ -227,6 +237,7 @@ const TableProject = ({
 								selectedStatusClickHandler={selectedStatusClickHandler}
 								dateSelectHandler={dateSelectHandler}
 								showEllipsisDropdown={showEllipsisDropdown}
+								showMessageSidebar={showMessageSidebar}
 							/>
 						))}
 						<TableRowAdder submitHandler={submitHandler} inputOnChangeHandler={inputOnChangeHandler} />

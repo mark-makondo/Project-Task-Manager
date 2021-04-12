@@ -9,7 +9,7 @@ import { GetAllProjectAction } from '../../context/actions/project/GetAllProject
 const OverviewContainer = () => {
 	const {
 		projectState: {
-			project: { data },
+			project: { data, isLoading },
 		},
 		projectDispatch,
 	} = useContext(Context);
@@ -23,7 +23,7 @@ const OverviewContainer = () => {
 			trackChanges.current = true;
 		}
 	}, [projectDispatch]);
-	return <Overview data={data} />;
+	return <Overview data={data} isLoading={isLoading} />;
 };
 
 export default OverviewContainer;

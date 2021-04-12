@@ -12,8 +12,8 @@ exports.createProjectFolder = async (req, res, next) => {
 		let projectName = req.body.projectName;
 		if (!projectName) return res.status(400).send('Project name is required.');
 
-		let companyEmail = req.body.companyEmail;
-		if (!companyEmail) return res.status(400).send('Company email is required.');
+		// let companyEmail = req.body.companyEmail;
+		// if (!companyEmail) return res.status(400).send('Company email is required.');
 
 		// let googleDrive = new GoogleDrive();
 
@@ -40,17 +40,22 @@ exports.createProjectFolder = async (req, res, next) => {
 
 exports.createTaskFolder = async (req, res, next) => {
 	try {
-		let { projectFolderId, companyEmail } = req.savedProject;
-		let folderName = req.body.taskName;
+		// let { _pid, companyEmail } = req.savedProject;
 
-		let type = 'user';
-		let role = 'owner';
+		// // let { pid, companyEmail } = req.addedTask;
+		// let folderName = req.body.taskName;
 
-		let googleDrive = new GoogleDrive();
-		await googleDrive.init();
+		// let type = 'user';
+		// let role = 'owner';
 
-		let { result } = await googleDrive.createFolderAndMove(projectFolderId, folderName);
-		await googleDrive.createPermission(result, type, role, companyEmail);
+		// let googleDrive = new GoogleDrive();
+		// await googleDrive.init();
+
+		// let { result } = await googleDrive.createFolderAndMove(_pid, folderName);
+		// await googleDrive.createPermission(result, type, role, companyEmail);
+
+		// // console.log(result);
+		// res.status(200).send({ message: 'Added task successfully.', result: req.savedProject });
 
 		return next();
 	} catch (error) {

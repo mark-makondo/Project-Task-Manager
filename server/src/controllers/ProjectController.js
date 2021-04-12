@@ -103,7 +103,6 @@ exports.findOne = async (req, res, next) => {
  */
 exports.deleteProject = async (req, res, next) => {
 	try {
-		console.log(req.params);
 		let pid = req.params.pid;
 		if (!pid) return res.status(400).send('pid not found from path parameters.');
 
@@ -239,7 +238,8 @@ exports.addTask = async (req, res, next) => {
 
 		res.status(200).send({ message: 'Added task successfully.', result: savedProject });
 
-		req.savedProject = savedProject;
+		// req.savedProject = savedProject;
+		// req.addedTask = { pid: savedProject._id, companyEmail: savedProject.companyEmail };
 
 		return next();
 	} catch (error) {

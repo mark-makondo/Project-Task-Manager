@@ -25,8 +25,6 @@ export const CreateProjectAction = (input) => async (createProjectDispatch) => {
 			createProjectButton.classList.remove('active');
 		}
 
-		alert('Project Created Successfully');
-
 		createProjectDispatch({
 			type: CREATE_PROJECT_SUCCESS,
 			payload: getAllProject.data,

@@ -1,0 +1,14 @@
+.chat-sidebar {
+	position: relative;
+	position: fixed;
+	background: gray;
+	height: 100vh;
+	top: 0;
+	z-index: 99;
+	width: 50vmin;
+	right: 0;
+	&-wrapper {
+		position: relative;
+	}
+}
+@import './chatSidebarResponsive';

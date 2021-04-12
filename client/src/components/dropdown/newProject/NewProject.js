@@ -48,8 +48,8 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 				)}
 
 				{isLoading ? (
-					<span className='normal-2'>
-						<i className='project-create-loading fas fa-spinner fa-spin'></i>
+					<span className='normal-2 project-create-loading '>
+						<i className='fas fa-spinner fa-spin'></i>
 						<span className='normal-3'>Please Wait...</span>
 					</span>
 				) : (

@@ -928,6 +928,21 @@ ul {
   margin-left: -50rem;
 }
 
+.chat-sidebar {
+  position: relative;
+  position: fixed;
+  background: gray;
+  height: 100vh;
+  top: 0;
+  z-index: 99;
+  width: 50vmin;
+  right: 0;
+}
+
+.chat-sidebar-wrapper {
+  position: relative;
+}
+
 .table {
   position: relative;
   width: 100%;
@@ -950,10 +965,14 @@ ul {
   align-items: center;
   align-content: center;
   width: 100%;
-  margin-bottom: 1rem;
   font-family: "Open Sans", sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
+  padding: 0.3rem 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  border-top: 1px solid;
+  border-color: #cecece;
 }
 
 .table__title-right {
@@ -1132,7 +1151,7 @@ ul {
 
 .table__content-tr__task .message-dot {
   margin-left: auto;
-  font-size: 1.8rem;
+  font-size: 1.46rem;
   color: #82828290;
   margin: 0 0.5rem;
   transition: 200ms linear;
@@ -1231,10 +1250,14 @@ ul {
   align-items: center;
   align-content: center;
   width: 100%;
-  margin-bottom: 1rem;
   font-family: "Open Sans", sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
+  padding: 0.3rem 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  border-top: 1px solid;
+  border-color: #cecece;
 }
 
 .table-project__title-right {
@@ -1318,6 +1341,33 @@ ul {
   width: 2.5rem;
   height: 2.5rem;
   margin: 0 0.5rem;
+}
+
+.table-project__title-members-add {
+  padding: 0.35rem 0.8rem;
+  border-radius: 0.4rem;
+  border: none;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1px;
+  outline: none;
+  transition: 150ms linear;
+  z-index: 1;
+  cursor: pointer;
+  text-align: center;
+  background: #6c63ff;
+  text-transform: uppercase;
+  margin: 0 1rem;
+}
+
+@media (hover: hover) {
+  .table-project__title-members-add:hover {
+    opacity: 0.85;
+  }
+}
+
+.table-project__title-members-add i {
+  margin-right: 0.2rem;
 }
 
 .table-project__content {
@@ -2000,6 +2050,14 @@ ul {
   background: #6c63ff;
   text-transform: uppercase;
   text-transform: capitalize;
+}
+
+.dropdown-content-new-project form .project-create-loading {
+  color: #6c63ff;
+}
+
+.dropdown-content-new-project form .project-create-loading i {
+  margin-right: 0.5rem;
 }
 
 .dropdown-content-select {

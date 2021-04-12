@@ -15,10 +15,17 @@
 	&__title {
 		@include setFlex(row, space-between, center);
 		width: 100%;
-		margin-bottom: 1rem;
+		// margin-bottom: 1rem;
 		font-family: $main;
 		text-transform: uppercase;
 		letter-spacing: 1px;
+		// background: #2f2e41;
+		// color: white;
+		padding: 0.3rem 1rem;
+		border-top-left-radius: 1rem;
+		border-top-right-radius: 1rem;
+		border-top: 1px solid;
+		border-color: getColors(selected);
 
 		&-right {
 			@include setFlex(row, space-between, center);
@@ -145,7 +152,7 @@
 				}
 				.message-dot {
 					margin-left: auto;
-					font-size: 1.8rem;
+					font-size: 1.46rem;
 					color: getColors(secondary-fade);
 					margin: 0 0.5rem;
 					transition: 200ms linear;

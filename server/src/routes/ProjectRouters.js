@@ -9,7 +9,8 @@ const verifyToken = require('../middlewares/VerifyToken');
 const googleDrive = require('../middlewares/GoogleDriveOperation');
 
 // project routes
-router.route('/create').post(verifyToken, googleDrive.createProjectFolder, projectController.create);
+// router.route('/create').post(verifyToken, googleDrive.createProjectFolder, projectController.create);
+router.route('/create').post(verifyToken, projectController.create);
 router.route('/findAll').get(verifyToken, projectController.findAllUserProjects);
 router.route('/find/:pid').get(verifyToken, projectController.findOne);
 router.route('/delete/:pid').delete(verifyToken, projectController.deleteProject);

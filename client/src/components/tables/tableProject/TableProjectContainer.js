@@ -4,15 +4,16 @@ import Moment from 'moment';
 // ui
 import TableProject from './TableProject';
 
+// helper
+import Query from '../../../helper/query.js';
+
 // context
 import Context from '../../../context/Context.js';
 import { TaskAction } from '../../../context/actions/project/TaskAction.js';
 
-// confirm dialogue
+// sub components
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
-
-// helper
-import Query from '../../../helper/query.js';
+import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 
 const TableProjectContainer = () => {
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
@@ -145,7 +146,6 @@ const TableProjectContainer = () => {
 
 		TaskAction(reqData, type)(getOneProjectDispatch);
 	};
-
 	//#endregion
 
 	//#region task status
@@ -204,6 +204,12 @@ const TableProjectContainer = () => {
 	};
 	//#endregion
 
+	//#region task messages and file upload
+	const showMessageSidebar = (e) => {
+		// let tid = e.currentTarget.dataset.tid;
+		// setCurrentTaskId(tid);
+	};
+	//#endregion
 	return (
 		<>
 			<TableProject
@@ -221,6 +227,7 @@ const TableProjectContainer = () => {
 				dateSelectHandler={dateSelectHandler}
 				ellipsisClickHandler={ellipsisClickHandler}
 				showEllipsisDropdown={showEllipsisDropdown}
+				showMessageSidebar={showMessageSidebar}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}
@@ -232,6 +239,7 @@ const TableProjectContainer = () => {
 				setIsActive={setConfirmProjectDeleteDialogueOpen}
 				confirmActionHandler={confirmProjectDeleteHandler}
 			/>
+			{/* <ChatSidebarContainer /> */}
 		</>
 	);
 };

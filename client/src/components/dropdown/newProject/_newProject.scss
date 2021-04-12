@@ -70,6 +70,13 @@
 			@include customButtonWithHover(white, getColors(btn-status-working));
 			text-transform: capitalize;
 		}
+
+		.project-create-loading {
+			color: getColors(btn-status-working);
+			i {
+				margin-right: 0.5rem;
+			}
+		}
 	}
 }
 @import './newProjectResponsive';
