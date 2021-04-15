@@ -9,7 +9,9 @@ import Query from '../../../helper/query.js';
 
 // context
 import Context from '../../../context/Context.js';
+import { SocketContext, socket } from '../../../context/SocketContext.js';
 import { TaskAction } from '../../../context/actions/project/TaskAction.js';
+import { TaskMessageAction } from '../../../context/actions/project/TaskMessageAction.js';
 
 // sub components
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
@@ -18,8 +20,9 @@ import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 const TableProjectContainer = () => {
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
 	const [confirmProjectDeleteDialogueOpen, setConfirmProjectDeleteDialogueOpen] = useState(false);
+	const [isChatSidebarActive, setisChatSidebarActive] = useState(false);
 	const [currentTaskId, setCurrentTaskId] = useState();
-
+	const [taskID, setTaskID] = useState();
 	const [input, setInput] = useState({
 		_pid: '',
 		taskName: '',
@@ -34,6 +37,23 @@ const TableProjectContainer = () => {
 		},
 		getOneProjectDispatch,
 	} = useContext(Context);
+
+	const { taskMessageDispatch } = useContext(Context);
+
+	//#region task messages and file upload
+	const showMessageSidebar = (e) => {
+		let tid = e.currentTarget.dataset.tid;
+
+		if (localStorage.getItem('local-tid') !== taskID) {
+			localStorage.setItem('local-tid', tid);
+			setTaskID(tid);
+		}
+
+		TaskMessageAction(tid, 'get')(taskMessageDispatch);
+		setisChatSidebarActive(!isChatSidebarActive);
+	};
+
+	//#endregion
 
 	//#region table title section
 	const showEllipsisDropdown = (e) => {
@@ -103,6 +123,7 @@ const TableProjectContainer = () => {
 			_tid: currentTaskId,
 		};
 
+		localStorage.removeItem('local-tid');
 		TaskAction(reqData, type)(getOneProjectDispatch);
 		setConfirmTaskDeleteDialogueOpen(!confirmTaskDeleteDialogueOpen);
 	};
@@ -155,9 +176,7 @@ const TableProjectContainer = () => {
 		let dropdownContentQuery = document.querySelector(
 			`.table-project__content-tr__status--${tid} .dropdown-content-select`
 		);
-		let dropdownWrapperQuery = document.querySelector(
-			`.table-project__content-tr__status--${tid} .status-wrapper`
-		);
+		let dropdownWrapperQuery = document.querySelector(`.table-project__content-tr__status--${tid} .status-wrapper`);
 
 		dropdownContentQuery.classList.toggle('active');
 		dropdownWrapperQuery.classList.toggle('active');
@@ -204,12 +223,6 @@ const TableProjectContainer = () => {
 	};
 	//#endregion
 
-	//#region task messages and file upload
-	const showMessageSidebar = (e) => {
-		// let tid = e.currentTarget.dataset.tid;
-		// setCurrentTaskId(tid);
-	};
-	//#endregion
 	return (
 		<>
 			<TableProject
@@ -239,7 +252,9 @@ const TableProjectContainer = () => {
 				setIsActive={setConfirmProjectDeleteDialogueOpen}
 				confirmActionHandler={confirmProjectDeleteHandler}
 			/>
-			{/* <ChatSidebarContainer /> */}
+			<SocketContext.Provider value={socket}>
+				<ChatSidebarContainer taskID={taskID} isChatSidebarActive={isChatSidebarActive} />
+			</SocketContext.Provider>
 		</>
 	);
 };

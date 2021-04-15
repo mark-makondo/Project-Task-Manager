@@ -14,7 +14,7 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				getOneProject: {
-					...state.auth,
+					...state.getOneProject,
 					error: false,
 					isLoading: true,
 				},
@@ -24,7 +24,7 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				getOneProject: {
-					...state.auth,
+					...state.getOneProject,
 					error: false,
 					isLoading: false,
 					data: payload,
@@ -35,7 +35,7 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				getOneProject: {
-					...state.auth,
+					...state.getOneProject,
 					isLoading: false,
 					error: payload,
 				},

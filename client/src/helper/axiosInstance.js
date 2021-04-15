@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { BACKEND_SERVER } from '../constants/SocketConnection.js';
 
 const axiosInstance = (history = null) => {
-	const baseURL = `http://localhost:5000/api/auth`;
+	const baseURL = `${BACKEND_SERVER}/api/auth`;
 
 	let headers = {};
 

@@ -16,6 +16,12 @@ const query = {
 	// dropdown select component for tasks @dashboard project
 	dropdownContentSelect: () => document.querySelector('.dropdown-content-select'),
 
+	// emojipicker
+	emojiPickerReact: () => document.querySelector('.emoji-picker-react'),
+
+	// chat sidebar
+	projectContainer: () => document.querySelector('.project-container .chat-sidebar'),
+
 	// more here
 };
 

@@ -1,23 +1,30 @@
+const { promisify } = require('util');
+const upload = require('../multer');
+const fs = require('fs');
+
 // models
 const { Project } = require('../models/ProjectModel');
 const { User } = require('../models/UserModel');
+const { Message } = require('../models/MessageModel');
 
 //#region Query for projects : Create, Find all, Find one, Delete.
-/**
- * Create a project for the user and push.
- * the project id to the user. The req.projectFolderId.
- * and req.user came from the middleware.
- */
+
 exports.create = async (req, res, next) => {
 	try {
 		let id = req.user._id;
+		if (!id) res.status(400).send('Id not found from jwt token.');
+
 		let user = await User.findById(id);
+		if (!user) return res.status(400).send('No user found.');
+
+		let projectName = req.body.projectName;
+		if (!projectName) return res.status(400).send('Project name is required.');
 
 		let project = new Project({
-			projectName: req.body.projectName,
+			projectName: projectName,
 			companyEmail: req.body.companyEmail,
 			owner: user._id,
-			projectFolderId: req.projectFolderId,
+			projectFolderId: '',
 		});
 
 		let savedProject = await project.save();
@@ -28,6 +35,8 @@ exports.create = async (req, res, next) => {
 
 		res.status(200).send(savedProject);
 
+		req.savedProject = savedProject;
+
 		return next();
 	} catch (error) {
 		// console.error(error);
@@ -35,11 +44,6 @@ exports.create = async (req, res, next) => {
 	}
 };
 
-/**
- * populate all the users project property to get all the project informations,
- * then do populate again for the project's member property to get all the
- * member's information.
- */
 exports.findAllUserProjects = async (req, res, next) => {
 	try {
 		let id = req.user._id;
@@ -48,7 +52,6 @@ exports.findAllUserProjects = async (req, res, next) => {
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
 
-		// do deep populate for projects and members property of project and user collection.
 		let projects = await user.execPopulate({
 			path: 'projects',
 			model: Project,
@@ -97,10 +100,6 @@ exports.findOne = async (req, res, next) => {
 	}
 };
 
-/**
- * requires a params of pid, deletes the corresponding project document together with
- * its references from user collection.
- */
 exports.deleteProject = async (req, res, next) => {
 	try {
 		let pid = req.params.pid;
@@ -133,10 +132,7 @@ exports.deleteProject = async (req, res, next) => {
 //#endregion
 
 //#region Query for project members: Add, Remove.
-/**
- * Add and update member property to our project collection.
- * Requires user 'id' and project 'pid' parameters from body.
- */
+
 exports.addMember = async (req, res, next) => {
 	try {
 		let id = req.body._id;
@@ -173,11 +169,6 @@ exports.addMember = async (req, res, next) => {
 	}
 };
 
-/**
- * Required a body parameters of '_mid' member's id and project's id '_pid'.
- * Removes a member from a project collection as well as removing the
- * project on  user collection.
- */
 exports.removeMember = async (req, res, next) => {
 	try {
 		let mid = req.body._mid;
@@ -209,11 +200,7 @@ exports.removeMember = async (req, res, next) => {
 //#endregion
 
 //#region Query for project tasks: Add, Remove, Update, File upload.
-/**
- * Requires '_pid' and 'taskName' parameter on the body.
- * Add a task to the project collection, then send a new req
- * property 'projectFolderId' to next middleware.
- */
+
 exports.addTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;
@@ -248,10 +235,6 @@ exports.addTask = async (req, res, next) => {
 	}
 };
 
-/**
- * Requires '_pid' project id and '_tid' task id from the body.
- * Removes a task from project collection.
- */
 exports.removeTask = async (req, res, next) => {
 	try {
 		let pid = req.params.pid;
@@ -278,10 +261,6 @@ exports.removeTask = async (req, res, next) => {
 	}
 };
 
-/**
- * body format must contain _pid and_tid property and one object that contains
- * the property that we are going to update.
- */
 exports.updateTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;
@@ -295,8 +274,8 @@ exports.updateTask = async (req, res, next) => {
 
 		let subdoc = project.tasks.id(tid);
 
-		for (let el in req.body.update) {
-			subdoc[el] = req.body.update[el];
+		for (let key in req.body.update) {
+			subdoc[key] = req.body.update[key];
 		}
 
 		let savedProject = project.save();
@@ -312,17 +291,97 @@ exports.updateTask = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project tasks upload: upload, delete, generate a link.
-exports.fileUploadTask = async (req, res, next) => {
+//#region Query for project tasks messages: get, post.
+
+// exports.postMessages = async (req, res, next) => {
+// 	try {
+// 		let { _id, name, email, avatar } = req.user;
+// 		let { message, dateCreated } = req.body.content;
+// 		let tid = req.body._tid;
+
+// 		let content = {
+// 			author: _id,
+// 			message,
+// 			dateCreated,
+// 		};
+
+// 		let findProjectTask = await Project.findOne({ 'tasks._id': tid });
+// 		if (!findProjectTask) return res.status(400).send('task doesnt exist.');
+
+// 		let msg = new Message(content);
+// 		let savedMsg = await msg.save();
+
+// 		let subdoc = findProjectTask.tasks.id(tid);
+// 		subdoc.messages.push(savedMsg);
+
+// 		await findProjectTask.save();
+
+// 		let formatContent = {
+// 			_id: savedMsg._id,
+// 			message,
+// 			dateCreated,
+// 			author: {
+// 				_id,
+// 				name,
+// 				email,
+// 				avatar,
+// 			},
+// 		};
+
+// 		socket.io.emit('message', formatContent);
+
+// 		res.sendStatus(200);
+// 		return next();
+// 	} catch (error) {
+// 		// console.error(error);
+// 		return next(error);
+// 	}
+// };
+
+exports.getMessages = async (req, res, next) => {
 	try {
-		// if (!pid) return res.status(400).send('_pid not found from the body.');
+		let tid = req.params.tid;
+		if (!tid) return res.status(400).send('task id not valid.');
 
-		// res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
+		let findProjectTask = await Project.findOne({ 'tasks._id': tid });
+		if (!findProjectTask) return res.status(400).send('task doesnt exist.');
 
+		let populateMessage = await findProjectTask
+			.populate({
+				path: 'tasks.assigned',
+				select: 'name email avatar',
+			})
+			.execPopulate({
+				path: 'tasks.messages',
+				model: Message,
+				populate: { path: 'author', model: User, select: 'name email avatar' },
+			});
+
+		let findTask = populateMessage.tasks.id(tid);
+
+		res.status(200).json(findTask);
 		return next();
 	} catch (error) {
-		// console.error(error);
+		console.error(error);
 		return next(error);
+	}
+};
+
+//#endregion
+
+//#region Query for project tasks upload: upload, delete, generate a link.
+
+exports.fileUploadTask = async (req, res) => {
+	try {
+		const startUpload = promisify(upload);
+
+		await startUpload(req, res);
+
+		if (req.isImage) return res.status(200).json({ success: true, url: req.file.filename });
+
+		// handle docs or pdf
+	} catch (error) {
+		console.error(error.message);
 	}
 };
 

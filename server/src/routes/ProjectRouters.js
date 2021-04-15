@@ -10,7 +10,7 @@ const googleDrive = require('../middlewares/GoogleDriveOperation');
 
 // project routes
 // router.route('/create').post(verifyToken, googleDrive.createProjectFolder, projectController.create);
-router.route('/create').post(verifyToken, projectController.create);
+router.route('/create').post(verifyToken, projectController.create, googleDrive.createProjectFolder);
 router.route('/findAll').get(verifyToken, projectController.findAllUserProjects);
 router.route('/find/:pid').get(verifyToken, projectController.findOne);
 router.route('/delete/:pid').delete(verifyToken, projectController.deleteProject);
@@ -24,10 +24,13 @@ router.route('/member/remove').delete(verifyToken, projectController.removeMembe
 // router.route('/task/remove').delete(verifyToken, projectController.removeTask, googleDrive.deleteTaskFolder);
 router.route('/task/add').post(verifyToken, projectController.addTask);
 router.route('/task/remove/:pid/:tid').delete(verifyToken, projectController.removeTask);
-
 router.route('/task/update').put(verifyToken, projectController.updateTask);
 
 // router.route('/task/fileupload').get(verifyToken, projectController.fileUploadTask, googleDrive.createFile);
-router.route('/task/fileupload').get(verifyToken, projectController.fileUploadTask);
+router.route('/task/fileupload').post(projectController.fileUploadTask);
+
+// task messages
+// router.route('/task/message').post(verifyToken, projectController.postMessages);
+router.route('/task/message/:tid').get(verifyToken, projectController.getMessages);
 
 module.exports = router;

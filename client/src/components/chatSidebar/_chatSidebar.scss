@@ -1,14 +1,56 @@
 .chat-sidebar {
 	position: relative;
 	position: fixed;
-	background: gray;
 	height: 100vh;
 	top: 0;
 	z-index: 99;
 	width: 50vmin;
 	right: 0;
+	height: 100%;
+	box-shadow: $little-shadow;
+	animation-name: hideChatSidebar;
+	animation-duration: 0.5s;
+	display: none;
+
+	&.hide {
+		// width: 0;
+		// display: none;
+		// opacity: 0;
+		// visibility: hidden;
+		display: block;
+	}
+
 	&-wrapper {
+		@include setFlex(column, center, center);
+
 		position: relative;
+		height: 100%;
+
+		&__body {
+			position: relative;
+			width: 100%;
+			flex: 1;
+			background: white;
+			overflow-y: auto;
+			overflow-x: hidden;
+			padding: 1rem;
+		}
+	}
+
+	@keyframes hideChatSidebar {
+		from {
+			width: 0;
+			display: none;
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		to {
+			width: 50vmin;
+			display: block;
+			opacity: 1;
+			visibility: visible;
+		}
 	}
 }
 @import './chatSidebarResponsive';

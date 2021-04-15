@@ -2,7 +2,7 @@
 	@include setFlex(row, center, center);
 	position: relative;
 	background: getColors(primary);
-	height: 4rem;
+	height: 5rem;
 
 	&-wrapper {
 		@include setFlex(row, space-between, center);

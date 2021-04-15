@@ -1,4 +1,41 @@
 .chat-message {
 	position: relative;
+	display: flex;
+	align-items: flex-start;
+	margin: 1rem;
+	color: getColors(primary);
+
+	&-wrapper {
+		display: flex;
+		&-left {
+			display: flex;
+			align-items: flex-end;
+
+			margin-right: 0.5rem;
+		}
+		&-right {
+			align-items: flex-start;
+			text-align: left;
+		}
+	}
+
+	&-divided {
+		background: antiquewhite;
+		padding-bottom: 1rem;
+		padding-right: 1rem;
+		border-radius: 2rem 1rem 1rem 0rem;
+		padding-left: 1rem;
+		padding-top: 0.5rem;
+	}
+	&__avatar {
+		border-radius: 100%;
+		overflow: hidden;
+		width: 3rem;
+		height: 3rem;
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
 }
 @import './chatMessageResponsive';

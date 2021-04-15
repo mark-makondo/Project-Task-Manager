@@ -1,4 +1,27 @@
 .chat-header {
+	@include setFlex(row, flex-start, center);
 	position: relative;
+	height: 5rem;
+	background-color: getColors(btn-status-working);
+	color: white;
+	padding: 0 1rem;
+	width: 100%;
+
+	&-wrapper {
+		@include setFlex(column, center, flex-start);
+		color: getColors(primary);
+		&__title {
+			color: getColors(primary);
+			text-transform: capitalize;
+		}
+		&__sub-title {
+			// color: getColors(btn-status-working-faded);
+			font-weight: 600;
+			span {
+				color: white;
+				font-weight: 600;
+			}
+		}
+	}
 }
 @import './chatHeaderResponsive';

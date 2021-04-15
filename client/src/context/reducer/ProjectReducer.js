@@ -14,7 +14,7 @@ const ProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				project: {
-					...state.auth,
+					...state.project,
 					error: false,
 					isLoading: true,
 				},
@@ -24,7 +24,7 @@ const ProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				project: {
-					...state.auth,
+					...state.project,
 					error: false,
 					isLoading: false,
 					data: payload,
@@ -36,7 +36,7 @@ const ProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				project: {
-					...state.auth,
+					...state.project,
 					isLoading: false,
 					error: payload,
 				},

@@ -75,7 +75,12 @@ const TableRow = ({
 
 	return (
 		<div className='table-project__content-tr table-project__content--grid'>
-			<div onClick={(e) => showMessageSidebar(e)} className='table-project__content-tr__task cell'>
+			<div
+				data-tid={task._id}
+				data-tname={task.taskName}
+				onClick={(e) => showMessageSidebar(e)}
+				className='table-project__content-tr__task cell'
+			>
 				<div style={{ backgroundColor: getCurrentStatusColor }} className='indicator'></div>
 				<div className={`content-wrapper content-wrapper--${task._id}`}>
 					<span className='content content--span' title={task.taskName}>
@@ -102,6 +107,7 @@ const TableRow = ({
 				></i>
 				<i
 					data-tid={task._id}
+					data-tname={task.taskName}
 					onClick={(e) => showMessageSidebar(e)}
 					className='message-dot far fa-comment-dots'
 				></i>

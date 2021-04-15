@@ -29,6 +29,11 @@
 @import '../components/dropdown/select/select';
 @import '../components/dropdown/details/details';
 
+// component chat
+@import '../components/chat/chatHeader/chatHeader';
+@import '../components/chat/chatMessage/chatMessage';
+@import '../components/chat/chatFooter/chatFooter';
+
 // pages
 @import '../pages/dashboard/dashboard';
 @import '../pages/home/home';

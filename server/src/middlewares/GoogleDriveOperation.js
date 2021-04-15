@@ -1,35 +1,34 @@
 const GoogleDrive = require('../googledrive.js');
 const { User } = require('../models/UserModel');
+const { Project } = require('../models/ProjectModel');
 
 exports.createProjectFolder = async (req, res, next) => {
 	try {
-		let id = req.user._id;
-		if (!id) res.status(400).send('Id not found from jwt token.');
+		let { _id, email } = req.user;
+		let { projectName, companyEmail } = req.savedProject;
 
-		let user = await User.findById(id);
-		if (!user) return res.status(400).send('No user found.');
+		let googleDrive = new GoogleDrive();
 
-		let projectName = req.body.projectName;
-		if (!projectName) return res.status(400).send('Project name is required.');
+		let folderName = projectName;
+		let parentFolderName = `PTM-${_id}`;
+		let ownerEmail = email;
 
-		// let companyEmail = req.body.companyEmail;
-		// if (!companyEmail) return res.status(400).send('Company email is required.');
+		let response = await googleDrive.createFolderAndMoveWithPermission(
+			folderName,
+			parentFolderName,
+			ownerEmail,
+			companyEmail
+		);
 
-		// let googleDrive = new GoogleDrive();
+		let projectFolderId = response.result;
 
-		// let folderName = req.body.projectName;
-		// let parentFolderName = `PTM-${req.user._id}`;
-		// let ownerEmail = req.user.email;
-		// let companyEmail = req.body.companyEmail;
+		let findProject = await Project.findByIdAndUpdate(
+			req.savedProject._id,
+			{ projectFolderId },
+			{ useFindAndModify: false, new: true }
+		);
 
-		// let response = await googleDrive.createFolderAndMoveWithPermission(
-		// 	folderName,
-		// 	parentFolderName,
-		// 	ownerEmail,
-		// 	companyEmail
-		// );
-
-		// req.projectFolderId = response.result;
+		findProject.save();
 
 		return next();
 	} catch (error) {

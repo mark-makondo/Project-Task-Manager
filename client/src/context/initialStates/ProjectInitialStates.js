@@ -11,3 +11,7 @@ export const ProjectInitialStates = {
 export const GetOneProjectStates = {
 	getOneProject: dataFormat,
 };
+
+export const TaskMessageInitialStates = {
+	taskMessage: dataFormat,
+};
