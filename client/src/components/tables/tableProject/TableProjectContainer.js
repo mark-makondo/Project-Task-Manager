@@ -20,7 +20,6 @@ import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 const TableProjectContainer = () => {
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
 	const [confirmProjectDeleteDialogueOpen, setConfirmProjectDeleteDialogueOpen] = useState(false);
-	const [isChatSidebarActive, setisChatSidebarActive] = useState(false);
 	const [currentTaskId, setCurrentTaskId] = useState();
 	const [taskID, setTaskID] = useState();
 	const [input, setInput] = useState({
@@ -42,15 +41,17 @@ const TableProjectContainer = () => {
 
 	//#region task messages and file upload
 	const showMessageSidebar = (e) => {
+		let queryChatSidebar = Query.chatSideBarContainer();
 		let tid = e.currentTarget.dataset.tid;
+		localStorage.setItem('local-tid', tid);
 
 		if (localStorage.getItem('local-tid') !== taskID) {
-			localStorage.setItem('local-tid', tid);
 			setTaskID(tid);
 		}
-
-		TaskMessageAction(tid, 'get')(taskMessageDispatch);
-		setisChatSidebarActive(!isChatSidebarActive);
+		if (e.target === e.currentTarget) {
+			TaskMessageAction(tid, 'get')(taskMessageDispatch);
+			queryChatSidebar.classList.add('active');
+		}
 	};
 
 	//#endregion
@@ -253,7 +254,7 @@ const TableProjectContainer = () => {
 				confirmActionHandler={confirmProjectDeleteHandler}
 			/>
 			<SocketContext.Provider value={socket}>
-				<ChatSidebarContainer taskID={taskID} isChatSidebarActive={isChatSidebarActive} />
+				<ChatSidebarContainer taskID={taskID} />
 			</SocketContext.Provider>
 		</>
 	);

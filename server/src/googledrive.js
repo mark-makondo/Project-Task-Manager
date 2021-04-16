@@ -19,11 +19,7 @@ class GoogleDrive {
 	}
 
 	/**
-	 * Only use this with the method that does not include multiple methods inside.
-	 * For example the createFolderAndMoveWithPermission since it already contains
-	 * the init method inside.
-	 *
-	 * @returns
+	 * Used for initializing google service connection.
 	 */
 	async init() {
 		try {
@@ -32,8 +28,8 @@ class GoogleDrive {
 			await token.authorize();
 
 			this.auth = token;
-
-			return console.log('User permission granted.');
+			// console.log('User permission granted.');
+			return true;
 		} catch (error) {
 			console.error(error.message);
 			return error.message;
@@ -41,9 +37,8 @@ class GoogleDrive {
 	}
 
 	/**
-	 * @param {String?} targetFolderId optional if we want to be specific
-	 * @param {String?} trashed include the trashed items if true
-	 * @returns
+	 * @param {String?} targetFolderId optional if we want to be specific.
+	 * @param {String?} trashed include the trashed items if true.
 	 */
 	async listFiles(targetFolderId = null, trashed = false) {
 		try {
@@ -66,10 +61,9 @@ class GoogleDrive {
 	}
 
 	/**
-	 * @param {String} id
+	 * @param {String} id file/folder id.
 	 * @param {String} type 'permission' or 'capabilities'.
 	 * @param {String} permissionId needed for type 'permission'. The email of the owner of the permission.
-	 * @returns
 	 */
 	async verifyCapabilitiesOrPermission(id, type, permissionId = null) {
 		try {
@@ -96,7 +90,6 @@ class GoogleDrive {
 
 	/**
 	 * @param {String} folderName folder name.
-	 * @returns
 	 */
 	async createFolder(folderName) {
 		try {
@@ -125,7 +118,6 @@ class GoogleDrive {
 	 * @param {String} filename name of the file.
 	 * @param {String} filepath path of the file.
 	 * @param {String} extension valid extention of the file
-	 * @returns
 	 */
 	async createFile(filename, filepath, extension) {
 		try {
@@ -158,7 +150,6 @@ class GoogleDrive {
 	/**
 	 * @param {String} id file/folder to be moved.
 	 * @param {String} folderId the designated folder.
-	 * @returns
 	 */
 	async moveResource(id, folderId) {
 		try {
@@ -190,7 +181,6 @@ class GoogleDrive {
 
 	/**
 	 * @param {String} id file/folder id to be deleted
-	 * @returns
 	 */
 	async deleteResource(id) {
 		try {
@@ -211,8 +201,7 @@ class GoogleDrive {
 	 * @param {String?} type user, anyone.
 	 * @param {String?} role reader, commenter, writer, fileOrganizer, organizer/owner.
 	 * @param {String?} email valid google email for google drive.
-	 *  @param {String?} moveToNewOwnersRoot default is 'false' if ommited.
-	 * @returns
+	 * @param {String?} moveToNewOwnersRoot default is 'false' if ommited.
 	 */
 	async createPermission(id, type = null, role = null, email = null, root = null) {
 		try {
@@ -263,7 +252,6 @@ class GoogleDrive {
 	 * @param {String} id file/folder to be targeted.
 	 * @param {String} permissionId the email of the owner of the permission that youre going to change.
 	 * @param {String} role reader, commenter, writer, fileOrganizer, organizer/owner.
-	 * @returns
 	 */
 	async updatePermission(id, permissionId, role) {
 		try {
@@ -287,7 +275,6 @@ class GoogleDrive {
 
 	/**
 	 * @param {String} id id of the file/folder
-	 * @returns
 	 */
 	async generatePublicUrl(id) {
 		try {
@@ -325,12 +312,59 @@ class GoogleDrive {
 	}
 
 	/**
+	 * Used for testing, all the non-user owned file or folders will be deleted.
+	 */
+	async findAllAndDelete() {
+		try {
+			let lists = await this.listFiles();
+
+			for await (file of lists) {
+				let res = await this.verifyCapabilitiesOrPermission(file.id, 'capabilities');
+				if (res.capabilities.canDelete === true) {
+					await this.deleteResource(file.id);
+				}
+			}
+			// console.log(lists);
+
+			return { message: `deletion success` };
+		} catch (error) {
+			console.error(error);
+			return error.message;
+		}
+	}
+
+	/**
+	 * @param {String} targetId file id
+	 * @param {String} shortcutName name of the shortcut
+	 */
+	async createShortcut(targetId, shortcutName) {
+		try {
+			shortcutMetadata = {
+				name: shortcutName,
+				mimeType: 'application/vnd.google-apps.shortcut',
+				shortcutDetails: {
+					targetId: targetId,
+				},
+			};
+
+			let result = await this.drive.files.create({
+				resource: shortcutMetadata,
+				fields: 'id,name,mimeType,shortcutDetails',
+			});
+
+			return { result, message: `${result.name} shortcut has been created.` };
+		} catch (error) {
+			console.error(error.message);
+			return error.message;
+		}
+	}
+
+	/**
 	 * @param {String} targetResourceId file/folder id.
 	 * @param {String} parentFolderId the folder where you want to move your folder/files.
 	 * @param {String} type 'anyone', 'user',
 	 * @param {String} role 'owner', 'fileOrganizer', 'writer', 'commenter', 'reader'.
 	 * @param {String} email only applicable if type is 'user' || 'group'.
-	 * @returns
 	 */
 	async moveResourceWithPermission(targetResourceId, parentFolderId, type, role, email) {
 		try {
@@ -345,16 +379,22 @@ class GoogleDrive {
 	/**
 	 * @param {String} parentFolderId the project folder id.
 	 * @param {String} folderName the folder to be created.
-	 * @returns
 	 */
 	async createFolderAndMove(parentFolderId, folderName) {
 		try {
-			let createFolder = await this.createFolder(folderName);
-			let targetFolderId = createFolder.result.id;
+			var fileMetadata = {
+				name: folderName,
+				parents: [parentFolderId],
+				mimeType: 'application/vnd.google-apps.folder',
+			};
 
-			this.moveResource(targetFolderId, parentFolderId);
+			let res = await this.drive.files.create({
+				auth: this.auth,
+				resource: fileMetadata,
+				fields: 'id',
+			});
 
-			return { result: targetFolderId, message: `${folderName} has been moved to ${parentFolderId}.` };
+			return { result: res, message: `${folderName} has been moved to ${parentFolderId}.` };
 		} catch (error) {
 			console.error(error.message);
 			return error.message;
@@ -362,32 +402,41 @@ class GoogleDrive {
 	}
 
 	/**
-	 * The method already calls the 'init()' method inside.
-	 * Used for moving the uploaded files from user to the designated tasks folder.
-	 *
-	 * @param {String} parentFolderName the folder name that was already created.
-	 * @param {String} filename the file to be created.
+	 * @param {String} parentTaskFolderId the task folder id that was already created.
+	 * @param {String} originalname the full name of the file that includes the extention.
 	 * @param {String} filepath filepath of the file.
-	 * @param {String} extension the extension of the file.
-	 * @returns
+	 * @param {String} mimeType the extension of the file.
 	 */
-	async createFileAndMove(parentFolderName, filename, filepath, extension) {
+	async createFileAndMove(parentTaskFolderId, originalname, filepath, mimeType) {
 		try {
-			await this.init();
+			let fileMetadata = {
+				name: originalname,
+				mimeType,
+				parents: [parentTaskFolderId],
+			};
 
-			let { result } = await this.createFile(filename, filepath, extension);
+			let media = {
+				body: fs.createReadStream(filepath),
+				mimeType,
+			};
 
-			let list = await this.listFiles();
-			await list.forEach((file) => {
-				if (file.name === parentFolderName) {
-					let parentId = file.id;
-					this.moveResource(result.id, parentId);
-				}
+			let response = await this.drive.files.create({
+				auth: this.auth,
+				resource: fileMetadata,
+				media,
+				fields: 'id',
 			});
 
-			let publicUrl = await this.generatePublicUrl(result.id);
+			let fileId = response.data.id;
 
-			return { publicUrl, result, message: `${filename} has been moved to ${parentFolderName}` };
+			let publicUrl = await this.generatePublicUrl(fileId);
+
+			let formatToSend = {
+				fileId,
+				publicUrl,
+			};
+
+			return formatToSend;
 		} catch (error) {
 			console.error(error.message);
 			return error.message;
@@ -404,7 +453,6 @@ class GoogleDrive {
 	 * @param {String} parentFolderName the name format for the parent foldername.
 	 * @param {String} ownerEmail the email of the current user logged in.
 	 * @param {String} companyEmail the owner of the project folder that we are going to make.
-	 * @returns
 	 */
 	async createFolderAndMoveWithPermission(folderName, parentFolderName, ownerEmail, companyEmail) {
 		try {
@@ -413,11 +461,13 @@ class GoogleDrive {
 			let emailIsOnePerson = companyEmail === ownerEmail;
 			let type = 'user';
 
+			// create a project folder all the tasks folder will be designated here.
 			let createFolder = await this.createFolder(folderName);
 			let targetFolderId = createFolder.result.id;
 
 			let list = await this.listFiles();
 
+			// check if the 'root' folder that was created already exists.
 			for await (let file of list) {
 				if (file.name === parentFolderName) {
 					let parentFolderId = file.id;
@@ -432,6 +482,7 @@ class GoogleDrive {
 				}
 			}
 
+			// create the 'root' folder of the user, all the projects that the user will create will go here.
 			let createParentFolder = await this.createFolder(parentFolderName);
 			let parentFolderId = createParentFolder.result.id;
 
@@ -457,7 +508,6 @@ class GoogleDrive {
 	 *
 	 * @param {String} fileId The folder or file that we are going to give a batch of permission.
 	 * @param {Array} permissions Array of permission following the format for requestBody or resource paramater.
-	 * @returns
 	 */
 	async batchPermissionRequest(fileId, permissions) {
 		try {
@@ -496,26 +546,3 @@ class GoogleDrive {
 }
 
 module.exports = GoogleDrive;
-
-// const test = async () => {
-// 	let google = new GoogleDrive();
-// 	await google.init();
-
-// 	let id = '1dN_bTaaQqsT7lvYsqUs-7O9wd3TgKVER';
-// 	// await google.deleteResource(id);
-// 	let parentFolderName = 'PTM-606ed6d16e35644970789c28';
-// 	let folderName = 'testing';
-
-// 	// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
-// 	// await google.createPermission;
-// 	// let link = await google.generatePublicUrl(id);
-// 	// console.log(link);
-// 	// await google.deleteResource(id);
-// 	// console.log(test);
-
-// 	// let capa = await google.verifyCapabilitiesOrPermission('1p72Gkq4Mrz98ayuWwJT8pG8QXOQ53S6f', 'capabilities');
-// 	let list = await google.listFiles();
-// 	console.log(list);
-// };
-
-// test();

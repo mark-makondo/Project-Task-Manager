@@ -27,6 +27,7 @@ const projectSchema = mongoose.Schema(
 				created_at: { type: Date, default: Date.now() },
 				fileUpload: [{ googlelink: { type: mongoose.SchemaTypes.Url }, fileName: { type: String } }],
 				messages: [{ type: mongoose.Schema.ObjectId, ref: 'message' }],
+				taskFolderId: { type: String },
 			},
 		],
 	},

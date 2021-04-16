@@ -14,6 +14,10 @@ const ChatMessage = ({ message, data }) => {
 	let avatar = message.author.avatar;
 	let date = message.dateCreated;
 
+	let isImage = message.type === 'image';
+	let isOthers = message.type === 'others';
+
+	let showDownloadableLink = isOthers && message.url;
 	let isAuthorIsEqualToUser = data?.user._id === authorid;
 
 	let margin = {
@@ -42,6 +46,10 @@ const ChatMessage = ({ message, data }) => {
 		return <img width='200' src={`${BACKEND_SERVER}/uploads/${msg}`} alt={`${msg} jpg`}></img>;
 	};
 
+	const DocsMessage = () => {
+		return <a href={showDownloadableLink}>{msg}</a>;
+	};
+
 	return (
 		<div className='chat-message normal-3'>
 			<div style={margin} className='chat-message-wrapper'>
@@ -56,7 +64,7 @@ const ChatMessage = ({ message, data }) => {
 				</div>
 				<div className='chat-message-wrapper-right'>
 					<div style={borderRadius} className='chat-message-divided'>
-						{message.type === 'image' ? <ImageMessage /> : <TextMessage />}
+						{isImage ? <ImageMessage /> : isOthers ? <DocsMessage /> : <TextMessage />}
 					</div>
 
 					<span style={margin} className='chat-message__date '>

@@ -8,7 +8,7 @@ import { TaskMessageAction } from '../../context/actions/project/TaskMessageActi
 // ui
 import ChatSidebar from './ChatSidebar.js';
 
-const ChatSidebarContainer = ({ taskID, isChatSidebarActive }) => {
+const ChatSidebarContainer = ({ taskID }) => {
 	const initialState = () => localStorage.getItem('local-tid') || taskID;
 
 	const [messages, setMessages] = useState([]);
@@ -83,14 +83,7 @@ const ChatSidebarContainer = ({ taskID, isChatSidebarActive }) => {
 	// return () => {
 	// 	socket.disconnect();
 	// };
-	return (
-		<ChatSidebar
-			isLoading={isLoading}
-			messages={messages}
-			data={getOneProject?.data}
-			isChatSidebarActive={isChatSidebarActive}
-		/>
-	);
+	return <ChatSidebar isLoading={isLoading} messages={messages} data={getOneProject?.data} />;
 };
 
 export default ChatSidebarContainer;

@@ -20,7 +20,7 @@ const query = {
 	emojiPickerReact: () => document.querySelector('.emoji-picker-react'),
 
 	// chat sidebar
-	projectContainer: () => document.querySelector('.project-container .chat-sidebar'),
+	chatSideBarContainer: () => document.querySelector('.project-container .chat-sidebar'),
 
 	// more here
 };

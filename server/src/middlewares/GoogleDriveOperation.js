@@ -1,13 +1,17 @@
 const GoogleDrive = require('../googledrive.js');
-const { User } = require('../models/UserModel');
 const { Project } = require('../models/ProjectModel');
 
+let googleDrive = new GoogleDrive();
+
+/**
+ * When a project was saved to the database this wil create a folder
+ * in the google drive and saved the projectFolderId to the current project.Then
+ * save the task folder id to the database.
+ */
 exports.createProjectFolder = async (req, res, next) => {
 	try {
 		let { _id, email } = req.user;
 		let { projectName, companyEmail } = req.savedProject;
-
-		let googleDrive = new GoogleDrive();
 
 		let folderName = projectName;
 		let parentFolderName = `PTM-${_id}`;
@@ -37,24 +41,32 @@ exports.createProjectFolder = async (req, res, next) => {
 	}
 };
 
+/**
+ * When a task was succesfuly created inside of a project then this will
+ * create a task folder and the parent will be the folder of the current project. Then
+ * save the task folder id to the database.
+ */
 exports.createTaskFolder = async (req, res, next) => {
 	try {
-		// let { _pid, companyEmail } = req.savedProject;
+		await googleDrive.init();
 
-		// // let { pid, companyEmail } = req.addedTask;
-		// let folderName = req.body.taskName;
+		let { latestDoc, pushedTask } = req.latestTask;
 
-		// let type = 'user';
-		// let role = 'owner';
+		let _pid = pushedTask._id;
+		let projectFolderId = pushedTask.projectFolderId;
+		let _tid = latestDoc._id;
+		let folderName = latestDoc.taskName;
 
-		// let googleDrive = new GoogleDrive();
-		// await googleDrive.init();
+		let { result } = await googleDrive.createFolderAndMove(projectFolderId, folderName);
+		let taskFolderId = result.data.id;
 
-		// let { result } = await googleDrive.createFolderAndMove(_pid, folderName);
-		// await googleDrive.createPermission(result, type, role, companyEmail);
+		await googleDrive.createPermission(taskFolderId);
 
-		// // console.log(result);
-		// res.status(200).send({ message: 'Added task successfully.', result: req.savedProject });
+		let project = await Project.findById(_pid);
+		let subdoc = project.tasks.id(_tid);
+
+		subdoc['taskFolderId'] = taskFolderId;
+		await project.save();
 
 		return next();
 	} catch (error) {
@@ -63,26 +75,32 @@ exports.createTaskFolder = async (req, res, next) => {
 	}
 };
 
-exports.deleteProjectFolder = async (req, res, next) => {
-	try {
-		return next();
-	} catch (error) {
-		console.error(error.message);
-		return next(error.message);
-	}
-};
-
-exports.deleteTaskFolder = async (req, res, next) => {
-	try {
-		return next();
-	} catch (error) {
-		console.error(error.message);
-		return next(error.message);
-	}
-};
-
+/**
+ * When uploading of images or document is a success then this middleware will run
+ * and create a spefic file to the google drive that corresponds to the uploaded file
+ * and put it inside of the current task folder.
+ */
 exports.createFile = async (req, res, next) => {
 	try {
+		await googleDrive.init();
+
+		let { _tid, _pid } = req.body;
+		let { originalname, mimetype, filename, path } = req.file;
+
+		let project = await Project.findById(_pid);
+		let { taskFolderId } = project.tasks.id(_tid);
+
+		let { fileId, publicUrl } = await googleDrive.createFileAndMove(taskFolderId, originalname, path, mimetype);
+		await googleDrive.createPermission(fileId);
+
+		if (req.isImage) {
+			res.status(200).json({ isImage: true, url: filename, publicUrl });
+
+			return next();
+		}
+
+		res.status(200).json({ isImage: false, originalname, publicUrl });
+
 		return next();
 	} catch (error) {
 		console.error(error.message);

@@ -9,10 +9,11 @@ const ChatFooter = ({
 	message,
 	messageFormSubmitHandler,
 	dropzoneClickHandler,
+	uploadError,
 }) => {
 	let pickerGroupNames = {
 		smileys_people: 'faces',
-		animals_nature: 'animals nature',
+		animals_nature: 'animals/nature',
 		food_drink: 'foods',
 		travel_places: 'travels',
 		activities: 'activities',
@@ -37,6 +38,7 @@ const ChatFooter = ({
 
 	return (
 		<div className='chat-footer'>
+			{uploadError && <span>{uploadError}</span>}
 			<form className='chat-footer-message normal-2' onSubmit={(e) => messageFormSubmitHandler(e)}>
 				<div className='chat-footer-message__input normal-1'>
 					<input

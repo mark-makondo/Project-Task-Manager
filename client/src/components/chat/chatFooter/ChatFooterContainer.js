@@ -14,7 +14,7 @@ import { SocketContext } from '../../../context/SocketContext.js';
 const ChatFooterContainer = ({ data }) => {
 	const [message, setMessage] = useState([]);
 
-	const [image, setImage] = useState();
+	const [uploadError, setUploadError] = useState(null);
 
 	const socket = useContext(SocketContext);
 
@@ -59,28 +59,52 @@ const ChatFooterContainer = ({ data }) => {
 
 		const config = {
 			headers: { 'content-type': 'multipart/form-data' },
+			onUploadProgress: (progressEvent) => console.log(progressEvent.loaded),
 		};
+
 		formData.append('file', files[0]);
-		// console.log(URL.createObjectURL(files[0]));
-		// setImage(URL.createObjectURL(files[0]));
+		formData.append('_tid', _tid);
+		formData.append('_pid', data?.project._id);
 
-		let res = await AxiosInstance().post('/project/task/fileupload', formData, config);
-		let fileData = res.data.url;
-		// let fileMimetype = res.data.url.mimetype;
+		try {
+			let res = await AxiosInstance().post('/project/task/fileupload', formData, config);
 
-		if (res.data.success) {
-			let messageformat = {
-				_id: data?.user._id,
-				_tid,
-				content: {
-					message: fileData,
-					dateCreated: moment(),
-					type: 'image',
-				},
-			};
-			socket.emit('send_message', messageformat);
+			let isImage = res.data.isImage;
+
+			if (isImage) {
+				let { url } = res.data;
+
+				let messageformat = {
+					_id: data?.user._id,
+					_tid,
+					content: {
+						message: url,
+						dateCreated: moment(),
+						type: 'image',
+					},
+				};
+				socket.emit('send_message', messageformat);
+			} else {
+				let { originalname, publicUrl } = res.data;
+
+				let messageformat = {
+					_id: data?.user._id,
+					_tid,
+					content: {
+						message: originalname,
+						dateCreated: moment(),
+						type: 'others',
+						url: publicUrl.webContentLink,
+					},
+				};
+				socket.emit('send_message', messageformat);
+			}
+		} catch (error) {
+			// console.error(error);
+			if (error) setUploadError(error.response.data);
 		}
 	};
+
 	return (
 		<ChatFooter
 			message={message}
@@ -89,6 +113,7 @@ const ChatFooterContainer = ({ data }) => {
 			onEmojiClick={onEmojiClick}
 			messageFormSubmitHandler={messageFormSubmitHandler}
 			dropzoneClickHandler={dropzoneClickHandler}
+			uploadError={uploadError}
 		/>
 	);
 };

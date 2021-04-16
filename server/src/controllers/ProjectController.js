@@ -7,7 +7,7 @@ const { Project } = require('../models/ProjectModel');
 const { User } = require('../models/UserModel');
 const { Message } = require('../models/MessageModel');
 
-//#region Query for projects : Create, Find all, Find one, Delete.
+//#region Query for projects : CREATE, FIND ALL OR ONE, DELETE.
 
 exports.create = async (req, res, next) => {
 	try {
@@ -131,7 +131,7 @@ exports.deleteProject = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project members: Add, Remove.
+//#region Query for project members: ADD, REMOVE.
 
 exports.addMember = async (req, res, next) => {
 	try {
@@ -199,34 +199,37 @@ exports.removeMember = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project tasks: Add, Remove, Update, File upload.
+//#region Query for project tasks: ADD, REMOVE, UPDATE, FILE UPLOAD.
 
 exports.addTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;
 		if (!pid) return res.status(400).send('_pid not found from the body.');
 
-		// let taskName = req.body.taskName;
-		// if (!taskName) return res.status(400).send('TaskName not found from the body.');
+		let taskName = req.body.taskName;
+		if (!taskName) return res.status(400).send('TaskName not found from the body.');
 
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		let { taskName, status, assigned, deadline } = req.body;
+		let { status, assigned, deadline } = req.body;
 
 		project.tasks.push({
 			taskName,
 			assigned,
 			status,
 			deadline,
+			taskFolderId: '',
 		});
 
-		let savedProject = await project.save();
+		let pushedTask = await project.save();
 
-		res.status(200).send({ message: 'Added task successfully.', result: savedProject });
+		res.status(200).send({ message: 'Added task successfully.', result: pushedTask });
 
-		// req.savedProject = savedProject;
-		// req.addedTask = { pid: savedProject._id, companyEmail: savedProject.companyEmail };
+		let subdocs = pushedTask.$getAllSubdocs();
+		let latestDoc = subdocs[subdocs.length - 1];
+
+		req.latestTask = { latestDoc, pushedTask };
 
 		return next();
 	} catch (error) {
@@ -278,7 +281,7 @@ exports.updateTask = async (req, res, next) => {
 			subdoc[key] = req.body.update[key];
 		}
 
-		let savedProject = project.save();
+		let savedProject = await project.save();
 
 		res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
 
@@ -291,52 +294,7 @@ exports.updateTask = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project tasks messages: get, post.
-
-// exports.postMessages = async (req, res, next) => {
-// 	try {
-// 		let { _id, name, email, avatar } = req.user;
-// 		let { message, dateCreated } = req.body.content;
-// 		let tid = req.body._tid;
-
-// 		let content = {
-// 			author: _id,
-// 			message,
-// 			dateCreated,
-// 		};
-
-// 		let findProjectTask = await Project.findOne({ 'tasks._id': tid });
-// 		if (!findProjectTask) return res.status(400).send('task doesnt exist.');
-
-// 		let msg = new Message(content);
-// 		let savedMsg = await msg.save();
-
-// 		let subdoc = findProjectTask.tasks.id(tid);
-// 		subdoc.messages.push(savedMsg);
-
-// 		await findProjectTask.save();
-
-// 		let formatContent = {
-// 			_id: savedMsg._id,
-// 			message,
-// 			dateCreated,
-// 			author: {
-// 				_id,
-// 				name,
-// 				email,
-// 				avatar,
-// 			},
-// 		};
-
-// 		socket.io.emit('message', formatContent);
-
-// 		res.sendStatus(200);
-// 		return next();
-// 	} catch (error) {
-// 		// console.error(error);
-// 		return next(error);
-// 	}
-// };
+//#region Query for project tasks messages: GET.
 
 exports.getMessages = async (req, res, next) => {
 	try {
@@ -369,19 +327,25 @@ exports.getMessages = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project tasks upload: upload, delete, generate a link.
+//#region Query for project tasks upload: UPLOAD, DELETE, GENERATE A LINK
 
-exports.fileUploadTask = async (req, res) => {
+exports.fileUploadTask = async (req, res, next) => {
+	const uploadPath = './src/uploads';
+
 	try {
 		const startUpload = promisify(upload);
 
+		fs.access(uploadPath, (err) => {
+			if (err) fs.mkdirSync(uploadPath);
+		});
+
 		await startUpload(req, res);
 
-		if (req.isImage) return res.status(200).json({ success: true, url: req.file.filename });
-
-		// handle docs or pdf
+		return next();
 	} catch (error) {
-		console.error(error.message);
+		// console.error(error);
+		if (error.name === 'MulterError') res.status(400).send(error.message);
+		return;
 	}
 };
 

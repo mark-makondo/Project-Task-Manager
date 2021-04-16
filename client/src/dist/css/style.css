@@ -938,12 +938,10 @@ ul {
   right: 0;
   height: 100%;
   box-shadow: 0px 3px 8px #00000025;
-  animation-name: hideChatSidebar;
-  animation-duration: 0.5s;
   display: none;
 }
 
-.chat-sidebar.hide {
+.chat-sidebar.active {
   display: block;
 }
 
@@ -2273,6 +2271,11 @@ ul {
   border-radius: 2rem 1rem 1rem 0rem;
   padding-left: 1rem;
   padding-top: 0.5rem;
+}
+
+.chat-message-divided a {
+  text-decoration: underline;
+  color: #6c63ff;
 }
 
 .chat-message__avatar {

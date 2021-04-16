@@ -9,13 +9,6 @@ const { Message } = require('../models/MessageModel');
  * @param {socket} io
  */
 const chatSocket = (socket, io) => {
-	// socket.on('join', (data) => {
-	// 	console.log('joined', data);
-	// 	socket.join(data);
-
-	// 	socket.to(data).emit('receive_message', data);
-	// });
-
 	socket.on('send_message', async (data) => {
 		let room = data._tid;
 		socket.join(room);
@@ -29,13 +22,16 @@ const chatSocket = (socket, io) => {
 const postMessages = async (data) => {
 	try {
 		let { _id, _tid, content } = data;
-		let { message, dateCreated, type } = content;
+		let { message, dateCreated, type, url } = content;
+
+		if (!url || url === '') url = '';
 
 		let saveToMessage = {
 			author: _id,
 			message,
 			dateCreated,
 			type,
+			url,
 		};
 
 		let msg = new Message(saveToMessage);
@@ -55,7 +51,6 @@ const postMessages = async (data) => {
 			model: User,
 			select: 'name email avatar',
 		});
-		// console.log(populatedMessage);
 
 		return populatedMessage;
 	} catch (error) {

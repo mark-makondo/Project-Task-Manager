@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('mongoose-type-url');
 
 const messageSchema = mongoose.Schema({
 	author: {
@@ -14,6 +15,7 @@ const messageSchema = mongoose.Schema({
 	type: {
 		type: String,
 	},
+	url: { type: mongoose.SchemaTypes.Url },
 });
 
 const Message = mongoose.model('message', messageSchema);

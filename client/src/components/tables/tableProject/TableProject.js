@@ -27,9 +27,7 @@ const TableProjectTitle = ({ data, ellipsisClickHandler, showEllipsisDropdown })
 								<span>{getStringInitials(data.project.owner.name)}</span>
 							)}
 						</div>
-						<figcaption>
-							{data.user.email === data.project.owner.email ? 'You' : data.project.owner.name}
-						</figcaption>
+						<figcaption>{data.user.email === data.project.owner.email ? 'You' : data.project.owner.name}</figcaption>
 					</figure>
 				</div>
 				<div className='dropdown-ellipsis' data-id={data.project._id}>
@@ -75,13 +73,13 @@ const TableRow = ({
 
 	return (
 		<div className='table-project__content-tr table-project__content--grid'>
-			<div
-				data-tid={task._id}
-				data-tname={task.taskName}
-				onClick={(e) => showMessageSidebar(e)}
-				className='table-project__content-tr__task cell'
-			>
-				<div style={{ backgroundColor: getCurrentStatusColor }} className='indicator'></div>
+			<div data-tname={task.taskName} className='table-project__content-tr__task cell'>
+				<div
+					data-tid={task._id}
+					onClick={(e) => showMessageSidebar(e)}
+					style={{ backgroundColor: getCurrentStatusColor }}
+					className='indicator'
+				></div>
 				<div className={`content-wrapper content-wrapper--${task._id}`}>
 					<span className='content content--span' title={task.taskName}>
 						{task.taskName}
@@ -100,11 +98,7 @@ const TableRow = ({
 					<i data-tid={task._id} onClick={(e) => taskSaveClickHandler(e)} className=' save fas fa-check'></i>
 				</div>
 
-				<i
-					data-tid={task._id}
-					onClick={(e) => taskDeleteClickHandler(e)}
-					className='icon delete fas fa-trash-alt'
-				></i>
+				<i data-tid={task._id} onClick={(e) => taskDeleteClickHandler(e)} className='icon delete fas fa-trash-alt'></i>
 				<i
 					data-tid={task._id}
 					data-tname={task.taskName}
