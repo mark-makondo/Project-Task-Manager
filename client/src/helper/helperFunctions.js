@@ -12,12 +12,16 @@ export const getStringInitials = (fullname) => {
 	if (fullname) {
 		let fullName = fullname.split(' ');
 		let initials = '';
+
 		fullName.map((name) => {
 			let splitName = name.split('');
 			let shiftInitials = splitName.shift();
-			let getInitials = shiftInitials.charAt(0);
-			initials += getInitials;
-			return initials;
+
+			if (shiftInitials) {
+				let getInitials = shiftInitials.charAt(0);
+				initials += getInitials;
+				return initials;
+			}
 		});
 		return initials.substr(0, 2);
 	}
@@ -110,9 +114,9 @@ export const decodedJwt = () => {
  * dropdown button and dropdown content. If you want to control you dropdown
  * content from disapearing add 'focus-dropdown' in your class.
  *
- * @param {e: button event} event
- * @param {query: dropdown content query} dropdownContent
- * @param {query:  dropdown button query} dropdownButton
+ * @param {e} event button event
+ * @param {query} dropdownContent the class for the dropdown content
+ * @param {query} dropdownButton the button for showing the dropdown
  */
 export const dropdownHandler = (event, dropdownContent, dropdownButton) => {
 	try {

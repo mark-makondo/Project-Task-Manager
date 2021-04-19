@@ -4,11 +4,7 @@ import React from 'react';
 import Home from './Home.js';
 
 const HomeContainer = () => {
-	return (
-		<>
-			<Home />
-		</>
-	);
+	return <Home />;
 };
 
 export default HomeContainer;

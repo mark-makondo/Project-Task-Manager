@@ -22,12 +22,14 @@
 // component modal
 @import '../components/modal/profileModal/profileModal';
 @import '../components/modal/dialogue/dialogue';
+@import '../components/modal/details/details';
 
 // component dropdown
 @import '../components/dropdown/profileSettings/profileSettings';
 @import '../components/dropdown/newProject/newProject';
+@import '../components/dropdown/addMembers/addMembers';
+@import '../components/dropdown/tableSettings/tableSettings';
 @import '../components/dropdown/select/select';
-@import '../components/dropdown/details/details';
 
 // component chat
 @import '../components/chat/chatHeader/chatHeader';

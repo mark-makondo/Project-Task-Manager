@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Moment from 'moment';
 
 // ui
@@ -6,12 +6,15 @@ import TableProject from './TableProject';
 
 // helper
 import Query from '../../../helper/query.js';
+import { dropdownHandler } from '../../../helper/helperFunctions.js';
 
 // context
 import Context from '../../../context/Context.js';
-import { SocketContext, socket } from '../../../context/SocketContext.js';
 import { TaskAction } from '../../../context/actions/project/TaskAction.js';
 import { TaskMessageAction } from '../../../context/actions/project/TaskMessageAction.js';
+
+// testing context
+import { TaskActionCreate, TaskActionRemove } from '../../../context/actions/project/ProjectTaskAction.js';
 
 // sub components
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
@@ -19,7 +22,6 @@ import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 
 const TableProjectContainer = () => {
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
-	const [confirmProjectDeleteDialogueOpen, setConfirmProjectDeleteDialogueOpen] = useState(false);
 	const [currentTaskId, setCurrentTaskId] = useState();
 	const [taskID, setTaskID] = useState();
 	const [input, setInput] = useState({
@@ -29,6 +31,7 @@ const TableProjectContainer = () => {
 		assigned: '',
 		deadline: '',
 	});
+	const [projectTaskData, setProjectTaskData] = useState([]);
 
 	const {
 		getOneProjectState: {
@@ -39,64 +42,42 @@ const TableProjectContainer = () => {
 
 	const { taskMessageDispatch } = useContext(Context);
 
-	//#region task messages and file upload
-	const showMessageSidebar = (e) => {
-		let queryChatSidebar = Query.chatSideBarContainer();
-		let tid = e.currentTarget.dataset.tid;
-		localStorage.setItem('local-tid', tid);
+	// testing state
+	const {
+		projectTaskState: { projectTasks },
+		projectTaskDispatch,
+	} = useContext(Context);
 
-		if (localStorage.getItem('local-tid') !== taskID) {
-			setTaskID(tid);
-		}
-		if (e.target === e.currentTarget) {
-			TaskMessageAction(tid, 'get')(taskMessageDispatch);
-			queryChatSidebar.classList.add('active');
-		}
-	};
+	//#region TESTING ADDING OF CONTEXT ON THE TABLE
+	useEffect(() => {
+		projectTasks && console.log('PROJECT TASK TESTING', projectTasks);
+		projectTasks && console.log('PROJECT STATE TESTING', projectTaskData);
+		projectTasks && setProjectTaskData(projectTasks);
+	}, [projectTasks, projectTaskData]);
 
 	//#endregion
 
 	//#region table title section
 	const showEllipsisDropdown = (e) => {
-		let current = e.currentTarget;
+		const dropdownContentQuery = Query.dropdownTableSettingsContent();
+		const dropdownButtonQuery = Query.dropdownTableSettingsButton();
 
-		let dropdownContentQuery = Query.dropdownContentSelect();
-
-		dropdownContentQuery.classList.toggle('active');
-		current.classList.toggle('active');
+		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
 
-	const ellipsisClickHandler = (e) => {
-		let dropdownContentQuery = Query.dropdownContentSelect();
+	const showAddMembersDropdown = (e) => {
+		const dropdownContentQuery = Query.dropdownAddMembersContent();
+		const dropdownButtonQuery = Query.dropdownAddMembersButton();
 
-		let value = e.currentTarget.dataset.id;
-		let isDelete = value === '1';
-
-		if (isDelete) {
-			setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
-			dropdownContentQuery.classList.remove('active');
-		}
+		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
-
-	const confirmProjectDeleteHandler = () => {
-		let type = 'removeProject';
-		let formatedData = {
-			_pid: data?.project._id,
-			_id: data?.user._id,
-		};
-
-		TaskAction(formatedData, type)(getOneProjectDispatch);
-		setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
-	};
-
 	//#endregion
 
 	//#region adding new row
 	const submitHandler = (e) => {
 		e.preventDefault();
-		let type = 'create';
 
-		TaskAction(input, type)(getOneProjectDispatch);
+		TaskActionCreate(input)(projectTaskDispatch);
 	};
 
 	const inputOnChangeHandler = (e) => {
@@ -118,15 +99,15 @@ const TableProjectContainer = () => {
 	};
 
 	const confirmTaskDeleteHandler = () => {
-		let type = 'remove';
 		let reqData = {
 			_pid: data?.project._id,
 			_tid: currentTaskId,
 		};
 
 		localStorage.removeItem('local-tid');
-		TaskAction(reqData, type)(getOneProjectDispatch);
 		setConfirmTaskDeleteDialogueOpen(!confirmTaskDeleteDialogueOpen);
+
+		TaskActionRemove(reqData)(projectTaskDispatch);
 	};
 	//#endregion
 
@@ -224,6 +205,59 @@ const TableProjectContainer = () => {
 	};
 	//#endregion
 
+	//#region task messages and file upload
+	const showMessageSidebar = (e) => {
+		let queryChatSidebar = Query.chatSideBarContainer();
+		let tid = e.currentTarget.dataset.tid;
+		localStorage.setItem('local-tid', tid);
+
+		if (localStorage.getItem('local-tid') !== taskID) {
+			setTaskID(tid);
+		}
+		if (e.target === e.currentTarget) {
+			TaskMessageAction(tid, 'get')(taskMessageDispatch);
+			queryChatSidebar.classList.add('active');
+		}
+	};
+
+	//#endregion
+
+	//#region task person
+	const showPersonsDropdown = (e) => {
+		let tid = e.currentTarget.dataset.tid;
+
+		let dropdownContentQuery = document.querySelector(
+			`.table-project__content-tr__avatar--${tid} .dropdown-content-select`
+		);
+		let dropdownWrapperQuery = document.querySelector(`.table-project__content-tr__avatar--${tid} .dropdown-button`);
+
+		dropdownContentQuery.classList.toggle('active');
+		dropdownWrapperQuery.classList.toggle('active');
+	};
+
+	const selectedPersonClickHandler = (e) => {
+		let tid = e.currentTarget.dataset.tid;
+		let personId = e.currentTarget.dataset.id;
+
+		let dropdownContentQuery = document.querySelector(
+			`.table-project__content-tr__avatar--${tid} .dropdown-content-select`
+		);
+
+		dropdownContentQuery.classList.remove('active');
+
+		let type = 'assignPerson';
+		let reqData = {
+			_pid: data?.project._id,
+			_tid: tid,
+			update: {
+				assigned: personId,
+			},
+		};
+
+		TaskAction(reqData, type)(getOneProjectDispatch);
+	};
+	//#endregion
+
 	return (
 		<>
 			<TableProject
@@ -239,23 +273,21 @@ const TableProjectContainer = () => {
 				showStatusDropdown={showStatusDropdown}
 				selectedStatusClickHandler={selectedStatusClickHandler}
 				dateSelectHandler={dateSelectHandler}
-				ellipsisClickHandler={ellipsisClickHandler}
 				showEllipsisDropdown={showEllipsisDropdown}
 				showMessageSidebar={showMessageSidebar}
+				showAddMembersDropdown={showAddMembersDropdown}
+				showPersonsDropdown={showPersonsDropdown}
+				selectedPersonClickHandler={selectedPersonClickHandler}
+				// testing
+				projectTaskData={projectTaskData}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}
 				setIsActive={setConfirmTaskDeleteDialogueOpen}
 				confirmActionHandler={confirmTaskDeleteHandler}
 			/>
-			<DialogueContainer
-				isActive={confirmProjectDeleteDialogueOpen}
-				setIsActive={setConfirmProjectDeleteDialogueOpen}
-				confirmActionHandler={confirmProjectDeleteHandler}
-			/>
-			<SocketContext.Provider value={socket}>
-				<ChatSidebarContainer taskID={taskID} />
-			</SocketContext.Provider>
+
+			<ChatSidebarContainer taskID={taskID} />
 		</>
 	);
 };

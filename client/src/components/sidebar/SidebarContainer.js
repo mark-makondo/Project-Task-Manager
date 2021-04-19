@@ -47,15 +47,13 @@ const SidebarContainer = () => {
 	};
 
 	return (
-		<>
-			<Sidebar
-				collapseClickHandler={collapseClickHandler}
-				showProfileSettingsDropdown={showProfileSettingsDropdown}
-				showCreateProjectDropdown={showCreateProjectDropdown}
-				userData={data}
-				allProjects={project.data}
-			/>
-		</>
+		<Sidebar
+			collapseClickHandler={collapseClickHandler}
+			showProfileSettingsDropdown={showProfileSettingsDropdown}
+			showCreateProjectDropdown={showCreateProjectDropdown}
+			userData={data}
+			allProjects={project.data}
+		/>
 	);
 };
 

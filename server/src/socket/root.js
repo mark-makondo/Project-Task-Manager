@@ -14,6 +14,8 @@ module.exports = (io) => {
 		// });
 
 		require('./chat')(socket, io);
+		require('./notification')(socket, io);
+		require('./notificationResponse')(socket, io);
 
 		socket.on('disconnect', () => {
 			console.log('disconnected');

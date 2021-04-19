@@ -16,6 +16,10 @@
 		color: white;
 		overflow: hidden;
 		font-family: $sub;
+		img {
+			border-radius: 50%;
+			max-width: 2.3rem;
+		}
 		span {
 			text-align: center;
 		}
@@ -24,7 +28,6 @@
 	&__title {
 		@include setFlex(row, space-between, center);
 		width: 100%;
-		// margin-bottom: 1rem;
 		font-family: $main;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -49,10 +52,15 @@
 						background-color: getColors(fade-selected);
 					}
 				}
-				.dropdown-content-select {
-					right: 5px;
+				.dropdown-content-table-settings {
+					right: -1rem;
 					margin-top: 0.5rem;
+					border-left-color: getColors(fade-selected);
+					border-top-color: getColors(btn-status-working);
+
 					&::after {
+						top: -6px;
+						right: 20px;
 						left: unset;
 						margin: unset;
 					}
@@ -78,19 +86,30 @@
 				}
 				.avatar {
 					@include setFlex(row, center, center);
-					width: 2.5rem;
-					height: 2.5rem;
+					width: 2.3rem;
+					height: 2.3rem;
 					margin: 0 0.5rem;
 				}
 			}
 		}
-		&-members-add {
-			@include customButtonWithHover(white, getColors(btn-status-working)) {
-				opacity: 0.85;
-			}
+		&-members-add-container {
+			position: relative;
 			margin: 0 1rem;
-			i {
-				margin-right: 0.2rem;
+			button {
+				@include customButtonWithHover(white, getColors(btn-status-working)) {
+					opacity: 0.85;
+				}
+
+				i {
+					margin-right: 0.2rem;
+				}
+				i,
+				span {
+					pointer-events: none;
+				}
+				&.active {
+					opacity: 0.8;
+				}
 			}
 		}
 	}
@@ -122,10 +141,42 @@
 			margin-bottom: 0.5rem;
 
 			&__avatar {
-				.avatar {
+				@include setFlex(row, space-between, space-between);
+				position: relative;
+
+				&-wrapper {
 					@include setFlex(row, center, center);
 					width: 2.3rem;
 					height: 2.3rem;
+				}
+
+				&-arrow {
+					@include setFlex(row, center, center);
+					position: absolute;
+					right: 10px;
+					height: 100%;
+					padding: 0.3rem;
+					z-index: 5;
+				}
+
+				.dropdown-content-select {
+					li {
+						@include setFlex(row, center, center);
+
+						.person-avatar {
+							width: 2.5rem;
+							height: 2.5rem;
+							border-radius: 50%;
+							margin-right: 0.5rem;
+							img {
+								max-width: 100%;
+								height: auto;
+								border-radius: 50%;
+							}
+						}
+					}
+					&::after {
+					}
 				}
 			}
 
@@ -265,7 +316,7 @@
 						color: white;
 					}
 					.fa-angle-down {
-						color: white;
+						color: getColors(primary);
 					}
 					@include responsiveHover() {
 						border-color: getColors(primary);
@@ -302,6 +353,10 @@
 					border: none;
 					font-size: 16px;
 					margin: 0 1rem;
+
+					&.disabled {
+						pointer-events: none;
+					}
 					@include responsiveHover() {
 						border: 1px dashed;
 					}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BACKEND_SERVER } from '../constants/SocketConnection.js';
+import { BACKEND_SERVER } from '../constants/Config.js';
 
 const axiosInstance = (history = null) => {
 	const baseURL = `${BACKEND_SERVER}/api/auth`;

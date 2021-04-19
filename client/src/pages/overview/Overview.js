@@ -13,7 +13,7 @@ const Overview = ({ data, isLoading }) => {
 		<div className='overview'>
 			<div style={isDataExist ? { height: 'unset' } : { height: '100%' }} className='overview-container'>
 				{isLoading ? (
-					<i class='overview-loading fas fa-spinner fa-spin'></i>
+					<i className='overview-loading fas fa-spinner fa-spin'></i>
 				) : isDataExist ? (
 					data.projects.map((project) => (
 						<TableTemplateContainer key={`pro-${project._id}`} project={project} originalData={data} />

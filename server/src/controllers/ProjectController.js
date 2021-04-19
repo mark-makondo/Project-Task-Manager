@@ -8,7 +8,6 @@ const { User } = require('../models/UserModel');
 const { Message } = require('../models/MessageModel');
 
 //#region Query for projects : CREATE, FIND ALL OR ONE, DELETE.
-
 exports.create = async (req, res, next) => {
 	try {
 		let id = req.user._id;
@@ -132,7 +131,6 @@ exports.deleteProject = async (req, res, next) => {
 //#endregion
 
 //#region Query for project members: ADD, REMOVE.
-
 exports.addMember = async (req, res, next) => {
 	try {
 		let id = req.body._id;
@@ -171,10 +169,10 @@ exports.addMember = async (req, res, next) => {
 
 exports.removeMember = async (req, res, next) => {
 	try {
-		let mid = req.body._mid;
+		let mid = req.params.mid;
 		if (!mid) return res.status(400).send('mid path not found from body.');
 
-		let pid = req.body._pid;
+		let pid = req.params.pid;
 		if (!pid) return res.status(400).send('pid not found not found from body.');
 
 		// remove the specified member's id from our project collection.
@@ -188,7 +186,7 @@ exports.removeMember = async (req, res, next) => {
 		// remove the specified project's id from our user collection.
 		await User.updateOne({ _id: mid }, { $pull: { projects: pid } });
 
-		res.status(200).send('Members update successfull.');
+		res.status(200).send({ success: true, message: 'Members update successfull.' });
 
 		return next();
 	} catch (error) {
@@ -197,10 +195,28 @@ exports.removeMember = async (req, res, next) => {
 	}
 };
 
+exports.getMembers = async (req, res, next) => {
+	try {
+		let pid = req.params.pid;
+
+		let findProject = await Project.findById(pid);
+
+		let { members } = await findProject.execPopulate({
+			path: 'members._id',
+			select: 'name email avatar',
+		});
+
+		res.status(200).send({ members });
+
+		return next();
+	} catch (error) {
+		console.error(error);
+		return next(error);
+	}
+};
 //#endregion
 
 //#region Query for project tasks: ADD, REMOVE, UPDATE, FILE UPLOAD.
-
 exports.addTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;
@@ -224,10 +240,18 @@ exports.addTask = async (req, res, next) => {
 
 		let pushedTask = await project.save();
 
-		res.status(200).send({ message: 'Added task successfully.', result: pushedTask });
-
 		let subdocs = pushedTask.$getAllSubdocs();
 		let latestDoc = subdocs[subdocs.length - 1];
+
+		let projectTasks = await project.execPopulate({
+			path: 'tasks.assigned',
+			select: 'name email avatar',
+			model: User,
+		});
+
+		let populatedTask = projectTasks.tasks.id(latestDoc._id);
+
+		res.status(200).send({ message: 'Added task successfully.', result: pushedTask, result2: populatedTask });
 
 		req.latestTask = { latestDoc, pushedTask };
 
@@ -292,10 +316,28 @@ exports.updateTask = async (req, res, next) => {
 	}
 };
 
+exports.getTasks = async (req, res, next) => {
+	try {
+		let pid = req.params.pid;
+
+		let project = await Project.findById(pid);
+		let projectTasks = await project.execPopulate({
+			path: 'tasks.assigned',
+			select: 'name email avatar',
+			model: User,
+		});
+
+		res.status(200).send(projectTasks.tasks);
+
+		return next();
+	} catch (error) {
+		console.error(error);
+		return next(error);
+	}
+};
 //#endregion
 
 //#region Query for project tasks messages: GET.
-
 exports.getMessages = async (req, res, next) => {
 	try {
 		let tid = req.params.tid;
@@ -328,7 +370,6 @@ exports.getMessages = async (req, res, next) => {
 //#endregion
 
 //#region Query for project tasks upload: UPLOAD, DELETE, GENERATE A LINK
-
 exports.fileUploadTask = async (req, res, next) => {
 	const uploadPath = './src/uploads';
 

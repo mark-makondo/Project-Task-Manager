@@ -7,6 +7,7 @@ const Mongoose = require('./mongodb.js');
 const socket = require('socket.io');
 const path = require('path');
 
+const config = require('../config');
 const userRoutes = require('./routes/UserRouters');
 const projectRoutes = require('./routes/ProjectRouters');
 
@@ -17,7 +18,7 @@ const server = http.createServer(app);
 
 const io = socket(server, {
 	cors: {
-		origin: 'http://localhost:3000',
+		origin: config.socket.CLIENT_ORIGIN,
 		methods: ['GET', 'POST'],
 	},
 });
@@ -75,7 +76,7 @@ const googleDriveTesting = async () => {
 	// }
 
 	// let res = await google.findAllAndDelete();
-	console.log(lists);
+	// console.log(lists);
 	// console.log('deleting', res);
 };
 

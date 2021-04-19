@@ -38,14 +38,6 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 						name='companyEmail'
 					/>
 				</div>
-				{error ? (
-					<div className='error normal-2'>
-						<span>Error: </span>
-						{error}
-					</div>
-				) : (
-					''
-				)}
 
 				{isLoading ? (
 					<span className='normal-2 project-create-loading '>
@@ -58,6 +50,12 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 					</button>
 				)}
 			</form>
+
+			{error && (
+				<div className='error normal-3'>
+					<span>{error}</span>
+				</div>
+			)}
 		</div>
 	);
 };

@@ -56,6 +56,31 @@
 	}
 }
 
+// custom scroll
+@mixin customScrollbar {
+	/* Designing for scroll-bar */
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	/* Track */
+	&::-webkit-scrollbar-track {
+		background: getColors(gray-fade);
+		border-radius: 5px;
+	}
+
+	/* Handle */
+	&::-webkit-scrollbar-thumb {
+		background: getColors(primary);
+		border-radius: 5px;
+	}
+
+	/* Handle on hover */
+	&::-webkit-scrollbar-thumb:hover {
+		background: getColors(btn-status-working);
+	}
+}
+
 // font size
 @function getFontSize($type, $target) {
 	@if $type == s {
@@ -73,6 +98,9 @@
 	}
 	.normal-3 {
 		font-size: getFontSize($type, normal-3);
+	}
+	.normal-4 {
+		font-size: getFontSize($type, normal-4);
 	}
 }
 

@@ -1,0 +1,114 @@
+.details-modal {
+	@include setFlex(row, center, center);
+	position: fixed;
+	background: #80808040;
+	z-index: 99;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: 150ms linear;
+	text-transform: capitalize;
+
+	.empty-members-bg {
+		width: 15rem;
+		height: 100%;
+		padding: 1rem;
+		opacity: 0.8;
+	}
+	&-members-loading {
+		margin: 1rem 0;
+		color: getColors(btn-status-working);
+	}
+	&.active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	&-wrapper {
+		@include setFlex(column, center, center);
+		position: relative;
+		max-width: fit-content;
+		height: auto;
+		background: white;
+		border-radius: 1rem;
+		padding-bottom: 1.5rem;
+		min-width: 15rem;
+	}
+	&-header {
+		border-bottom: 2px solid;
+		border-color: getColors(fade-selected);
+		width: 100%;
+		padding: 0.5rem 0;
+		font-weight: bold;
+		text-align: center;
+	}
+	&-body {
+		@include customScrollbar();
+
+		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 50vh;
+
+		ul {
+			@include setFlex(column, center, center);
+			width: 100%;
+			li {
+				@include setFlex(row, center, center);
+				padding: 0.5rem 1rem;
+				width: 100%;
+
+				&:not(:last-of-type) {
+					border-bottom: 1px solid;
+					border-color: getColors(fade-selected);
+					padding-bottom: 1rem;
+				}
+				@include responsiveHover() {
+					transition: 150ms ease-in-out;
+					background-color: getColors(gray-fade);
+				}
+			}
+		}
+
+		&__avatar {
+			@include setFlex(row, center, center);
+			background-color: black;
+			color: white;
+			border-radius: 50%;
+			width: 2.5rem;
+			height: 2.5rem;
+			text-align: center;
+			margin-right: 1rem;
+			img {
+				border-radius: 50%;
+				max-width: 100%;
+			}
+			span {
+				text-transform: uppercase;
+			}
+		}
+
+		&__content {
+			@include setFlex(column, center, center);
+			&-name {
+				font-weight: 600;
+			}
+			&-status {
+				color: getColors(primary-fade);
+			}
+		}
+
+		&__delete {
+			margin-left: 2rem;
+			color: getColors(primary-fade);
+			@include responsiveHover() {
+				transition: 150ms ease-in-out;
+				color: getColors(btn-status-working);
+			}
+		}
+	}
+}
+@import './detailsResponsive';

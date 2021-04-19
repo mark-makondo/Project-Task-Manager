@@ -4,8 +4,10 @@ $font-size-s: (
 	// 20px
 	'normal-2': 1rem,
 	// 16px
-	'normal-3': 0.75rem,
+	'normal-3': 0.875rem,
 	// 14px
+	'normal-4': 0.75rem,
+	// 12px
 );
 
 // max width variables
@@ -20,6 +22,7 @@ $max-width: (
 $colors: (
 	'primary': #2f2e41,
 	'primary-fade': #a1a1a1,
+	'primary-less-fade': #727272,
 	'secondary': #828282,
 	'secondary-fade': #82828290,
 	'secondary-more-fade': #f3f3f3,
@@ -32,6 +35,7 @@ $colors: (
 	'btn-status-working': #6c63ff,
 	'btn-status-working-faded': #b0abff,
 	'btn-status-completed': #59df62,
+	'gray-fade': #f6f6f6,
 );
 
 // custom

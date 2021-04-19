@@ -24,6 +24,8 @@ export const TaskAction = (input, type) => async (getOneProjectDispatch) => {
 		} else if (type === 'removeProject') {
 			window.location.replace(`/${input._id}/dashboard/project-overview`);
 			await axiosInstance().delete(`/project/delete/${input._pid}`);
+		} else if (type === 'assignPerson') {
+			await axiosInstance().put(`/project/task/update`, input);
 		}
 
 		findUpdatedProject = await axiosInstance().get(`/project/find/${input._pid}`);

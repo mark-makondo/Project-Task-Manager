@@ -9,6 +9,7 @@
 	right: 0;
 	bottom: 0;
 	z-index: 99;
+
 	&-wrapper {
 		@include setFlex(column, center, center);
 		border-radius: 0.5rem;
@@ -21,6 +22,10 @@
 		margin: 1rem;
 		box-shadow: $little-shadow;
 		text-align: center;
+
+		h2 {
+			text-transform: capitalize;
+		}
 	}
 	&-buttons {
 		@include setFlex(row, space-evenly, center);
@@ -31,7 +36,8 @@
 				opacity: 0.8;
 			}
 			&:first-of-type {
-				background-color: getColors(primary-fade);
+				color: getColors(primary);
+				background-color: getColors(fade-selected);
 			}
 		}
 	}

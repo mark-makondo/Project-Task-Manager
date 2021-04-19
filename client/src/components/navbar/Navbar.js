@@ -7,9 +7,10 @@ import { ReactComponent as Logo } from '../../assets/svg/logo-svg.svg';
 // components
 import NotificationContainer from '../notification/NotificationContainer.js';
 
+// constants
+import { GOOGLE_CLIENT_ID } from '../../constants/Config';
+
 const Navbar = ({ logoutClickHandler }) => {
-	const clientId =
-		'934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com';
 	return (
 		<nav className='navbar'>
 			<div className='navbar-wrapper'>
@@ -18,7 +19,7 @@ const Navbar = ({ logoutClickHandler }) => {
 					<NotificationContainer />
 
 					<GoogleLogout
-						clientId={clientId}
+						clientId={GOOGLE_CLIENT_ID}
 						buttonText='Logout'
 						render={(renderProps) => (
 							<button

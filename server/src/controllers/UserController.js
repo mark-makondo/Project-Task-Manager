@@ -4,24 +4,12 @@ const bcrypt = require('bcryptjs');
 const config = require('../../config');
 
 // validation
-const {
-	registerValidation,
-	loginValidation,
-	changePassValidation,
-} = require('../validation/JoiValidation');
+const { registerValidation, loginValidation, changePassValidation } = require('../validation/JoiValidation');
 
 // models
 const { User } = require('../models/UserModel');
 
 //#region Login and Register for users.
-/**
- * Receives a post request google token
- * and decodeds it.
- *
- * @param {*} req
- * @param {*} res
- * @returns
- */
 exports.googleLogin = async (req, res, next) => {
 	try {
 		let client = new OAuth2Client(config.googleCredentials.CLIENT_ID);
@@ -68,16 +56,6 @@ exports.googleLogin = async (req, res, next) => {
 	}
 };
 
-/**
- * Two types of register is happening: normal register and when
- * the user uses a gmail account for google login that is still not yet
- * registered to the database.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
- */
 exports.register = async (req, res, next) => {
 	try {
 		let { error } = registerValidation(req.body);
@@ -137,14 +115,6 @@ exports.register = async (req, res, next) => {
 	}
 };
 
-/**
- * Login method for user route.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
- */
 exports.login = async (req, res, next) => {
 	try {
 		let { error } = loginValidation(req.body.input);
@@ -181,14 +151,6 @@ exports.login = async (req, res, next) => {
 //#endregion
 
 //#region User operations: Find, Update, Change password.
-/**
- * Find method for a single user.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
- */
 exports.find = async (req, res, next) => {
 	try {
 		// we can also use the req.user from the verify here instead of params
@@ -209,14 +171,6 @@ exports.find = async (req, res, next) => {
 	}
 };
 
-/**
- * Update user.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
- */
 exports.update = async (req, res, next) => {
 	try {
 		let id = req.user._id;
@@ -237,13 +191,6 @@ exports.update = async (req, res, next) => {
 	}
 };
 
-/**
- * Change password method for user.
- *
- * @param {*} req
- * @param {*} res
- * @returns
- */
 exports.changePassword = async (req, res, next) => {
 	try {
 		let id = req.params.id;
@@ -280,4 +227,23 @@ exports.changePassword = async (req, res, next) => {
 	}
 };
 
+//#endregion
+
+//#region
+exports.getNotifications = async (req, res, next) => {
+	try {
+		let _id = req.params.id;
+
+		let findUser = await User.findById(_id);
+
+		let notifications = await findUser.notifications;
+
+		res.status(200).send(notifications);
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
 //#endregion

@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'react-moment';
 
 // constants
-import { BACKEND_SERVER } from '../../../constants/SocketConnection.js';
+import { BACKEND_SERVER } from '../../../constants/Config.js';
 
 // helper
 import { getStringInitials } from '../../../helper/helperFunctions.js';

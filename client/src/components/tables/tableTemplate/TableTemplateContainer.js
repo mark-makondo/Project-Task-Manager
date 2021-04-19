@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import TableTemplate from './TableTemplate.js';
 
 // modal components
-import DetailsModalContainer from '../../dropdown/details/DetailsContainer.js';
+// import DetailsModalContainer from '../../dropdown/details/DetailsContainer.js';
 
 const TableTemplateContainer = ({ project, originalData }) => {
 	const [isDetailsModalActive, setIsDetailsModalActive] = useState(false);
@@ -45,7 +45,7 @@ const TableTemplateContainer = ({ project, originalData }) => {
 				dropdownClickHandler={dropdownClickHandler}
 				detailsModalClickHandler={detailsModalClickHandler}
 			/>
-			<DetailsModalContainer isActive={isDetailsModalActive} setIsActive={setIsDetailsModalActive} />
+			{/* <DetailsModalContainer isActive={isDetailsModalActive} setIsActive={setIsDetailsModalActive} /> */}
 		</>
 	);
 };

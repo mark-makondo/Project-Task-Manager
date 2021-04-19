@@ -15,6 +15,7 @@ const projectSchema = mongoose.Schema(
 			{
 				_id: { type: mongoose.Schema.ObjectId, ref: 'user' },
 				isAccepted: { type: Boolean, default: 'false' },
+				joinedDate: { type: String },
 			},
 		],
 		tasks: [

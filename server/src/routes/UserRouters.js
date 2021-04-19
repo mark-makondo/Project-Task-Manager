@@ -14,5 +14,6 @@ router.route('/login').post(userController.login);
 router.route('/:id').get(verifyToken, userController.find);
 router.route('/update').put(verifyToken, userController.update);
 router.put('/changePassword/:id', verifyToken, userController.changePassword);
+router.get('/notifications/:id', verifyToken, userController.getNotifications);
 
 module.exports = router;

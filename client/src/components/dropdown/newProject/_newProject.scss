@@ -9,15 +9,18 @@
 	left: 108%;
 	text-align: center;
 	box-shadow: $little-shadow;
-	border: 2px solid;
-	border-color: getColors(btn-status-working);
-	border-radius: 0.5rem;
 	transition: 150ms ease-in-out;
 	z-index: 1;
 	text-transform: capitalize;
 	cursor: pointer;
 	padding: 1rem;
 	text-align: left;
+
+	border-radius: 10px;
+	border-color: getColors(fade-selected);
+	border-left: 2px solid;
+	border-left-color: getColors(btn-status-working);
+
 	&.active {
 		display: block;
 		opacity: 1;
@@ -33,7 +36,7 @@
 		z-index: -1;
 		left: -2%;
 		transform: rotate(40deg);
-		top: 16%;
+		top: 2.3125rem;
 		box-shadow: $more-shadow;
 	}
 
@@ -77,6 +80,12 @@
 				margin-right: 0.5rem;
 			}
 		}
+	}
+
+	.error {
+		text-align: center;
+		margin-top: 0.3rem;
+		text-transform: none;
 	}
 }
 @import './newProjectResponsive';

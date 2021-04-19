@@ -23,6 +23,17 @@ const userSchema = mongoose.Schema(
 			max: 1024,
 		},
 		projects: [{ type: mongoose.Schema.ObjectId, ref: 'project' }],
+		notifications: [
+			{
+				_id: { type: mongoose.Schema.ObjectId },
+				dateReceived: { type: String },
+				hasRead: { type: Boolean, default: false },
+				type: { type: String },
+				sender: { _id: { type: String }, name: { type: String }, email: { type: String }, avatar: { type: String } },
+				response: { type: String, default: 'none' },
+				project: { _id: { type: String }, projectName: { type: String } },
+			},
+		],
 	},
 	{ timestamps: true }
 );

@@ -5,11 +5,17 @@ const package = require('./package.json');
  */
 const config = {
 	applicationName: package.name,
+
+	socket: {
+		CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
+	},
+
 	googleDrive: {
 		// The main folder of the service google account in the google drive.
 		// All the created files/folders will be stored in this folder.
 		ROOT_FOLDER_ID: process.env.GOOGLE_DRIVE_ROOT_FOLDER,
 	},
+
 	mongoDB: {
 		url: process.env.MONGODB_CONNECTION_STRING,
 		options: {
@@ -18,6 +24,7 @@ const config = {
 			useCreateIndex: true,
 		},
 	},
+
 	googleCredentials: {
 		// Generated from the google console project section using oauth2Client mainly used
 		// for google login. The googlePrivateKey.json in the root folder is a service
@@ -27,6 +34,7 @@ const config = {
 		CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		CLIENT_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
 	},
+
 	userAuth: {
 		JWT_SECRET: process.env.JWT_SECRET,
 	},

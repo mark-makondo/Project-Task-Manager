@@ -15,3 +15,15 @@ export const GetOneProjectStates = {
 export const TaskMessageInitialStates = {
 	taskMessage: dataFormat,
 };
+
+export const MembersInitialStates = {
+	members: dataFormat,
+};
+
+export const ProjectTasksInitialStates = {
+	projectTasks: {
+		isLoading: false,
+		data: [],
+		error: false,
+	},
+};

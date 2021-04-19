@@ -8,12 +8,14 @@
 	left: 75%;
 	text-align: center;
 	box-shadow: $little-shadow;
-	border: 2px solid;
-	border-color: getColors(btn-status-working);
 	z-index: 1;
 	cursor: pointer;
-	border-radius: 0.5rem;
 	transition: 150ms ease-in-out;
+
+	border-radius: 10px;
+	border-color: getColors(fade-selected);
+	border-left: 2px solid;
+	border-left-color: getColors(btn-status-working);
 
 	&.active {
 		display: block;
