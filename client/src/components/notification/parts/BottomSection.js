@@ -23,7 +23,7 @@ export const BottomSection = ({ notification, acceptClickHandler, declineClickHa
 				className={`normal-3 ${removeDeclineButton}`}
 				disabled={disableAcceptButton}
 			>
-				Accept
+				{isAccepted ? response : 'Accept'}
 			</button>
 			<button
 				data-nid={_id}
@@ -34,7 +34,7 @@ export const BottomSection = ({ notification, acceptClickHandler, declineClickHa
 				className={`normal-3 ${removeAcceptButton}`}
 				disabled={disableDeclineButton}
 			>
-				Decline
+				{isDeclined ? response : 'Decline'}
 			</button>
 		</div>
 	);

@@ -890,6 +890,7 @@ ul {
   outline: none;
   transition: 150ms linear;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .notif .notification-wrapper .section-bottom button:nth-of-type(1) {
@@ -1157,7 +1158,22 @@ ul {
   right: 0;
   height: 100%;
   box-shadow: 0px 3px 8px #00000025;
+  animation-name: hideChatSidebar;
+  animation-duration: 0.5s;
   display: none;
+}
+
+.chat-sidebar .message-loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  margin: auto;
+  width: 1rem;
+  height: 100%;
+  color: #6c63ff;
+  font-size: 1.5rem;
 }
 
 .chat-sidebar.active {
@@ -1473,6 +1489,7 @@ ul {
   position: relative;
   width: 100%;
   margin: auto 0;
+  height: 100%;
 }
 
 .table-project-loading {
@@ -1649,11 +1666,37 @@ ul {
 }
 
 .table-project__content {
+  /* Designing for scroll-bar */
+  /* Track */
+  /* Handle */
+  /* Handle on hover */
   display: flex;
   flex-direction: column;
   border-top: 1px solid;
   border-color: #cecece;
+  padding: 0 1rem;
   padding-top: 1rem;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.table-project__content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-project__content::-webkit-scrollbar-track {
+  background: #f6f6f6;
+  border-radius: 5px;
+}
+
+.table-project__content::-webkit-scrollbar-thumb {
+  background: #2f2e41;
+  border-radius: 5px;
+}
+
+.table-project__content::-webkit-scrollbar-thumb:hover {
+  background: #6c63ff;
 }
 
 .table-project__content--grid {
@@ -1692,8 +1735,24 @@ ul {
   justify-content: center;
   align-items: center;
   align-content: center;
+  position: relative;
   width: 2.3rem;
   height: 2.3rem;
+}
+
+.table-project__content-tr__avatar-wrapper .avatar-plus {
+  display: none;
+  position: absolute;
+  color: white;
+}
+
+@media (hover: hover) {
+  .table-project__content-tr__avatar-wrapper:hover {
+    opacity: 0.8;
+  }
+  .table-project__content-tr__avatar-wrapper:hover .avatar-plus {
+    display: block;
+  }
 }
 
 .table-project__content-tr__avatar-arrow {
@@ -1706,7 +1765,6 @@ ul {
   right: 10px;
   height: 100%;
   padding: 0.3rem;
-  z-index: 5;
 }
 
 .table-project__content-tr__avatar .dropdown-content-select li {
@@ -2361,8 +2419,8 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  align-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
 }
 
 .details-modal-body__content-name {
@@ -2792,7 +2850,11 @@ ul {
 }
 
 .dropdown-content-select.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
   opacity: 1;
 }
 
@@ -2855,17 +2917,38 @@ ul {
   width: 100%;
 }
 
+.chat-header-close {
+  font-size: 2rem;
+  margin-left: auto;
+}
+
+@media (hover: hover) {
+  .chat-header-close:hover {
+    opacity: 0.8;
+  }
+}
+
 .chat-header-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
+  position: relative;
   color: #2f2e41;
+  min-width: 0;
+  margin-right: 1.5rem;
 }
 
 .chat-header-wrapper__title {
   color: #2f2e41;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+}
+
+.chat-header-wrapper__title::first-letter {
   text-transform: capitalize;
 }
 
@@ -2938,6 +3021,46 @@ ul {
   width: 100%;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+.chat-footer-upload-percent {
+  position: relative;
+  display: block;
+  height: 0.5rem;
+  width: 0%;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+  margin-right: auto;
+  opacity: 0.8;
+  background: #59df62;
+  transition: 150ms all linear;
+  visibility: none;
+}
+
+.chat-footer-upload-percent.loading {
+  width: 50%;
+  visibility: visible;
+}
+
+.chat-footer-upload-percent.completed {
+  animation-name: complete, begone;
+  animation-duration: 150ms, 150ms;
+  animation-delay: 0ms, 1000ms;
+  animation-timing-function: ease-in, ease-out;
+  animation-iteration-count: 1, 1;
+}
+
+@keyframes complete {
+  from {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes begone {
+  to {
+    opacity: 0;
+  }
 }
 
 .chat-footer-message {
@@ -3017,8 +3140,12 @@ ul {
   padding: 0.5rem;
 }
 
+.chat-footer-message__send:disabled {
+  opacity: 0.8 !important;
+}
+
 @media (hover: hover) {
-  .chat-footer-message__send:hover {
+  .chat-footer-message__send:not(:disabled):hover {
     color: #6c63ff;
   }
 }
@@ -3083,6 +3210,7 @@ ul {
   flex: 1 1;
   width: 100%;
   padding: 0 2rem;
+  height: 100%;
 }
 
 .project-container {
@@ -3092,6 +3220,7 @@ ul {
   align-items: center;
   align-content: center;
   width: 100%;
+  height: 60vh;
 }
 
 .normal-1 {

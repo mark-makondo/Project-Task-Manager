@@ -1,28 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import Moment from 'moment';
 
 // ui
 import TableProject from './TableProject';
 
 // helper
+import axiosInstance from '../../../helper/axiosInstance.js';
 import Query from '../../../helper/query.js';
 import { dropdownHandler } from '../../../helper/helperFunctions.js';
 
 // context
 import Context from '../../../context/Context.js';
-import { TaskAction } from '../../../context/actions/project/TaskAction.js';
-import { TaskMessageAction } from '../../../context/actions/project/TaskMessageAction.js';
-
-// testing context
-import { TaskActionCreate, TaskActionRemove } from '../../../context/actions/project/ProjectTaskAction.js';
+import { SocketContext } from '../../../context/SocketContext.js';
+import { TaskMessageGetAction } from '../../../context/actions/project/TaskMessageAction.js';
+import {
+	TaskActionCreate,
+	TaskActionRemove,
+	TaskActionUpdate,
+} from '../../../context/actions/project/ProjectTaskAction.js';
 
 // sub components
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
 import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 
 const TableProjectContainer = () => {
+	const [projectTaskData, setProjectTaskData] = useState([]);
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
-	const [currentTaskId, setCurrentTaskId] = useState();
+	const [projectMembers, setProjectMembers] = useState([]);
 	const [taskID, setTaskID] = useState();
 	const [input, setInput] = useState({
 		_pid: '',
@@ -31,29 +36,88 @@ const TableProjectContainer = () => {
 		assigned: '',
 		deadline: '',
 	});
-	const [projectTaskData, setProjectTaskData] = useState([]);
+
+	const socket = useContext(SocketContext);
 
 	const {
 		getOneProjectState: {
-			getOneProject: { isLoading, data },
+			getOneProject: { data },
 		},
-		getOneProjectDispatch,
 	} = useContext(Context);
 
 	const { taskMessageDispatch } = useContext(Context);
 
-	// testing state
 	const {
 		projectTaskState: { projectTasks },
 		projectTaskDispatch,
 	} = useContext(Context);
 
-	//#region TESTING ADDING OF CONTEXT ON THE TABLE
+	const params = useParams();
+
+	//#region globally used functions in this js file.
+	const returnIsAcceptedMemberEmail = () => {
+		return data?.project.members
+			.filter((member) => {
+				return member.isAccepted === true;
+			})
+			.map((member) => {
+				return member._id.email;
+			});
+	};
+
+	const updaterFunction = async (updateData) => {
+		try {
+			let pid = data?.project._id;
+			let emails = returnIsAcceptedMemberEmail();
+
+			let result = await axiosInstance().put('/project/task/update', updateData);
+
+			let resData = result.data;
+
+			await TaskActionUpdate(resData)(projectTaskDispatch);
+
+			let formatToSend = {
+				type: 'taskUpdate',
+				emails,
+				pid,
+				data: resData,
+			};
+
+			socket.emit('row_send_update', formatToSend);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	//#endregion
+
+	//#region responsible for table realtime updates.
 	useEffect(() => {
-		projectTasks && console.log('PROJECT TASK TESTING', projectTasks);
-		projectTasks && console.log('PROJECT STATE TESTING', projectTaskData);
 		projectTasks && setProjectTaskData(projectTasks);
 	}, [projectTasks, projectTaskData]);
+
+	useEffect(() => {
+		let currentUserEmail = data?.user.email;
+		let paramsPid = params.pid;
+
+		socket.on('row_receive_update', (content) => {
+			let { type, data, emails, pid } = content;
+
+			emails &&
+				emails.forEach((email) => {
+					if (email === currentUserEmail && paramsPid === pid) {
+						if (type === 'create') TaskActionCreate(data)(projectTaskDispatch);
+						if (type === 'remove') TaskActionRemove(data)(projectTaskDispatch);
+						if (type === 'taskUpdate') TaskActionUpdate(data)(projectTaskDispatch);
+					}
+					return;
+				});
+		});
+
+		return () => {
+			socket.off('row_receive_update');
+		};
+	}, [socket, projectTaskDispatch, data?.user.email, params.pid]);
 
 	//#endregion
 
@@ -74,10 +138,25 @@ const TableProjectContainer = () => {
 	//#endregion
 
 	//#region adding new row
-	const submitHandler = (e) => {
+	const submitHandler = async (e) => {
 		e.preventDefault();
 
-		TaskActionCreate(input)(projectTaskDispatch);
+		let pid = data?.project._id;
+		let emails = returnIsAcceptedMemberEmail();
+
+		let result = await axiosInstance().post('/project/task/add', input);
+		let resData = result?.data.result2;
+
+		await TaskActionCreate(resData)(projectTaskDispatch);
+
+		let formatToSend = {
+			type: 'create',
+			data: resData,
+			emails,
+			pid,
+		};
+
+		socket.emit('row_send_update', formatToSend);
 	};
 
 	const inputOnChangeHandler = (e) => {
@@ -92,22 +171,31 @@ const TableProjectContainer = () => {
 
 	//#region deleting a row
 	const taskDeleteClickHandler = (e) => {
-		let datatid = e.currentTarget.dataset.tid;
+		let tid = e.currentTarget.dataset.tid;
+		localStorage.setItem('local-tid', tid);
 
-		setCurrentTaskId(datatid);
 		setConfirmTaskDeleteDialogueOpen(!confirmTaskDeleteDialogueOpen);
 	};
 
-	const confirmTaskDeleteHandler = () => {
-		let reqData = {
-			_pid: data?.project._id,
-			_tid: currentTaskId,
+	const confirmTaskDeleteHandler = async () => {
+		let tid = localStorage.getItem('local-tid');
+		let pid = data?.project._id;
+		let emails = returnIsAcceptedMemberEmail();
+
+		await axiosInstance().delete(`/project/task/remove/${pid}/${tid}`);
+		await TaskActionRemove(tid)(projectTaskDispatch);
+
+		let formatToSend = {
+			type: 'remove',
+			data: tid,
+			emails,
+			pid,
 		};
+
+		socket.emit('row_send_update', formatToSend);
 
 		localStorage.removeItem('local-tid');
 		setConfirmTaskDeleteDialogueOpen(!confirmTaskDeleteDialogueOpen);
-
-		TaskActionRemove(reqData)(projectTaskDispatch);
 	};
 	//#endregion
 
@@ -130,7 +218,7 @@ const TableProjectContainer = () => {
 		});
 	};
 
-	const taskSaveClickHandler = (e) => {
+	const taskSaveClickHandler = async (e) => {
 		let tid = e.currentTarget.dataset.tid;
 		let editWrapperQuery = document.querySelector(`.table-project__content-tr .edit-wrapper--${tid}`);
 		let contentWrapperQuery = document.querySelector(`.table-project__content-tr .content-wrapper--${tid}`);
@@ -138,16 +226,17 @@ const TableProjectContainer = () => {
 		editWrapperQuery.classList.remove('editing');
 		contentWrapperQuery.classList.remove('enable-edit');
 
-		let type = 'update';
-		let reqData = {
-			_pid: input._pid,
+		let pid = data?.project._id;
+
+		let updateData = {
+			_pid: pid,
 			_tid: tid,
 			update: {
 				taskName: input.taskName,
 			},
 		};
 
-		TaskAction(reqData, type)(getOneProjectDispatch);
+		await updaterFunction(updateData);
 	};
 	//#endregion
 
@@ -164,7 +253,7 @@ const TableProjectContainer = () => {
 		dropdownWrapperQuery.classList.toggle('active');
 	};
 
-	const selectedStatusClickHandler = (e) => {
+	const selectedStatusClickHandler = async (e) => {
 		let tid = e.currentTarget.dataset.id;
 		let listValue = e.currentTarget.innerHTML;
 
@@ -174,8 +263,7 @@ const TableProjectContainer = () => {
 
 		dropdownContentQuery.classList.remove('active');
 
-		let type = 'update';
-		let reqData = {
+		let updateData = {
 			_pid: data?.project._id,
 			_tid: tid,
 			update: {
@@ -183,17 +271,16 @@ const TableProjectContainer = () => {
 			},
 		};
 
-		TaskAction(reqData, type)(getOneProjectDispatch);
+		await updaterFunction(updateData);
 	};
 
 	//#endregion
 
 	//#region task deadline selection
-	const dateSelectHandler = (date, tid) => {
+	const dateSelectHandler = async (date, tid) => {
 		let formattedDate = Moment.utc(date, 'MM/DD/YYYY').format('MM/DD/YYYY');
 
-		let type = 'update';
-		let reqData = {
+		let updateData = {
 			_pid: data?.project._id,
 			_tid: tid,
 			update: {
@@ -201,7 +288,7 @@ const TableProjectContainer = () => {
 			},
 		};
 
-		TaskAction(reqData, type)(getOneProjectDispatch);
+		await updaterFunction(updateData);
 	};
 	//#endregion
 
@@ -215,9 +302,10 @@ const TableProjectContainer = () => {
 			setTaskID(tid);
 		}
 		if (e.target === e.currentTarget) {
-			TaskMessageAction(tid, 'get')(taskMessageDispatch);
+			TaskMessageGetAction(tid)(taskMessageDispatch);
 			queryChatSidebar.classList.add('active');
 		}
+		socket.emit('join', tid);
 	};
 
 	//#endregion
@@ -235,9 +323,12 @@ const TableProjectContainer = () => {
 		dropdownWrapperQuery.classList.toggle('active');
 	};
 
-	const selectedPersonClickHandler = (e) => {
+	const selectedPersonClickHandler = async (e) => {
 		let tid = e.currentTarget.dataset.tid;
 		let personId = e.currentTarget.dataset.id;
+		let personName = e.currentTarget.dataset.name;
+		let personEmail = e.currentTarget.dataset.email;
+		let personAvatar = e.currentTarget.dataset.avatar;
 
 		let dropdownContentQuery = document.querySelector(
 			`.table-project__content-tr__avatar--${tid} .dropdown-content-select`
@@ -245,23 +336,40 @@ const TableProjectContainer = () => {
 
 		dropdownContentQuery.classList.remove('active');
 
-		let type = 'assignPerson';
-		let reqData = {
+		let updateData = {
 			_pid: data?.project._id,
 			_tid: tid,
 			update: {
-				assigned: personId,
+				assigned: {
+					_id: personId,
+					name: personName,
+					email: personEmail,
+					avatar: personAvatar,
+				},
 			},
 		};
 
-		TaskAction(reqData, type)(getOneProjectDispatch);
+		await updaterFunction(updateData);
 	};
+
+	useEffect(() => {
+		let projectOwner = data?.project.owner;
+		let projectOwnerCreatedAt = data?.project.owner.createdAt;
+		let projectOriginalMembers = data?.project.members;
+
+		let memberFormat = {
+			_id: projectOwner,
+			isAccepted: true,
+			joinedDate: Moment(projectOwnerCreatedAt).format('ddd MMM D yy'),
+		};
+		projectOwner && setProjectMembers(projectOriginalMembers.concat(memberFormat));
+	}, [data?.project.owner, data?.project.members]);
+
 	//#endregion
 
 	return (
 		<>
 			<TableProject
-				isLoading={isLoading}
 				data={data}
 				submitHandler={submitHandler}
 				inputOnChangeHandler={inputOnChangeHandler}
@@ -278,8 +386,8 @@ const TableProjectContainer = () => {
 				showAddMembersDropdown={showAddMembersDropdown}
 				showPersonsDropdown={showPersonsDropdown}
 				selectedPersonClickHandler={selectedPersonClickHandler}
-				// testing
 				projectTaskData={projectTaskData}
+				projectMembers={projectMembers}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}

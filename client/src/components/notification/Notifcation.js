@@ -33,6 +33,7 @@ const Notification = ({
 	acceptClickHandler,
 	declineClickHandler,
 	notifSectionClickHandler,
+	notificationIsLoading,
 }) => {
 	return (
 		<div className='notif'>
@@ -44,11 +45,13 @@ const Notification = ({
 			<div className='notification hide'>
 				<header className='notification-header'>
 					<span className='notification-header__title'> notifications</span>
-					<div className='notification-header__mark'>
+					{/* <div className='notification-header__mark'>
 						<span>Mark All</span>
 						<i onClick={(e) => markAllClickHandler(e)} className='fas fa-check normal-1'></i>
-					</div>
+					</div> */}
 				</header>
+				{/* {notificationIsLoading ? <i className='notification-loading fas fa-spinner fa-spin'></i> :()} */}
+
 				<div className='notification-wrapper'>
 					{notifications && notifications.length !== 0 ? (
 						[...notifications].reverse().map((notification) => (
@@ -57,9 +60,7 @@ const Notification = ({
 								data-nid={notification._id}
 								data-type={notification.type}
 								key={notification._id}
-								className={`section  normal-3 section-${notification._id} ${
-									(notification.response !== 'none') | notification.hasRead && 'marked-as-read'
-								}`}
+								className={`section  normal-3 section-${notification._id} ${notification.hasRead && 'marked-as-read'}`}
 							>
 								<div className='section-wrapper'>
 									{notification.type === 'invite' ? (

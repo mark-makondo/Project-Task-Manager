@@ -12,6 +12,8 @@ export const TopSection = ({ notification }) => {
 	let isTypeAssign = type === 'assign';
 	let isTypeAccepted = type === 'accepted';
 	let isTypeDeclined = type === 'declined';
+	let isTypeDeleted = type === 'deleted';
+	let isTypeRemoved = type === 'removed';
 
 	const Message = ({ name, content, projectName }) => {
 		return (
@@ -41,6 +43,10 @@ export const TopSection = ({ notification }) => {
 					<Message name={name} content='accepted your invitation for ' projectName={project.projectName} />
 				) : isTypeDeclined ? (
 					<Message name={name} content='declined your invitation for ' projectName={project.projectName} />
+				) : isTypeDeleted ? (
+					<Message name={name} content='deleted ' projectName={project.projectName} />
+				) : isTypeRemoved ? (
+					<Message name={name} content='removed you from ' projectName={project.projectName} />
 				) : (
 					<p></p>
 				)}

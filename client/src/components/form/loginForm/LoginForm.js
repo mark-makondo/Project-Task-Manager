@@ -6,15 +6,8 @@ import GoogleLogin from 'react-google-login';
 import { ReactComponent as Sleeping } from '../../../assets/svg/login-bg-svg.svg';
 import { ReactComponent as GoogleLogo } from '../../../assets/svg/google-square.svg';
 
-const LoginForm = ({
-	formClickhandler,
-	inputChangeHandler,
-	handleGoogleLogin,
-	loading,
-	error,
-}) => {
-	const clientId =
-		'934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com';
+const LoginForm = ({ formClickhandler, inputChangeHandler, handleGoogleLogin, loading, error }) => {
+	const clientId = '934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com';
 
 	if (loading) {
 		return <i className='login-loading fas fa-spinner fa-spin'></i>;
@@ -26,11 +19,7 @@ const LoginForm = ({
 				<GoogleLogin
 					clientId={clientId}
 					render={(renderProps) => (
-						<figure
-							onClick={renderProps.onClick}
-							disabled={renderProps.disabled}
-							className='google-button normal-3'
-						>
+						<figure onClick={renderProps.onClick} disabled={renderProps.disabled} className='google-button normal-3'>
 							<GoogleLogo width='1.5rem' height='1.5rem' />
 							<figcaption> Login with Google</figcaption>
 						</figure>

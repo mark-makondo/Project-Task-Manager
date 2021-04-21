@@ -7,11 +7,11 @@ import TableTemplateContainer from '../../components/tables/tableTemplate/TableT
 import { ReactComponent as EmptySvg } from '../../assets/svg/empty-svg.svg';
 
 const Overview = ({ data, isLoading }) => {
-	let isDataExist = data && !!data.projects.length;
+	// let isDataExist = data && !!data.projects.length;
 
 	return (
 		<div className='overview'>
-			<div style={isDataExist ? { height: 'unset' } : { height: '100%' }} className='overview-container'>
+			{/* <div style={isDataExist ? { height: 'unset' } : { height: '100%' }} className='overview-container'>
 				{isLoading ? (
 					<i className='overview-loading fas fa-spinner fa-spin'></i>
 				) : isDataExist ? (
@@ -21,7 +21,7 @@ const Overview = ({ data, isLoading }) => {
 				) : (
 					<EmptySvg />
 				)}
-			</div>
+			</div> */}
 		</div>
 	);
 };

@@ -36,6 +36,13 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/auth/user', userRoutes);
 app.use('/api/auth/project', projectRoutes);
 
+// Production
+// app.use(express.static(path.join(__dirname, '../../client/build')));
+
+// app.get('*', (req, res) => {
+// 	res.sendFile(path.resolve(__dirname, '../', '../', 'client', 'build', 'index.html'));
+// });
+
 exports.io = io;
 mongoose.run(server, PORT);
 
@@ -47,7 +54,7 @@ const googleDriveTesting = async () => {
 	let google = new Google();
 	await google.init();
 
-	let id = '1dfO7O0qKVD9SEBl6PZle99B1oj31tLEv';
+	let id = '1eCDgz_GrUGOr3qybZYTrurTt0SpPkJvS';
 	// await google.deleteResource(id);
 	// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
 	// let folderName = 'testing';
@@ -67,16 +74,16 @@ const googleDriveTesting = async () => {
 	// let lists = await google.listFiles();
 
 	// delete all // btter than google drive
-	let lists = await google.listFiles();
+	// let lists = await google.listFiles();
 	// for await (file of lists) {
 	// 	let res = await google.verifyCapabilitiesOrPermission(file.id, 'capabilities');
-	// 	if (res.capabilities.canDelete === true) {
-	// 		await google.deleteResource(file.id);
-	// 	}
+	// 	// if (res.capabilities.canDelete === true) {
+	// 	await google.deleteResource(file.id);
+	// 	// }
 	// }
 
-	// let res = await google.findAllAndDelete();
-	// console.log(lists);
+	await google.findAllAndDelete();
+	// console.log(link);
 	// console.log('deleting', res);
 };
 

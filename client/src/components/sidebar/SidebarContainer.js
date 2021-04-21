@@ -52,7 +52,7 @@ const SidebarContainer = () => {
 			showProfileSettingsDropdown={showProfileSettingsDropdown}
 			showCreateProjectDropdown={showCreateProjectDropdown}
 			userData={data}
-			allProjects={project.data}
+			projects={project}
 		/>
 	);
 };

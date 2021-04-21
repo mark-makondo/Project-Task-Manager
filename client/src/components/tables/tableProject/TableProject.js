@@ -7,7 +7,6 @@ import TableRow from './parts/TableRow.js';
 import TableRowAdder from './parts/TableRowAdder.js';
 
 const TableProject = ({
-	isLoading,
 	data,
 	submitHandler,
 	inputOnChangeHandler,
@@ -25,10 +24,11 @@ const TableProject = ({
 	showPersonsDropdown,
 	selectedPersonClickHandler,
 	projectTaskData,
+	projectMembers,
 }) => {
 	return (
 		<div className='table-project'>
-			{!!data && !isLoading ? (
+			{!!data ? (
 				<>
 					<TableProjectTitle
 						data={data}
@@ -37,7 +37,6 @@ const TableProject = ({
 						showAddMembersDropdown={showAddMembersDropdown}
 					/>
 					<div className='table-project__content normal-2'>
-						{/* data.project.tasks */}
 						<TableHeader />
 						{projectTaskData &&
 							projectTaskData.data?.map((task) => (
@@ -56,6 +55,7 @@ const TableProject = ({
 									showMessageSidebar={showMessageSidebar}
 									showPersonsDropdown={showPersonsDropdown}
 									selectedPersonClickHandler={selectedPersonClickHandler}
+									projectMembers={projectMembers}
 								/>
 							))}
 						{data.user._id === data.project.owner._id && (

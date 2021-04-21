@@ -6,11 +6,12 @@ import { getStringInitials } from '../../../helper/helperFunctions.js';
 const StatusSelect = ({ data, itemClickHandler }) => {
 	return (
 		<>
-			{data.map((item, i) => (
-				<li data-id={item.id} key={`${item.data}-${i}`} onClick={(e) => itemClickHandler(e)}>
-					{item.data}
-				</li>
-			))}
+			{data &&
+				data.map((item, i) => (
+					<li data-id={item.id} key={`${item.data}-${i}`} onClick={(e) => itemClickHandler(e)}>
+						{item.data}
+					</li>
+				))}
 		</>
 	);
 };
@@ -18,18 +19,27 @@ const StatusSelect = ({ data, itemClickHandler }) => {
 const PersonSelect = ({ data, itemClickHandler, tid }) => {
 	return (
 		<>
-			{data.map((item) => (
-				<li key={item._id._id} data-id={item._id._id} data-tid={tid} onClick={(e) => itemClickHandler(e)}>
-					<div className='person-avatar'>
-						{item._id.avatar !== 'no-avatar' ? (
-							<img src={item._id.avatar} alt='avatar' />
-						) : (
-							<span>{getStringInitials(item._id.name)}</span>
-						)}
-					</div>
-					<span className='person-avatar-name normal-3'>{item._id.name.split(' ')[0]}</span>
-				</li>
-			))}
+			{data &&
+				data.map((item) => (
+					<li
+						key={item._id._id}
+						data-id={item._id._id}
+						data-tid={tid}
+						data-name={item._id.name}
+						data-email={item._id.email}
+						data-avatar={item._id.avatar}
+						onClick={(e) => itemClickHandler(e)}
+					>
+						<div className='person-avatar'>
+							{item._id.avatar !== 'no-avatar' ? (
+								<img src={item._id.avatar} alt='avatar' />
+							) : (
+								<span>{getStringInitials(item._id.name)}</span>
+							)}
+						</div>
+						<span className='person-avatar-name normal-3'>{item._id.name.split(' ')[0]}</span>
+					</li>
+				))}
 		</>
 	);
 };

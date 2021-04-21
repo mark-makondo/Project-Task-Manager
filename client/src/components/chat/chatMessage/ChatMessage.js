@@ -7,7 +7,26 @@ import { BACKEND_SERVER } from '../../../constants/Config.js';
 // helper
 import { getStringInitials } from '../../../helper/helperFunctions.js';
 
-const ChatMessage = ({ message, data }) => {
+const TextMessage = ({ display, name, isAuthorIsEqualToUser, msg }) => {
+	return (
+		<>
+			<span style={display} className='chat-message__name' title={name}></span>
+			<span title={isAuthorIsEqualToUser ? 'You' : name}>
+				<p className='chat-message__content '>{msg}</p>
+			</span>
+		</>
+	);
+};
+
+const ImageMessage = ({ msg }) => {
+	return <img width='200' src={`${BACKEND_SERVER}/uploads/${msg}`} alt={`${msg} jpg`}></img>;
+};
+
+const DocsMessage = ({ showDownloadableLink, msg }) => {
+	return <a href={showDownloadableLink}>{msg}</a>;
+};
+
+const ChatMessage = ({ message, data, chatMessageRef }) => {
 	let authorid = message.author._id;
 	let msg = message.message;
 	let name = message.author.name;
@@ -31,27 +50,8 @@ const ChatMessage = ({ message, data }) => {
 		borderRadius: isAuthorIsEqualToUser && '1rem 2rem 0rem 1rem',
 	};
 
-	const TextMessage = () => {
-		return (
-			<>
-				<span style={display} className='chat-message__name' title={name}></span>
-				<span title={isAuthorIsEqualToUser ? 'You' : name}>
-					<p className='chat-message__content '>{msg}</p>
-				</span>
-			</>
-		);
-	};
-
-	const ImageMessage = () => {
-		return <img width='200' src={`${BACKEND_SERVER}/uploads/${msg}`} alt={`${msg} jpg`}></img>;
-	};
-
-	const DocsMessage = () => {
-		return <a href={showDownloadableLink}>{msg}</a>;
-	};
-
 	return (
-		<div className='chat-message normal-3'>
+		<div ref={chatMessageRef} className='chat-message normal-3'>
 			<div style={margin} className='chat-message-wrapper'>
 				<div className='chat-message-wrapper-left'>
 					<div style={display} className='chat-message__avatar'>
@@ -64,7 +64,13 @@ const ChatMessage = ({ message, data }) => {
 				</div>
 				<div className='chat-message-wrapper-right'>
 					<div style={borderRadius} className='chat-message-divided'>
-						{isImage ? <ImageMessage /> : isOthers ? <DocsMessage /> : <TextMessage />}
+						{isImage ? (
+							<ImageMessage msg={msg} />
+						) : isOthers ? (
+							<DocsMessage showDownloadableLink={showDownloadableLink} msg={msg} />
+						) : (
+							<TextMessage display={display} name={name} isAuthorIsEqualToUser={isAuthorIsEqualToUser} msg={msg} />
+						)}
 					</div>
 
 					<span style={margin} className='chat-message__date '>

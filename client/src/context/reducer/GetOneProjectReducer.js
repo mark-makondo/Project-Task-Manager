@@ -1,7 +1,4 @@
 import {
-	TASK_LOADING,
-	TASK_SUCCESS,
-	TASK_ERROR,
 	GET_PROJECT_LOADING,
 	GET_PROJECT_SUCCESS,
 	GET_PROJECT_ERROR,
@@ -9,7 +6,6 @@ import {
 
 const GetOneProjectReducer = (state, { payload, type }) => {
 	switch (type) {
-		case TASK_LOADING:
 		case GET_PROJECT_LOADING:
 			return {
 				...state,
@@ -19,7 +15,6 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 					isLoading: true,
 				},
 			};
-		case TASK_SUCCESS:
 		case GET_PROJECT_SUCCESS:
 			return {
 				...state,
@@ -30,7 +25,6 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 					data: payload,
 				},
 			};
-		case TASK_ERROR:
 		case GET_PROJECT_ERROR:
 			return {
 				...state,

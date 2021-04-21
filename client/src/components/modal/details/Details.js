@@ -11,6 +11,7 @@ const MemberHolder = ({ member, removeMemberClickHandler, isCurrentUserOwner }) 
 	let avatar = _id.avatar;
 	let name = _id.name;
 	let email = _id.email;
+	let mid = _id._id;
 
 	return (
 		<li>
@@ -31,7 +32,8 @@ const MemberHolder = ({ member, removeMemberClickHandler, isCurrentUserOwner }) 
 			</div>
 			{isCurrentUserOwner && (
 				<i
-					data-mid={_id._id}
+					data-email={email}
+					data-mid={mid}
 					onClick={(e) => removeMemberClickHandler(e)}
 					className='details-modal-body__delete fas fa-trash-alt normal-2'
 				></i>
@@ -40,9 +42,12 @@ const MemberHolder = ({ member, removeMemberClickHandler, isCurrentUserOwner }) 
 	);
 };
 
+/**
+ * Main component details.
+ */
 const Details = ({ members, removeMemberClickHandler, isCurrentUserOwner }) => {
-	let { data, isLoading } = members;
-	let projectMembers = data.members;
+	let { data } = members;
+	let projectMembers = data;
 
 	return (
 		<div className='details-modal'>
@@ -53,21 +58,17 @@ const Details = ({ members, removeMemberClickHandler, isCurrentUserOwner }) => {
 				</div>
 				<div className='details-modal-body normal-3'>
 					<ul>
-						{!isLoading ? (
-							projectMembers.length !== 0 ? (
-								projectMembers.map((member) => (
-									<MemberHolder
-										key={member._id}
-										member={member}
-										removeMemberClickHandler={removeMemberClickHandler}
-										isCurrentUserOwner={isCurrentUserOwner}
-									/>
-								))
-							) : (
-								<EmptyMembers className='empty-members-bg' />
-							)
+						{projectMembers && projectMembers.length !== 0 ? (
+							projectMembers.map((member) => (
+								<MemberHolder
+									key={member._id._id}
+									member={member}
+									removeMemberClickHandler={removeMemberClickHandler}
+									isCurrentUserOwner={isCurrentUserOwner}
+								/>
+							))
 						) : (
-							<i className='details-modal-members-loading fas fa-spinner fa-spin normal-1'></i>
+							<EmptyMembers className='empty-members-bg' />
 						)}
 					</ul>
 				</div>

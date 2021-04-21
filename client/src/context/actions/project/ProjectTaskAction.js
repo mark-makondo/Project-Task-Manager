@@ -1,8 +1,7 @@
 import axiosInstance from '../../../helper/axiosInstance.js';
-
 import {
-	TASK_GET,
 	TASK_LOADING,
+	TASK_GET,
 	TASK_CREATE,
 	TASK_REMOVE,
 	TASK_UPDATE,
@@ -10,60 +9,86 @@ import {
 	COULD_NOT_CONNECT,
 } from '../../../constants/actionTypes/ActionTypes.js';
 
-export const TaskActionGet = (pid) => async (TaskDispatch) => {
+/**
+ * get tasks
+ */
+export const TaskActionGet = (pid) => async (projectTaskDispatch) => {
 	try {
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_LOADING,
 		});
 
 		let tasks = await axiosInstance().get(`/project/${pid}/tasks`);
 
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_GET,
 			payload: tasks.data,
 		});
 	} catch (err) {
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_ERROR,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
 		});
 	}
 };
 
-export const TaskActionCreate = (input) => async (TaskDispatch) => {
+/**
+ * create tasks
+ */
+export const TaskActionCreate = (data) => async (projectTaskDispatch) => {
 	try {
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_LOADING,
 		});
 
-		let newTask = await axiosInstance().post('/project/task/add', input);
-
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_CREATE,
-			payload: newTask.data.result2,
+			payload: data,
 		});
 	} catch (err) {
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_ERROR,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
 		});
 	}
 };
 
-export const TaskActionRemove = (input) => async (TaskDispatch) => {
+/**
+ * remove tasks
+ */
+export const TaskActionRemove = (tid) => async (projectTaskDispatch) => {
 	try {
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_LOADING,
 		});
 
-		await axiosInstance().delete(`/project/task/remove/${input._pid}/${input._tid}`);
-
-		TaskDispatch({
+		projectTaskDispatch({
 			type: TASK_REMOVE,
-			payload: input._tid,
+			payload: tid,
 		});
 	} catch (err) {
-		TaskDispatch({
+		projectTaskDispatch({
+			type: TASK_ERROR,
+			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
+		});
+	}
+};
+
+/**
+ * update tasks
+ */
+export const TaskActionUpdate = (data) => async (projectTaskDispatch) => {
+	try {
+		projectTaskDispatch({
+			type: TASK_LOADING,
+		});
+
+		projectTaskDispatch({
+			type: TASK_UPDATE,
+			payload: data,
+		});
+	} catch (err) {
+		projectTaskDispatch({
 			type: TASK_ERROR,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
 		});

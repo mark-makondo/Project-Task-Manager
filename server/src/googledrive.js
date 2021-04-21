@@ -318,14 +318,18 @@ class GoogleDrive {
 		try {
 			let lists = await this.listFiles();
 
-			for await (file of lists) {
+			for await (let file of lists) {
 				let res = await this.verifyCapabilitiesOrPermission(file.id, 'capabilities');
 				if (res.capabilities.canDelete === true) {
 					await this.deleteResource(file.id);
+					console.log('deleting', file.id);
 				}
+				console.log('creating url for files tht cant be deleted.');
+				await this.generatePublicUrl(file.id);
 			}
-			// console.log(lists);
-
+			console.log('done, showing lists');
+			console.log(lists);
+			console.log('process done');
 			return { message: `deletion success` };
 		} catch (error) {
 			console.error(error);

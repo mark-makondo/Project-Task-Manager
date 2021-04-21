@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import moment from 'moment';
 
 // ui
@@ -13,8 +13,10 @@ import { SocketContext } from '../../../context/SocketContext.js';
 
 const ChatFooterContainer = ({ data }) => {
 	const [message, setMessage] = useState([]);
-
+	const [isBtnDisable, setIsBtnDisable] = useState(true);
 	const [uploadError, setUploadError] = useState(null);
+	const [uploading, setUploading] = useState(false);
+	const [uploadPercent, setUploadPercent] = useState(0);
 
 	const socket = useContext(SocketContext);
 
@@ -31,9 +33,31 @@ const ChatFooterContainer = ({ data }) => {
 		e.preventDefault();
 
 		setMessage([e.target.value]);
+
+		!!e.target.value ? setIsBtnDisable(false) : setIsBtnDisable(true);
 	};
 
-	const messageFormSubmitHandler = (e) => {
+	const sendMessageAndPost = async (_tid, messageformat) => {
+		try {
+			let messageFormatToEmit = {
+				_tid,
+				content: {
+					_id: data?.user._id,
+					...messageformat.content,
+					author: data?.user,
+					url: '',
+				},
+			};
+
+			socket.emit('send_message', messageFormatToEmit);
+
+			await AxiosInstance().post('/project/task/message/add', messageformat);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const messageFormSubmitHandler = async (e) => {
 		e.preventDefault();
 
 		let _tid = localStorage.getItem('local-tid');
@@ -49,7 +73,8 @@ const ChatFooterContainer = ({ data }) => {
 			},
 		};
 
-		socket.emit('send_message', messageformat);
+		sendMessageAndPost(_tid, messageformat);
+		setMessage('');
 	};
 
 	const dropzoneClickHandler = async (files) => {
@@ -59,7 +84,7 @@ const ChatFooterContainer = ({ data }) => {
 
 		const config = {
 			headers: { 'content-type': 'multipart/form-data' },
-			onUploadProgress: (progressEvent) => console.log(progressEvent.loaded),
+			// onUploadProgress: (e) => setUploadPercent(Math.round((e.loaded * 100) / e.total)),
 		};
 
 		formData.append('file', files[0]);
@@ -67,9 +92,12 @@ const ChatFooterContainer = ({ data }) => {
 		formData.append('_pid', data?.project._id);
 
 		try {
+			setUploading(true);
+			setUploadPercent(50);
 			let res = await AxiosInstance().post('/project/task/fileupload', formData, config);
-
 			let isImage = res.data.isImage;
+			setUploading(false);
+			setUploadPercent(100);
 
 			if (isImage) {
 				let { url } = res.data;
@@ -83,7 +111,8 @@ const ChatFooterContainer = ({ data }) => {
 						type: 'image',
 					},
 				};
-				socket.emit('send_message', messageformat);
+				// socket.emit('send_message', messageformat);
+				sendMessageAndPost(_tid, messageformat);
 			} else {
 				let { originalname, publicUrl } = res.data;
 
@@ -97,13 +126,19 @@ const ChatFooterContainer = ({ data }) => {
 						url: publicUrl.webContentLink,
 					},
 				};
-				socket.emit('send_message', messageformat);
+				// socket.emit('send_message', messageformat);
+				sendMessageAndPost(_tid, messageformat);
 			}
 		} catch (error) {
 			// console.error(error);
 			if (error) setUploadError(error.response.data);
+			setUploading(false);
 		}
 	};
+
+	useEffect(() => {
+		console.log(uploadPercent);
+	}, [uploadPercent, uploading]);
 
 	return (
 		<ChatFooter
@@ -114,6 +149,9 @@ const ChatFooterContainer = ({ data }) => {
 			messageFormSubmitHandler={messageFormSubmitHandler}
 			dropzoneClickHandler={dropzoneClickHandler}
 			uploadError={uploadError}
+			isBtnDisable={isBtnDisable}
+			uploading={uploading}
+			uploadPercent={uploadPercent}
 		/>
 	);
 };

@@ -60,28 +60,31 @@ const TaskName = ({
 	);
 };
 
-const Person = ({ task, data, isCurrentUserOwner, showPersonsDropdown, selectedPersonClickHandler }) => {
+const Person = ({
+	task,
+	data,
+	isCurrentUserOwner,
+	showPersonsDropdown,
+	selectedPersonClickHandler,
+	projectMembers,
+}) => {
 	return (
 		<div className={`table-project__content-tr__avatar table-project__content-tr__avatar--${task._id} cell`}>
 			<div
 				data-tid={task._id}
-				onClick={(e) => showPersonsDropdown(e)}
+				onClick={(e) => isCurrentUserOwner & (data.project.members.length !== 0) && showPersonsDropdown(e)}
 				className='table-project__content-tr__avatar-wrapper avatar avatar-global dropdown-button'
 			>
 				{!!task.assigned &&
 					(task.assigned.avatar !== 'no-avatar' ? (
 						<img src={task.assigned.avatar} alt='avatar' />
 					) : (
-						<span>{getStringInitials(task.assigned.name)}</span>
+						<span title={task.assigned.email}>{getStringInitials(task.assigned.name)}</span>
 					))}
+				{isCurrentUserOwner && <i className='avatar-plus fas fa-plus'></i>}
 			</div>
-			{isCurrentUserOwner && <i className='table-project__content-tr__avatar-arrow fas fa-angle-down'></i>}
-			<SelectContainer
-				data={data.project.members}
-				itemClickHandler={selectedPersonClickHandler}
-				type='2'
-				tid={task._id}
-			/>
+
+			<SelectContainer data={projectMembers} itemClickHandler={selectedPersonClickHandler} type='2' tid={task._id} />
 		</div>
 	);
 };
@@ -178,6 +181,7 @@ const TableRow = ({
 	showMessageSidebar,
 	showPersonsDropdown,
 	selectedPersonClickHandler,
+	projectMembers,
 }) => {
 	let calculatedDatePercent = `${getComparedDatePercent(task.created_at, task.deadline)}%`;
 	let getCurrentStatusColor = getStatusColor(!!task.status && task.status);
@@ -203,6 +207,7 @@ const TableRow = ({
 				isCurrentUserOwner={isCurrentUserOwner}
 				showPersonsDropdown={showPersonsDropdown}
 				selectedPersonClickHandler={selectedPersonClickHandler}
+				projectMembers={projectMembers}
 			/>
 			<Status
 				task={task}

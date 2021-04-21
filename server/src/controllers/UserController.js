@@ -153,8 +153,6 @@ exports.login = async (req, res, next) => {
 //#region User operations: Find, Update, Change password.
 exports.find = async (req, res, next) => {
 	try {
-		// we can also use the req.user from the verify here instead of params
-		// since it also returns a decoded jwt token.
 		if (req.params.id) {
 			let id = req.params.id;
 			let findSingleUser = await User.findById(id);
@@ -232,9 +230,9 @@ exports.changePassword = async (req, res, next) => {
 //#region
 exports.getNotifications = async (req, res, next) => {
 	try {
-		let _id = req.params.id;
+		let id = req.params.id;
 
-		let findUser = await User.findById(_id);
+		let findUser = await User.findById(id);
 
 		let notifications = await findUser.notifications;
 
@@ -246,4 +244,99 @@ exports.getNotifications = async (req, res, next) => {
 		return next(error);
 	}
 };
+
+exports.addNotification = async (req, res, next) => {
+	try {
+		let { emailToNotif, dataToPush } = req.body;
+		let { sender, type, _pid, projectName } = dataToPush;
+
+		console.log(emailToNotif);
+
+		let findEmail = await User.find({ email: emailToNotif });
+		let findUser = await User.findById(findEmail[0]._id);
+
+		let formatSender = {
+			_id: sender._id,
+			name: sender.name,
+			email: sender.email,
+			avatar: sender.avatar,
+		};
+
+		let formatToPush = {
+			sender: formatSender,
+			response: 'none',
+			hasRead: false,
+			type,
+			dateReceived: Date.now(),
+			project: {
+				_id: _pid,
+				projectName,
+			},
+		};
+
+		findUser.notifications.push(formatToPush);
+
+		let pushedNotification = await findUser.save();
+
+		let subdocs = pushedNotification.$getAllSubdocs();
+		let latestDoc = subdocs[subdocs.length - 1];
+
+		let latestSingleNotification = findUser.notifications.id(latestDoc._id);
+
+		res.status(200).send(latestSingleNotification);
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
+
+exports.removeNotification = async (req, res, next) => {
+	try {
+		// let userId = req.user._id;
+		// let notificationsId = req.body._nid;
+
+		// await User.updateOne(
+		// 	{ _id: userId },
+		// 	{
+		// 		$pull: { notifications: { _id: notificationsId } },
+		// 	}
+		// );
+
+		// res.status(200).send(notificationsId);
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
+
+exports.updateNotification = async (req, res, next) => {
+	try {
+		let userId = req.user._id;
+		let notificationsId = req.body._nid;
+		let update = req.body.update;
+
+		let findUser = await User.findById(userId);
+
+		let subdoc = findUser.notifications.id(notificationsId);
+
+		for (let key in update) {
+			subdoc[key] = update[key];
+		}
+
+		let savedUser = await findUser.save();
+		let updatedUserNotification = savedUser.notifications.id(notificationsId);
+
+		res.status(200).send(updatedUserNotification);
+
+		return next();
+	} catch (error) {
+		// console.error(error);
+		return next(error);
+	}
+};
+
 //#endregion

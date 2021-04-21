@@ -3,37 +3,43 @@ import Context from './Context.js';
 
 // initials states
 import AuthInitialStates from './initialStates/AuthInitialStates.js';
-import UserInitialStates from './initialStates/UserInitialStates.js';
+import { UserInitialStates, NotifcationsInitialStates } from './initialStates/UserInitialStates.js';
 import {
 	ProjectInitialStates,
 	GetOneProjectStates,
 	TaskMessageInitialStates,
-	MembersInitialStates,
-	// test
 	ProjectTasksInitialStates,
+	ProjectMembersInitialStates,
 } from './initialStates/ProjectInitialStates.js';
 
 // reducers
 import AuthReducer from './reducer/AuthReducer.js';
 import UserReducer from './reducer/UserReducer.js';
+import NotificationReducer from './reducer/NotificationReducer.js';
 import ProjectReducer from './reducer/ProjectReducer.js';
 import GetOneProjectReducer from './reducer/GetOneProjectReducer.js';
 import TaskMessageReducer from './reducer/TaskMessageReducer.js';
-import MembersReducer from './reducer/MembersReducer.js';
-
-//test
 import ProjectTaskReducer from './reducer/ProjectTaskReducer.js';
+import ProjectMembersReducer from './reducer/ProjectMembersReducer.js';
 
 const AppState = ({ children }) => {
+	// user
 	const [authState, authDispatch] = useReducer(AuthReducer, AuthInitialStates);
 	const [userState, userDispatch] = useReducer(UserReducer, UserInitialStates);
-	const [projectState, projectDispatch] = useReducer(ProjectReducer, ProjectInitialStates);
-	const [getOneProjectState, getOneProjectDispatch] = useReducer(GetOneProjectReducer, GetOneProjectStates);
-	const [taskMessageState, taskMessageDispatch] = useReducer(TaskMessageReducer, TaskMessageInitialStates);
-	const [membersState, membersDispatch] = useReducer(MembersReducer, MembersInitialStates);
 
-	// testing table reducer
+	// user notifications
+	const [notificationState, notificationDispatch] = useReducer(NotificationReducer, NotifcationsInitialStates);
+
+	// project
+	const [getOneProjectState, getOneProjectDispatch] = useReducer(GetOneProjectReducer, GetOneProjectStates);
+	const [projectState, projectDispatch] = useReducer(ProjectReducer, ProjectInitialStates);
+
+	// project tasks
 	const [projectTaskState, projectTaskDispatch] = useReducer(ProjectTaskReducer, ProjectTasksInitialStates);
+	const [projectMembersState, projectMembersDispatch] = useReducer(ProjectMembersReducer, ProjectMembersInitialStates);
+
+	// project tasks message
+	const [taskMessageState, taskMessageDispatch] = useReducer(TaskMessageReducer, TaskMessageInitialStates);
 
 	return (
 		<Context.Provider
@@ -44,21 +50,23 @@ const AppState = ({ children }) => {
 				userState,
 				userDispatch,
 
-				projectState,
-				projectDispatch,
+				notificationState,
+				notificationDispatch,
 
 				getOneProjectState,
 				getOneProjectDispatch,
 
-				taskMessageState,
-				taskMessageDispatch,
+				projectState,
+				projectDispatch,
 
-				membersState,
-				membersDispatch,
-
-				// test
 				projectTaskState,
 				projectTaskDispatch,
+
+				projectMembersState,
+				projectMembersDispatch,
+
+				taskMessageState,
+				taskMessageDispatch,
 			}}
 		>
 			{children}

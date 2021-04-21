@@ -20,6 +20,7 @@ const ProjectTaskReducer = (state, { payload, type }) => {
 			};
 		case TASK_GET:
 			return {
+				...state,
 				projectTasks: {
 					isLoading: false,
 					data: payload,
@@ -28,6 +29,7 @@ const ProjectTaskReducer = (state, { payload, type }) => {
 			};
 		case TASK_CREATE:
 			return {
+				...state,
 				projectTasks: {
 					isLoading: false,
 					data: [...state.projectTasks.data, payload],
@@ -35,9 +37,22 @@ const ProjectTaskReducer = (state, { payload, type }) => {
 				},
 			};
 		case TASK_UPDATE:
-			return {};
+			let updatedTask = state.projectTasks.data.map((task) => {
+				if (task._id === payload.result._id) return payload.result;
+				return task;
+			});
+
+			return {
+				...state,
+				projectTasks: {
+					isLoading: false,
+					data: updatedTask,
+					error: false,
+				},
+			};
 		case TASK_REMOVE:
 			return {
+				...state,
 				projectTasks: {
 					isLoading: false,
 					data: state.projectTasks.data.filter((task) => {

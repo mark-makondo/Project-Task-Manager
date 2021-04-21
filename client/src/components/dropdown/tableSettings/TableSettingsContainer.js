@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+// import Moment from 'moment';
 
 // ui
 import TableSettings from './TableSettings';
@@ -8,42 +9,77 @@ import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
 import DetailsModalContainer from '../../modal/details/DetailsContainer.js';
 
 // context
-import Context from '../../../context/Context.js';
-import { TaskAction } from '../../../context/actions/project/TaskAction.js';
-import { GetMembersAction } from '../../../context/actions/project/GetMembersAction.js';
 
+import Context from '../../../context/Context.js';
+import { RemoveProjectAction } from '../../../context/actions/project/ProjectAction';
+import { ProjectMembersGetAction } from '../../../context/actions/project/ProjectMembersAction';
+
+import { SocketContext } from '../../../context/SocketContext.js';
 const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 	const [confirmProjectDeleteDialogueOpen, setConfirmProjectDeleteDialogueOpen] = useState(false);
 	const [detailsIsActive, setDetailsIsActive] = useState(false);
 
-	const { getOneProjectDispatch } = useContext(Context);
-	const { membersDispatch } = useContext(Context);
+	const { projectDispatch } = useContext(Context);
+	const { projectMembersDispatch } = useContext(Context);
+	const socket = useContext(SocketContext);
 
-	//#region
+	//#region table details settings
 	const showProjectDetailsClickHandler = (e) => {
 		let pid = data?.project._id;
 
-		GetMembersAction(pid)(membersDispatch);
+		ProjectMembersGetAction(pid)(projectMembersDispatch);
 		setDetailsIsActive(!detailsIsActive);
 	};
 
 	//#endregion
 
 	//#region delete project logic
+	useEffect(() => {}, [socket]);
+
 	const deleteProjectClickHandler = (e) => {
 		setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
 	};
 
 	const confirmProjectDeleteHandler = () => {
-		let type = 'removeProject';
+		let projectId = data?.project._id;
+
+		let userId = data?.user._id;
 		let formatedData = {
-			_pid: data?.project._id,
-			_id: data?.user._id,
+			_pid: projectId,
+			_id: userId,
 		};
 
-		TaskAction(formatedData, type)(getOneProjectDispatch);
+		sendDeleteNoticeToMembers();
+		RemoveProjectAction(formatedData)(projectDispatch);
+
 		setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
 		localStorage.removeItem('local-tid');
+	};
+
+	const sendDeleteNoticeToMembers = () => {
+		let acceptedMembers = data?.project.members
+			.filter((member) => {
+				return member.isAccepted === true;
+			})
+			.map((email) => {
+				return email._id.email;
+			});
+
+		let emailToNotif = acceptedMembers;
+
+		let type = 'deleted';
+		let projectName = data.project.projectName;
+		let _pid = data.project._id;
+
+		let dataToPush = {
+			sender: data?.user,
+			type,
+			response: 'none',
+			projectName,
+			_pid,
+		};
+
+		socket.emit('send_notif', { emailToNotif, dataToPush, notifType: 'deleteProject' });
 	};
 
 	//#endregion

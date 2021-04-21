@@ -8,42 +8,69 @@ import Query from '../../../helper/query.js';
 
 // context
 import Context from '../../../context/Context.js';
-import { GetMembersAction } from '../../../context/actions/project/GetMembersAction.js';
-import { RemoveMembersAction } from '../../../context/actions/project/RemoveMemberAction';
+import { SocketContext } from '../../../context/SocketContext.js';
+
+import {
+	ProjectMembersGetAction,
+	ProjectMembersRemoveAction,
+} from '../../../context/actions/project/ProjectMembersAction';
 
 // sub modal
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
 
 const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) => {
 	const [confirmDialogueOpen, setConfirmDialogueOpen] = useState(false);
-	const [currentClickedMember, setCurrentClickedMember] = useState();
+	const [currentClickedMember, setCurrentClickedMember] = useState({});
+
+	const socket = useContext(SocketContext);
 
 	const {
-		membersState: { members },
-		membersDispatch,
+		projectMembersState: { projectMembers },
+		projectMembersDispatch,
 	} = useContext(Context);
 
 	useEffect(() => {
 		let pid = data.project._id;
 
-		GetMembersAction(pid)(membersDispatch);
-	}, [membersDispatch, data?.project._id]);
+		ProjectMembersGetAction(pid)(projectMembersDispatch);
+	}, [projectMembersDispatch, data?.project._id]);
 
 	const removeMemberClickHandler = (e) => {
-		let currentMember = e.target.dataset.mid;
+		let currentMemberId = e.target.dataset.mid;
+		let currentMemberEmail = e.target.dataset.email;
 
-		setCurrentClickedMember(currentMember);
+		setCurrentClickedMember({ mid: currentMemberId, email: currentMemberEmail });
 		setConfirmDialogueOpen(!confirmDialogueOpen);
 	};
 
 	const confirmRemoveMemberHandler = () => {
 		let formatedData = {
 			pid: data?.project._id,
-			mid: currentClickedMember,
+			mid: currentClickedMember.mid,
 		};
 
-		RemoveMembersAction(formatedData)(membersDispatch);
+		ProjectMembersRemoveAction(formatedData)(projectMembersDispatch);
+		sendRemoveNoticeToMembers();
+
 		setConfirmDialogueOpen(!confirmDialogueOpen);
+	};
+
+	// make this as a bsis when we create the notification for member removal notice
+	const sendRemoveNoticeToMembers = () => {
+		let emailToNotif = currentClickedMember.email;
+
+		let type = 'removed';
+		let projectName = data.project.projectName;
+		let _pid = data.project._id;
+
+		let dataToPush = {
+			sender: data?.user,
+			type,
+			projectName,
+			_pid,
+		};
+
+		socket.emit('send_notif', { emailToNotif, dataToPush, notifType: 'removedMember' });
 	};
 
 	// current modal active modifier
@@ -70,7 +97,7 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 			<>
 				<Details
 					data={data}
-					members={members}
+					members={projectMembers}
 					removeMemberClickHandler={removeMemberClickHandler}
 					isCurrentUserOwner={isCurrentUserOwner}
 				/>

@@ -13,7 +13,6 @@ const notificationResponseSocket = (socket, io) => {
 
 	socket.on('send_notification_response', async (content) => {
 		let { sendType, data } = content;
-		// console.log(data);
 
 		// io.emit('received_notification_response', formatToSend);
 

@@ -32,6 +32,9 @@ const Navbar = ({ logoutClickHandler }) => {
 						)}
 						onLogoutSuccess={logoutClickHandler}
 					></GoogleLogout>
+					{/* <button onClick={logoutClickHandler} className='navbar__right-logout normal-2'>
+						Logout
+					</button> */}
 				</div>
 			</div>
 		</nav>

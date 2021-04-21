@@ -14,6 +14,11 @@ router.route('/login').post(userController.login);
 router.route('/:id').get(verifyToken, userController.find);
 router.route('/update').put(verifyToken, userController.update);
 router.put('/changePassword/:id', verifyToken, userController.changePassword);
-router.get('/notifications/:id', verifyToken, userController.getNotifications);
+
+// notifications
+router.route('/:id/notifications').get(verifyToken, userController.getNotifications);
+router.route('/notification/add').post(verifyToken, userController.addNotification);
+router.route('/notification/update').put(verifyToken, userController.updateNotification);
+router.route('/notification/remove/:nid').delete(verifyToken, userController.removeNotification);
 
 module.exports = router;

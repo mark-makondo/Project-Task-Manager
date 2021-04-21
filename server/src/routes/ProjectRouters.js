@@ -19,12 +19,13 @@ router.route('/member/remove/:pid/:mid').delete(verifyToken, projectController.r
 router.route('/member/findAll/:pid').get(verifyToken, projectController.getMembers);
 
 // project tasks routes
+router.route('/:pid/tasks').get(verifyToken, projectController.getTasks);
 router.route('/task/remove/:pid/:tid').delete(verifyToken, projectController.removeTask);
 router.route('/task/update').put(verifyToken, projectController.updateTask);
 
 // task messages
-router.route('/:pid/tasks').get(verifyToken, projectController.getTasks);
 router.route('/task/message/:tid').get(verifyToken, projectController.getMessages);
+router.route('/task/message/add').post(verifyToken, projectController.addMessage);
 
 // Routes with google drive middleware
 router.route('/create').post(verifyToken, projectController.create, googleDrive.createProjectFolder);

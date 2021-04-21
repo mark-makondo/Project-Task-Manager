@@ -9,13 +9,21 @@ const { Message } = require('../models/MessageModel');
  * @param {socket} io
  */
 const chatSocket = (socket, io) => {
-	socket.on('send_message', async (data) => {
-		let room = data._tid;
+	let roomFlag = '';
+
+	socket.on('join', (room) => {
+		roomFlag = room;
 		socket.join(room);
 
-		let res = await postMessages(data);
+		console.log(`${socket.id} joined the room ${room}`);
+	});
 
-		io.to(room).emit('received_message', res);
+	socket.on('send_message', async (data) => {
+		let room = data._tid;
+		// let res = await postMessages(data);
+
+		// io.to(room).emit('received_message', res);
+		io.to(room).emit('received_message', data.content);
 	});
 };
 
@@ -35,7 +43,10 @@ const postMessages = async (data) => {
 		};
 
 		let msg = new Message(saveToMessage);
-		let savedMsg = await msg.save();
+
+		let populatedMsg = await msg.execPopulate({ path: 'author', model: User, select: 'name email avatar' });
+
+		let savedMsg = await populatedMsg.save();
 
 		let findProjectTask = await Project.findOne({ 'tasks._id': _tid });
 		if (!findProjectTask) return console.error('task doesnt exist.');
@@ -45,14 +56,7 @@ const postMessages = async (data) => {
 
 		await findProjectTask.save();
 
-		let findMessage = await Message.findOne({ _id: savedMsg._id });
-		let populatedMessage = findMessage.execPopulate({
-			path: 'author',
-			model: User,
-			select: 'name email avatar',
-		});
-
-		return populatedMessage;
+		return savedMsg;
 	} catch (error) {
 		console.error(error);
 	}

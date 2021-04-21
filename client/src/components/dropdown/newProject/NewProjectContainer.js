@@ -5,7 +5,7 @@ import NewProject from './NewProject.js';
 
 // context
 import Context from '../../../context/Context.js';
-import { CreateProjectAction } from '../../../context/actions/project/CreateProjectAction.js';
+import { CreateProjectAction } from '../../../context/actions/project/ProjectAction';
 
 const NewProjectContainer = () => {
 	const [input, setInput] = useState({

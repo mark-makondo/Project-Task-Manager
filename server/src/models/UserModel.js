@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema(
 		projects: [{ type: mongoose.Schema.ObjectId, ref: 'project' }],
 		notifications: [
 			{
-				_id: { type: mongoose.Schema.ObjectId },
+				_id: { type: mongoose.Schema.ObjectId, auto: true },
 				dateReceived: { type: String },
 				hasRead: { type: Boolean, default: false },
 				type: { type: String },

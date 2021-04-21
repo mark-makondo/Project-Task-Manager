@@ -6,6 +6,45 @@
 	padding: 1rem;
 	margin-bottom: 1rem;
 
+	&-upload-percent {
+		position: relative;
+		display: block;
+		height: 0.5rem;
+		width: 0%;
+		border-radius: 2rem;
+		margin-bottom: 1rem;
+		margin-right: auto;
+		opacity: 0.8;
+		background: getColors(btn-status-completed);
+		transition: 150ms all linear;
+		visibility: none;
+
+		&.loading {
+			width: 50%;
+			visibility: visible;
+		}
+		&.completed {
+			animation-name: complete, begone;
+			animation-duration: 150ms, 150ms;
+			animation-delay: 0ms, 1000ms;
+			animation-timing-function: ease-in, ease-out;
+			animation-iteration-count: 1, 1;
+		}
+	}
+
+	@keyframes complete {
+		from {
+			width: 100%;
+			opacity: 1;
+		}
+	}
+
+	@keyframes begone {
+		to {
+			opacity: 0;
+		}
+	}
+
 	&-message {
 		@include setFlex(row, center, center);
 
@@ -71,8 +110,14 @@
 			color: getColors(primary);
 			padding: 0.5rem;
 
-			@include responsiveHover() {
-				color: getColors(btn-status-working);
+			&:disabled {
+				opacity: 0.8 !important;
+			}
+
+			&:not(:disabled) {
+				@include responsiveHover() {
+					color: getColors(btn-status-working);
+				}
 			}
 		}
 	}

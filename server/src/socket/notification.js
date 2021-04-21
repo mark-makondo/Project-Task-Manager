@@ -30,7 +30,7 @@ const notificationSocket = (socket, io) => {
 			},
 		};
 
-		await pushNotification(io, data, sendStatus, formatToSend, sendType);
+		await pushNotification(io, data, sendStatus, formatToSend, sendType, content);
 	});
 };
 
@@ -44,18 +44,18 @@ const pushNotification = async (io, data, sendStatus, formatToSend, sendType) =>
 
 		let findEmailIfExist = await User.findOne({ email: emailToInvite });
 
-		if (!findEmailIfExist) return sendStatus({ senderEmail, message: 'The email is not a valid user.' });
-		if (findEmailIfExist.email === senderEmail) return sendStatus({ senderEmail, message: 'Action not allowed.' });
-
-		let findMember = await Project.find({ _id: pid, 'members._id': findEmailIfExist._id });
-		if (findMember.length !== 0) return sendStatus({ senderEmail, message: 'User is already a member.' });
-
-		// emit the notification now
-		await io.emit('received_notification', formatToSend);
-
-		await findEmailIfExist.notifications.push(formatToPush);
-
 		if (sendType === 'new') {
+			if (!findEmailIfExist) return sendStatus({ senderEmail, message: 'The email is not a valid user.' });
+			if (findEmailIfExist.email === senderEmail) return sendStatus({ senderEmail, message: 'Action not allowed.' });
+
+			let findMember = await Project.find({ _id: pid, 'members._id': findEmailIfExist._id });
+			if (findMember.length !== 0) return sendStatus({ senderEmail, message: 'User is already a member.' });
+
+			// emit the notification now
+			await io.emit('received_notification', { receivedData: formatToSend, emailToInvite });
+
+			await findEmailIfExist.notifications.push(formatToPush);
+
 			await sendStatus({ senderEmail, message: 'Invitation sent!' });
 
 			// add the receipient to the project pending members.
@@ -63,6 +63,15 @@ const pushNotification = async (io, data, sendStatus, formatToSend, sendType) =>
 			project.members.push(findEmailIfExist);
 
 			await project.save();
+		} else if (sendType === 'deleteProject') {
+			// specific data only available for delete project type
+			let dataToPerformDelete = content.formatedData;
+
+			// to push notification.
+			await io.emit('received_notification', { receivedData: formatToSend, emailToInvite });
+
+			// to perform delete action to the receipient.
+			await io.emit('received_notification_delete_action', { dataToPerformDelete, emailToInvite });
 		}
 
 		await findEmailIfExist.save();

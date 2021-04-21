@@ -92,7 +92,7 @@
 		}
 
 		&__content {
-			@include setFlex(column, center, center);
+			@include setFlex(column, center, flex-start);
 			&-name {
 				font-weight: 600;
 			}

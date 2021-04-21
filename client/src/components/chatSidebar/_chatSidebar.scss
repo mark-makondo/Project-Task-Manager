@@ -8,9 +8,18 @@
 	right: 0;
 	height: 100%;
 	box-shadow: $little-shadow;
-	// animation-name: hideChatSidebar;
-	// animation-duration: 0.5s;
+	animation-name: hideChatSidebar;
+	animation-duration: 0.5s;
 	display: none;
+
+	.message-loading {
+		@include setFlex(row, center, center);
+		margin: auto;
+		width: 1rem;
+		height: 100%;
+		color: getColors(btn-status-working);
+		font-size: 1.5rem;
+	}
 
 	&.active {
 		// width: 0;

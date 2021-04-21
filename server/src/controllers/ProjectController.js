@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const upload = require('../multer');
 const fs = require('fs');
+const socket = require('../server.js');
 
 // models
 const { Project } = require('../models/ProjectModel');
@@ -11,7 +12,7 @@ const { Message } = require('../models/MessageModel');
 exports.create = async (req, res, next) => {
 	try {
 		let id = req.user._id;
-		if (!id) res.status(400).send('Id not found from jwt token.');
+		if (!id) return res.status(400).send('Id not found from jwt token.');
 
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
@@ -46,12 +47,12 @@ exports.create = async (req, res, next) => {
 exports.findAllUserProjects = async (req, res, next) => {
 	try {
 		let id = req.user._id;
-		if (!id) res.status(400).send('Id not found from jwt token.');
+		if (!id) return res.status(400).send('Id not found from jwt token.');
 
 		let user = await User.findById(id);
 		if (!user) return res.status(400).send('No user found.');
 
-		let projects = await user.execPopulate({
+		let userData = await user.execPopulate({
 			path: 'projects',
 			model: Project,
 			populate: { path: 'members._id', model: User },
@@ -59,7 +60,7 @@ exports.findAllUserProjects = async (req, res, next) => {
 			populate: { path: 'tasks.assigned', model: User },
 		});
 
-		res.status(200).send(projects);
+		res.status(200).send(userData.projects);
 
 		return next();
 	} catch (error) {
@@ -76,10 +77,10 @@ exports.findOne = async (req, res, next) => {
 		let user = req.user;
 
 		let pid = req.params.pid;
-		if (!pid) res.status(400).send('Parameter id not found.');
+		if (!pid) return res.status(400).send('Parameter id not found.');
 
 		let findProject = await Project.findById(pid);
-		if (!findProject) res.status(400).send('Project not found.');
+		if (!findProject) return res.status(400).send('Project not found.');
 
 		let project = await findProject
 			.populate('owner')
@@ -105,7 +106,7 @@ exports.deleteProject = async (req, res, next) => {
 		if (!pid) return res.status(400).send('pid not found from path parameters.');
 
 		let project = await Project.findOneAndDelete({ _id: pid }, { useFindAndModify: false });
-		if (!project) return res.send.status(400).send('Project removal failed.');
+		if (!project) return res.status(400).send('Project removal failed.');
 
 		let membersId = project.members.map((id) => id._id);
 		let ownerId = project.owner;
@@ -133,32 +134,34 @@ exports.deleteProject = async (req, res, next) => {
 //#region Query for project members: ADD, REMOVE.
 exports.addMember = async (req, res, next) => {
 	try {
-		let id = req.body._id;
-		if (!id) return res.status(400).send('id not found.');
-
+		let uid = req.user._id;
 		let pid = req.body._pid;
-		if (!pid) return res.status(400).send('pid not found.');
+		let memberToInviteEmail = req.body.memberToInviteEmail;
 
-		let user = await User.findById(id);
-		if (!user) return res.status(400).send('User not found.');
+		let memberToInvite = await User.find({ email: memberToInviteEmail });
+
+		if (memberToInvite.length === 0) return res.status(400).send('The email is not a valid user.');
+
+		let findMember = await Project.find({ _id: pid, 'members._id': memberToInvite[0]._id });
+		if (findMember.length === 1) return res.status(400).send('User is already a member.');
+		else if (memberToInvite._id === uid) return res.status(400).send('Action not allowed.');
 
 		let project = await Project.findById(pid);
-		if (!project) return res.status(400).send('Project not found.');
 
-		let findFilter = { _id: pid, 'members._id': user._id };
-		let findMember = await Project.find(findFilter);
-		if (findMember.length !== 0) return res.status(400).send('User is already a member.');
+		project.members.push(memberToInvite[0]);
 
-		project.members.push(user);
-		user.projects.push(project);
-
-		await user.save();
 		await project.save();
 
-		res.status(200).send({
-			message: `${user.name} was added on project ${project.projectName}`,
-			result: { user: user },
+		let { members } = await project.execPopulate({
+			path: 'members._id',
+			select: 'name email avatar',
 		});
+
+		let latestDoc = members[members.length - 1];
+
+		res.status(200).send(latestDoc);
+
+		socket.io.emit('invitation_sent', { success: true, result: latestDoc, currentUserId: uid });
 
 		return next();
 	} catch (error) {
@@ -201,12 +204,14 @@ exports.getMembers = async (req, res, next) => {
 
 		let findProject = await Project.findById(pid);
 
-		let { members } = await findProject.execPopulate({
-			path: 'members._id',
-			select: 'name email avatar',
-		});
+		if (findProject) {
+			let { members } = await findProject.execPopulate({
+				path: 'members._id',
+				select: 'name email avatar',
+			});
 
-		res.status(200).send({ members });
+			res.status(200).send(members);
+		}
 
 		return next();
 	} catch (error) {
@@ -299,15 +304,22 @@ exports.updateTask = async (req, res, next) => {
 		let project = await Project.findById(pid);
 		if (!project) return res.status(400).send('Project not found.');
 
-		let subdoc = project.tasks.id(tid);
+		let projectTasks = await project.execPopulate({
+			path: 'tasks.assigned',
+			select: 'name email avatar',
+			model: User,
+		});
+
+		let subdoc = projectTasks.tasks.id(tid);
 
 		for (let key in req.body.update) {
 			subdoc[key] = req.body.update[key];
 		}
 
 		let savedProject = await project.save();
+		let updatedTask = savedProject.tasks.id(tid);
 
-		res.status(200).send({ message: 'Task updated successfully.', result: savedProject });
+		res.status(200).send({ message: 'Task updated successfully.', result: updatedTask });
 
 		return next();
 	} catch (error) {
@@ -337,7 +349,7 @@ exports.getTasks = async (req, res, next) => {
 };
 //#endregion
 
-//#region Query for project tasks messages: GET.
+//#region Query for project tasks messages: GET, ADD.
 exports.getMessages = async (req, res, next) => {
 	try {
 		let tid = req.params.tid;
@@ -360,6 +372,47 @@ exports.getMessages = async (req, res, next) => {
 		let findTask = populateMessage.tasks.id(tid);
 
 		res.status(200).json(findTask);
+		return next();
+	} catch (error) {
+		console.error(error);
+		return next(error);
+	}
+};
+
+exports.addMessage = async (req, res, next) => {
+	try {
+		let userId = req.user._id;
+
+		let { _tid, content } = req.body;
+		let { message, dateCreated, type, url } = content;
+
+		if (!url || url === '') url = '';
+
+		let saveToMessage = {
+			author: userId,
+			message,
+			dateCreated,
+			type,
+			url,
+		};
+
+		let msg = new Message(saveToMessage);
+
+		let populatedMsg = await msg.execPopulate({ path: 'author', model: User, select: 'name email avatar' });
+
+		let savedMsg = await populatedMsg.save();
+
+		let findProjectTask = await Project.findOne({ 'tasks._id': _tid });
+		if (!findProjectTask) return res.status(400).send('task doesnt exist.');
+
+		let subdoc = findProjectTask.tasks.id(_tid);
+		subdoc.messages.push(savedMsg);
+
+		await findProjectTask.save();
+
+		res.status(200).send(savedMsg);
+		// console.log('message return ctrl', savedMsg);
+
 		return next();
 	} catch (error) {
 		console.error(error);

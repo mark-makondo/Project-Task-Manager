@@ -1,29 +1,30 @@
-let dataFormat = {
+let nullFormat = {
 	isLoading: false,
 	data: null,
 	error: false,
 };
+let ArrayFormat = {
+	isLoading: false,
+	data: [],
+	error: false,
+};
 
 export const ProjectInitialStates = {
-	project: dataFormat,
+	project: ArrayFormat,
 };
 
 export const GetOneProjectStates = {
-	getOneProject: dataFormat,
+	getOneProject: nullFormat,
 };
 
 export const TaskMessageInitialStates = {
-	taskMessage: dataFormat,
-};
-
-export const MembersInitialStates = {
-	members: dataFormat,
+	taskMessage: nullFormat,
 };
 
 export const ProjectTasksInitialStates = {
-	projectTasks: {
-		isLoading: false,
-		data: [],
-		error: false,
-	},
+	projectTasks: ArrayFormat,
+};
+
+export const ProjectMembersInitialStates = {
+	projectMembers: ArrayFormat,
 };

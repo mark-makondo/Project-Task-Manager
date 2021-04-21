@@ -1,16 +1,14 @@
 import {
-	GET_ALL_PROJECT_LOADING,
-	GET_ALL_PROJECT_SUCCESS,
-	GET_ALL_PROJECT_ERROR,
-	CREATE_PROJECT_LOADING,
-	CREATE_PROJECT_SUCCESS,
-	CREATE_PROJECT_ERROR,
+	PROJECT_LOADING,
+	PROJECT_GETALL,
+	PROJECT_CREATE,
+	PROJECT_REMOVE,
+	PROJECT_ERROR,
 } from '../../constants/actionTypes/ActionTypes.js';
 
 const ProjectReducer = (state, { payload, type }) => {
 	switch (type) {
-		case CREATE_PROJECT_LOADING:
-		case GET_ALL_PROJECT_LOADING:
+		case PROJECT_LOADING:
 			return {
 				...state,
 				project: {
@@ -19,20 +17,36 @@ const ProjectReducer = (state, { payload, type }) => {
 					isLoading: true,
 				},
 			};
-		case CREATE_PROJECT_SUCCESS:
-		case GET_ALL_PROJECT_SUCCESS:
+		case PROJECT_GETALL:
 			return {
 				...state,
 				project: {
-					...state.project,
-					error: false,
 					isLoading: false,
 					data: payload,
+					error: false,
 				},
 			};
-
-		case CREATE_PROJECT_ERROR:
-		case GET_ALL_PROJECT_ERROR:
+		case PROJECT_CREATE:
+			return {
+				...state,
+				project: {
+					isLoading: false,
+					data: [...state.project.data, payload],
+					error: false,
+				},
+			};
+		case PROJECT_REMOVE:
+			return {
+				...state,
+				project: {
+					isLoading: false,
+					data: state.project.data.filter((project) => {
+						return project._id !== payload;
+					}),
+					error: false,
+				},
+			};
+		case PROJECT_ERROR:
 			return {
 				...state,
 				project: {

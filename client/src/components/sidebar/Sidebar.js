@@ -13,7 +13,7 @@ const Sidebar = ({
 	showProfileSettingsDropdown,
 	showCreateProjectDropdown,
 	userData,
-	allProjects,
+	projects,
 }) => {
 	// to prevent 'home' from always being active since home is not 'exact'.
 	let match = useRouteMatch();
@@ -38,15 +38,13 @@ const Sidebar = ({
 					<div className='sidebar-top__projects sidebar-top--title'>
 						<span className='title'>
 							projects-
-							<span className='project-num'>{`(${
-								!!allProjects && allProjects.projects.length ? allProjects.projects.length : 0
-							})`}</span>
+							<span className='project-num'>{`(${!!projects && projects.data ? projects.data.length : 0})`}</span>
 						</span>
 						<ul className='normal-2'>
-							{!!allProjects &&
-								allProjects.projects.map((project, i) => (
+							{!!projects &&
+								projects.data.map((project, i) => (
 									<NavLink
-										key={i}
+										key={`${project._id}-${i}`}
 										to={`${homeUrl}/${project._id}`}
 										activeClassName='selected'
 										className='project-list normal-2 sidebar-hover'
@@ -65,7 +63,7 @@ const Sidebar = ({
 					<div onClick={(e) => showProfileSettingsDropdown(e)} className='sidebar-bottom__profile dropdown'>
 						<div className='dropdown-button sidebar-bottom__profile-avatar'>
 							{userData && userData?.avatar !== 'no-avatar' ? (
-								<img src={userData?.avatar} alt='' />
+								<img src={userData?.avatar} alt='user data avatar' />
 							) : (
 								<span>{getStringInitials(userData?.name)}</span>
 							)}

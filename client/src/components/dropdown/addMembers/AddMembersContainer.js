@@ -1,72 +1,102 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import Moment from 'moment';
+import React, { useState, useContext, useEffect } from 'react';
 
 // ui
 import AddMembers from './AddMembers.js';
 
 // context
 import { SocketContext } from '../../../context/SocketContext.js';
-
-// helper
-import AxiosInstance from '../../../helper/axiosInstance.js';
+import Context from '../../../context/Context.js';
+import { ProjectMembersAddAction } from '../../../context/actions/project/ProjectMembersAction.js';
 
 const AddMembersContainer = ({ data }) => {
-	const [isLoading, setIsLoading] = useState(false);
+	const [statusReceived, setStatusReceived] = useState(null);
 	const [status, setStatus] = useState(null);
-	const membersEmailRef = useRef();
+	const [input, setInput] = useState({
+		membersEmail: '',
+	});
 
 	const socket = useContext(SocketContext);
+	const {
+		projectMembersState: {
+			projectMembers: { isLoading, error },
+		},
+		projectMembersDispatch,
+	} = useContext(Context);
 
 	const formSubmitHandler = (e) => {
 		e.preventDefault();
 
-		let type = 'invite';
-		let emailToInvite = membersEmailRef.current.value;
-		let senderData = data.user;
-		let sentDate = Moment();
-		let projectName = data.project.projectName;
-		let projectId = data.project._id;
+		let emailToNotif = input.membersEmail;
+		let _pid = data?.project._id;
 
-		let formatToSend = {
-			type,
-			emailToInvite,
-			senderData,
-			sentDate,
-			project: {
-				projectId,
-				projectName,
-			},
-		};
-
-		socket.emit('send_notification', { sendType: 'new', data: formatToSend });
-
-		setIsLoading(true);
-		membersEmailRef.current.value = '';
+		ProjectMembersAddAction({ _pid, memberToInviteEmail: emailToNotif })(projectMembersDispatch);
 	};
 
 	useEffect(() => {
-		let currentUserEmail = data.user.email;
-
-		socket.on('status', (data) => {
-			setIsLoading(false);
-
-			let { senderEmail, message } = data;
-			if (currentUserEmail === senderEmail) {
-				setStatus(message);
-			}
+		socket.on('invitation_sent', (content) => {
+			let isUserTheSame = content.currentUserId === data?.user._id;
+			setStatus('Invitation sent!');
+			setStatusReceived({ received: true, isUserTheSame });
 		});
 
-		return () => {
-			socket.off('status');
-		};
-	}, [socket, data.user.email]);
+		error && setStatus(error);
 
+		return () => {
+			socket.off('invitation_sent');
+		};
+	}, [socket, error, data?.user._id]);
+
+	useEffect(() => {
+		let emailToNotif = input.membersEmail;
+
+		let type = 'invite';
+		let projectName = data.project.projectName;
+		let _pid = data.project._id;
+
+		let dataToPush = {
+			sender: data?.user,
+			type,
+			response: 'none',
+			projectName,
+			_pid,
+		};
+
+		if (statusReceived) {
+			if (statusReceived.received === true && statusReceived.isUserTheSame === true) {
+				socket.emit('send_notif', { emailToNotif, dataToPush, notifType: 'inviteMembers' });
+			}
+			input.membersEmail = '';
+			setStatusReceived(null);
+		}
+
+		return () => {
+			socket.off('send_notif');
+		};
+	}, [
+		input,
+		input.membersEmail,
+		socket,
+		statusReceived,
+		statusReceived?.received,
+		statusReceived?.isUserTheSame,
+		data.project.projectName,
+		data.project._id,
+		data?.user,
+	]);
+
+	const inputOnChange = (e) => {
+		setInput({
+			...input,
+			[e.target.name]: e.target.value,
+		});
+	};
 	return (
 		<AddMembers
 			status={status}
 			isLoading={isLoading}
 			formSubmitHandler={formSubmitHandler}
-			membersEmailRef={membersEmailRef}
+			inputOnChange={inputOnChange}
+			input={input}
 		/>
 	);
 };

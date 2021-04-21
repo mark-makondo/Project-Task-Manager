@@ -21,7 +21,7 @@
 	border-top-color: getColors(btn-status-working);
 
 	&.active {
-		display: block;
+		@include setFlex(column, flex-start, flex-start);
 		opacity: 1;
 	}
 

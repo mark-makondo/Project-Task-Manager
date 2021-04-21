@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AddMembers = ({ membersEmailRef, formSubmitHandler, status, isLoading }) => {
+const AddMembers = ({ inputOnChange, input, formSubmitHandler, status, isLoading }) => {
 	return (
 		<div className='dropdown-content-add-members'>
 			<form onSubmit={(e) => formSubmitHandler(e)}>
@@ -18,7 +18,8 @@ const AddMembers = ({ membersEmailRef, formSubmitHandler, status, isLoading }) =
 						className='normal-2 focus-dropdown'
 						type='email'
 						name='membersEmail'
-						ref={membersEmailRef}
+						onChange={(e) => inputOnChange(e)}
+						value={input.membersEmail}
 					/>
 				</div>
 

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 // ui
 import Overview from './Overview.js';
 
 // context actions
 import Context from '../../context/Context.js';
-import { GetAllProjectAction } from '../../context/actions/project/GetAllProjectAction.js';
+import { GetAllProjectAction } from '../../context/actions/project/ProjectAction.js';
 
 const OverviewContainer = () => {
 	const {
@@ -14,15 +14,10 @@ const OverviewContainer = () => {
 		projectDispatch,
 	} = useContext(Context);
 
-	const trackChanges = useRef(false);
-
 	useEffect(() => {
-		if (!trackChanges.current) {
-			GetAllProjectAction()(projectDispatch);
-
-			trackChanges.current = true;
-		}
+		GetAllProjectAction()(projectDispatch);
 	}, [projectDispatch]);
+
 	return <Overview data={data} isLoading={isLoading} />;
 };
 

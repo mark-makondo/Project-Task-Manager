@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import Moment from 'moment';
+import { useParams, useHistory } from 'react-router-dom';
+
+// import Moment from 'moment';
 
 // ui
 import Notification from './Notifcation.js';
@@ -7,32 +9,48 @@ import Notification from './Notifcation.js';
 // context
 import Context from '../../context/Context.js';
 import { SocketContext } from '../../context/SocketContext.js';
-import { GetAllProjectAction } from '../../context/actions/project/GetAllProjectAction.js';
+import { GetAllProjectAction } from '../../context/actions/project/ProjectAction.js';
+
+import {
+	GetAllNotifications,
+	PushNotification,
+	UpdateNotification,
+	// RemoveNotification,
+} from '../../context/actions/user/NotificationAction.js';
 
 // helper
-import AxiosInstance from '../../helper/axiosInstance.js';
+// import axiosInstance from '../../helper/axiosInstance.js';
 import Query from '../../helper/query.js';
 
 const NotificationContainer = () => {
 	const [notifCount, setNotifCount] = useState(0);
-	const [notifications, setNotifications] = useState([]);
+	const [notificationData, setNotificationData] = useState([]);
+	const [isAlreadyClicked, setIsAlreadyClicked] = useState(false);
+	const [isAcceptLoading, setIsAcceptLoading] = useState(false);
+	const [isDeclineLoading, setIsDeclineLoading] = useState(false);
+
+	const params = useParams();
+	const history = useHistory();
 
 	const socket = useContext(SocketContext);
+	const { projectDispatch } = useContext(Context);
 	const {
 		userState: {
 			user: { data },
 		},
 	} = useContext(Context);
-
-	const { projectDispatch } = useContext(Context);
+	const {
+		notificationState: { notifications },
+		notificationDispatch,
+	} = useContext(Context);
 
 	//#region notification bell logic
 	const notifBellClickHandler = () => {
 		let bellSvg = Query.notificationBellSvg();
-		let notification = Query.notificationDropdown();
+		let notificationDropdown = Query.notificationDropdown();
 		let miniBell = Query.notifcationMiniBell();
 
-		notification.classList.toggle('hide');
+		notificationDropdown.classList.toggle('hide');
 		bellSvg.classList.toggle('active');
 
 		if (notifCount > 0) miniBell.classList.toggle('animate');
@@ -42,14 +60,15 @@ const NotificationContainer = () => {
 		let bellSvgWrapper = Query.notificationBellSvgWrapper();
 		let miniBell = Query.notifcationMiniBell();
 
-		let notifReadCount = notifications.filter((notification) => {
-			return notification.hasRead !== true;
-		}).length;
+		let notifReadCount =
+			notificationData.length !== 0 &&
+			notificationData.filter((notification) => {
+				return notification.hasRead !== true;
+			}).length;
 
 		setNotifCount(notifReadCount);
 
 		let notifDataCount = bellSvgWrapper.dataset.count;
-
 		if (notifDataCount > 0) {
 			bellSvgWrapper.classList.add('show-count');
 			miniBell.classList.add('animate');
@@ -57,71 +76,123 @@ const NotificationContainer = () => {
 			bellSvgWrapper.classList.remove('show-count');
 			miniBell.classList.remove('animate');
 		}
-	}, [notifCount, notifications]);
+	}, [notifCount, notificationData]);
 
 	//#endregion
 
-	//#region socket notification logic
-	const getNotifications = useCallback(async () => {
-		let currentUserId = data?._id;
-		if (currentUserId) {
-			let { data } = await AxiosInstance().get(`/user/notifications/${currentUserId}`);
-			setNotifications(data);
-		}
-	}, [data?._id]);
+	//#region functions used on socket notificaions logic
+	const getAllNotifications = useCallback(() => {
+		let id = data?._id;
 
-	useEffect(() => {
-		let currentUserEmail = data?.email;
+		data && GetAllNotifications(id)(notificationDispatch);
+	}, [data, notificationDispatch]);
 
-		socket.on('received_notification', (data) => {
-			if (currentUserEmail !== data.sender.email) {
-				setNotifications([...notifications, data]);
+	const responseForDeletedProject = useCallback(
+		(result, emailToNotif) => {
+			if (data) {
+				let currentUserEmail = data?.email;
+
+				emailToNotif.forEach((email) => {
+					if (email === currentUserEmail) {
+						let currentUserParams = params.userid;
+						let path = history.location.pathname;
+						let toPush = `/${currentUserParams}/dashboard`;
+
+						let projectPath = path.substring(path.lastIndexOf('/') + 1);
+						if (projectPath === result.project._id) history.push(toPush);
+					}
+				});
 			}
-		});
+			GetAllProjectAction()(projectDispatch);
+			getAllNotifications();
+		},
+		[data, history, params.userid, projectDispatch, getAllNotifications]
+	);
 
-		return () => {
-			socket.off('received_notification');
-		};
-	}, [socket, data?.email, notifications]);
+	const responseForRemovedMember = useCallback(
+		(result, emailToNotif) => {
+			if (data) {
+				let currentUserEmail = data?.email;
+				if (emailToNotif === currentUserEmail) {
+					PushNotification(result)(notificationDispatch);
 
-	useEffect(() => {
-		getNotifications();
-	}, [getNotifications]);
+					let currentUserParams = params.userid;
+					let path = history.location.pathname;
+					let toPush = `/${currentUserParams}/dashboard`;
 
-	useEffect(() => {
-		let currentUserId = data?._id;
+					let projectPath = path.substring(path.lastIndexOf('/') + 1);
 
-		socket.on('status', (data) => {
-			if (currentUserId === data.senderId) {
-				getNotifications();
+					projectPath === result.project._id && history.push(toPush);
+				}
 			}
-		});
+			GetAllProjectAction()(projectDispatch);
+			getAllNotifications();
+		},
+		[data, history, params.userid, notificationDispatch, getAllNotifications, projectDispatch]
+	);
 
-		return () => {
-			socket.off('status');
-		};
-	}, [socket, getNotifications, data?._id]);
+	const userPushNotification = useCallback(
+		(result, emailToNotif) => {
+			data && data?.email === emailToNotif && PushNotification(result)(notificationDispatch);
+
+			GetAllProjectAction()(projectDispatch);
+			getAllNotifications();
+		},
+		[data, notificationDispatch, projectDispatch, getAllNotifications]
+	);
 
 	//#endregion
 
-	//#region notification header logic.
-	const markAllClickHandler = (e) => {
-		// let current = e.currentTarget;
-		// let dropdownContentQuery = Query.dropdownContentSelect();
-		// dropdownContentQuery.classList.toggle('active');
-		// current.classList.toggle('active');
-	};
+	//#region socket notification logic.
+	useEffect(() => {
+		getAllNotifications();
+	}, [getAllNotifications]);
 
-	// #endregion
+	useEffect(() => {
+		notifications && setNotificationData(notifications.data);
+	}, [notificationData, notifications]);
 
-	//#region notification sections logic
+	useEffect(() => {
+		socket.on('rcv_notif', (content) => {
+			let { emailToNotif, result, originalData } = content;
+			let { notifType } = originalData;
+
+			if (notifType === 'inviteMembers') {
+				userPushNotification(result, emailToNotif);
+			} else if (notifType === 'deleteProject') {
+				responseForDeletedProject(result, emailToNotif);
+			} else if (notifType === 'acceptInvite' || notifType === 'declineInvite') {
+				userPushNotification(result, emailToNotif);
+			} else if (notifType === 'removedMember') {
+				responseForRemovedMember(result, emailToNotif);
+			}
+
+			setIsAlreadyClicked(false);
+		});
+
+		return () => {
+			socket.off('rcv_notif');
+		};
+	}, [
+		socket,
+		userPushNotification,
+		getAllNotifications,
+		responseForRemovedMember,
+		responseForDeletedProject,
+		projectDispatch,
+	]);
+
+	//#endregion
+
+	//#region notification accept and decline logic.
 	const acceptClickHandler = (e) => {
 		let projectId = e.target.dataset.pid;
 		let projectName = e.target.dataset.pname;
 		let notificationId = e.target.dataset.nid;
 		let senderEmail = e.target.dataset.senderemail;
+		let type = 'accepted';
 		let response = 'accepted';
-		let sendResponsetype = 'accepted';
+		let notifType = 'acceptInvite';
 
 		let currentUser = {
 			_id: data?._id,
@@ -130,8 +201,9 @@ const NotificationContainer = () => {
 			avatar: data?.avatar,
 		};
 
-		updateNotificationAndAddToMembers(currentUser, projectId, notificationId, response);
-		sendNotificationToAuthor(currentUser, senderEmail, projectName, projectId, sendResponsetype);
+		if (isAlreadyClicked !== true) {
+			sendInviteResponse(currentUser, senderEmail, response, projectName, projectId, notifType, type, notificationId);
+		}
 	};
 
 	const declineClickHandler = (e) => {
@@ -139,8 +211,9 @@ const NotificationContainer = () => {
 		let projectName = e.target.dataset.pname;
 		let notificationId = e.target.dataset.nid;
 		let senderEmail = e.target.dataset.senderemail;
+		let type = 'declined';
 		let response = 'declined';
-		let sendResponsetype = 'declined';
+		let notifType = 'declineInvite';
 
 		let currentUser = {
 			_id: data?._id,
@@ -148,85 +221,62 @@ const NotificationContainer = () => {
 			email: data?.email,
 			avatar: data?.avatar,
 		};
-
-		updateNotificationAndAddToMembers(currentUser, projectId, notificationId, response);
-		sendNotificationToAuthor(currentUser, senderEmail, projectName, projectId, sendResponsetype);
+		if (isAlreadyClicked !== true) {
+			sendInviteResponse(currentUser, senderEmail, response, projectName, projectId, notifType, type, notificationId);
+		}
 	};
 
-	/**
-	 * update the current user notification box if he/she accepted or declined
-	 * the invitations and if accepted the user will be added to the project
-	 * collection of the author of the corresponding notification.
-	 */
-	const updateNotificationAndAddToMembers = (currentUser, projectId, notificationId, response) => {
-		let formatToSend = {
-			currentUser,
-			projectId,
-			notificationId,
+	const sendInviteResponse = (
+		currentUser,
+		senderEmail,
+		response,
+		projectName,
+		projectId,
+		notifType,
+		type,
+		notificationId
+	) => {
+		setIsAlreadyClicked(true);
+
+		let emailToNotif = senderEmail;
+
+		let dataToPush = {
+			sender: currentUser,
+			type,
 			response,
+			projectName,
+			_pid: projectId,
 		};
 
-		socket.emit('send_notification_response', { sendType: 'updateMemberStatus', data: formatToSend });
+		socket.emit('send_notif', { emailToNotif, dataToPush, notifType, notificationId });
+		getAllNotifications();
 	};
 
-	/**
-	 * send a notification to the author of the notification if it was accepted
-	 * or not.
-	 */
-	const sendNotificationToAuthor = (currentUser, senderEmail, projectName, projectId, sendResponsetype) => {
-		let emailToSend = senderEmail;
-		let sentDate = Moment();
+	//#endregion
 
-		let formatToSend = {
-			type: sendResponsetype,
-			emailToInvite: emailToSend,
-			senderData: currentUser,
-			sentDate,
-			project: {
-				projectId,
-				projectName,
-			},
-		};
-
-		socket.emit('send_notification', { sendType: 'reply', data: formatToSend });
-	};
-
-	/**
-	 * update only the non-invite type notifications.
-	 */
+	//#region clickable update events
 	const notifSectionClickHandler = (e) => {
 		let type = e.currentTarget.dataset.type;
 		let notificationId = e.currentTarget.dataset.nid;
 
+		let formatToUdpdate = {
+			_nid: notificationId,
+			update: {
+				hasRead: true,
+			},
+		};
+
 		if (type !== 'invite') {
-			let formatToSend = {
-				currentUser: {
-					_id: data?._id,
-				},
-				notificationId,
-				response: 'none',
-			};
-			socket.emit('send_notification_response', { sendType: 'updateNotification', data: formatToSend });
+			UpdateNotification(formatToUdpdate)(notificationDispatch);
 		}
 	};
 
-	/**
-	 * dispatch getallproject state to get the updated projects of the current
-	 * user when the update is done.
-	 */
-	useEffect(() => {
-		let currentUserId = data?._id;
-
-		socket.on('status', (data) => {
-			if (currentUserId === data.senderId) {
-				data.sendType && data.sendType === 'membersUpdated' && GetAllProjectAction()(projectDispatch);
-			}
-		});
-
-		return () => {
-			socket.off('status');
-		};
-	}, [socket, data?._id, projectDispatch]);
+	// const markAllClickHandler = (e) => {
+	// 	// let current = e.currentTarget;
+	// 	// let dropdownContentQuery = Query.dropdownContentSelect();
+	// 	// dropdownContentQuery.classList.toggle('active');
+	// 	// current.classList.toggle('active');
+	// };
 
 	//#endregion
 
@@ -234,11 +284,12 @@ const NotificationContainer = () => {
 		<Notification
 			notifBellClickHandler={notifBellClickHandler}
 			notifCount={notifCount}
-			notifications={notifications}
-			markAllClickHandler={markAllClickHandler}
+			notifications={notificationData}
+			// markAllClickHandler={markAllClickHandler}
 			acceptClickHandler={acceptClickHandler}
 			declineClickHandler={declineClickHandler}
 			notifSectionClickHandler={notifSectionClickHandler}
+			notificationIsLoading={notifications.isLoading}
 		/>
 	);
 };
