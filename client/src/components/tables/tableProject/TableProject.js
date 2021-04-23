@@ -39,6 +39,7 @@ const TableProject = ({
 					<TableHeader />
 					<div className='table-project__content normal-2'>
 						{projectTaskData &&
+							projectTaskData.data?.length !== 0 &&
 							projectTaskData.data?.map((task) => (
 								<TableRow
 									data={data}

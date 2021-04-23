@@ -9,6 +9,7 @@ const StatusSelect = ({ data, itemClickHandler }) => {
 			{data &&
 				data.map((item, i) => (
 					<li
+						className='normal-3'
 						data-id={item.id}
 						key={`${item.data}-${i}`}
 						onMouseDown={(e) => itemClickHandler(e)}
@@ -27,6 +28,7 @@ const PersonSelect = ({ data, itemClickHandler, tid }) => {
 			{data &&
 				data.map((item) => (
 					<li
+						className='normal-3'
 						key={item._id._id}
 						data-id={item._id._id}
 						data-tid={tid}

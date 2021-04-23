@@ -43,6 +43,9 @@ const query = {
 	// details modal container @tableSettingsContainer
 	detailsModalQuery: () => document.querySelector('.details-modal'),
 
+	// uploaded files modal container @tableSettingsContainer
+	uploadedFilesModalQuery: () => document.querySelector('.uploaded-files-modal'),
+
 	// overview  modal container @overview
 	overviewMembersModalQuery: () => document.querySelector('.overview-members-modal'),
 	overviewTasksModalQuery: () => document.querySelector('.overview-tasks-modal'),

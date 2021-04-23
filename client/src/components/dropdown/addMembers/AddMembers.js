@@ -5,7 +5,7 @@ const AddMembers = ({ inputOnChange, input, formSubmitHandler, status, isLoading
 		<div className='dropdown-content-add-members'>
 			<form onSubmit={(e) => formSubmitHandler(e)}>
 				<div className='input-group'>
-					<div className='input-group__label normal-2'>
+					<div className='input-group__label normal-3'>
 						<label htmlFor='memberEmail'>Email:</label>
 
 						<span title='The email must be a valid user.'>
@@ -15,7 +15,7 @@ const AddMembers = ({ inputOnChange, input, formSubmitHandler, status, isLoading
 
 					<input
 						autoComplete='off'
-						className='normal-2 focus-dropdown'
+						className='normal-3 focus-dropdown'
 						type='email'
 						name='membersEmail'
 						onChange={(e) => inputOnChange(e)}

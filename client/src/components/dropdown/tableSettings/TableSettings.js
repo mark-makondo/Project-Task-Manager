@@ -1,9 +1,15 @@
 import React from 'react';
 
-const TableSettings = ({ showProjectDetailsClickHandler, deleteProjectClickHandler, isCurrentUserOwner }) => {
+const TableSettings = ({
+	showUploadedFilesClickHandler,
+	showProjectDetailsClickHandler,
+	deleteProjectClickHandler,
+	isCurrentUserOwner,
+}) => {
 	return (
-		<ul className='dropdown-content-table-settings normal-2'>
+		<ul className='dropdown-content-table-settings normal-3'>
 			<li onClick={(e) => showProjectDetailsClickHandler(e)}>Details</li>
+			<li onClick={(e) => showUploadedFilesClickHandler(e)}>Uploaded Files</li>
 			{isCurrentUserOwner && <li onClick={(e) => deleteProjectClickHandler(e)}>Delete Project</li>}
 		</ul>
 	);

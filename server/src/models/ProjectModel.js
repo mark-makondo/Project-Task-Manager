@@ -26,7 +26,14 @@ const projectSchema = mongoose.Schema(
 				assigned: { type: mongoose.Schema.ObjectId, ref: 'user' },
 				deadline: { type: String },
 				created_at: { type: Date, default: Date.now() },
-				fileUpload: [{ googlelink: { type: mongoose.SchemaTypes.Url }, fileName: { type: String } }],
+				fileUpload: [
+					{
+						_id: { type: mongoose.Schema.ObjectId, auto: true },
+						googleDownloadLink: { type: mongoose.SchemaTypes.Url },
+						googleViewLink: { type: mongoose.SchemaTypes.Url },
+						fileName: { type: String },
+					},
+				],
 				messages: [{ type: mongoose.Schema.ObjectId, ref: 'message' }],
 				taskFolderId: { type: String },
 			},

@@ -73,10 +73,10 @@
 			}
 			&-lists {
 				max-height: 30vh;
-				// background: getColors(secondary-more-fade);
 				padding: 0.4rem;
 				border-bottom-right-radius: 1rem;
 				border-bottom-left-radius: 1rem;
+				font-weight: 600;
 
 				ul {
 					display: flex;

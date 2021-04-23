@@ -5,7 +5,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 		<div className='dropdown-content-new-project'>
 			<form onSubmit={(e) => formSubmitHandler(e)}>
 				<div className='input-group'>
-					<div className='input-group__label normal-2'>
+					<div className='input-group__label normal-3'>
 						<label htmlFor='projectName'>What is your project name?</label>
 
 						<span title='Name for your project.'>
@@ -15,14 +15,14 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 
 					<input
 						autoComplete='off'
-						className='normal-2 focus-dropdown'
+						className='normal-3 focus-dropdown'
 						onChange={(e) => inputOnChangeHandler(e)}
 						type='text'
 						name='projectName'
 					/>
 				</div>
 				<div className='input-group'>
-					<div className='input-group__label normal-2'>
+					<div className='input-group__label normal-3'>
 						<label htmlFor='companyName'>Company Email:</label>
 
 						<span title='This will be used for auto transfer of ownership of files in google drive.'>
@@ -32,7 +32,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 
 					<input
 						autoComplete='off'
-						className='normal-2 focus-dropdown'
+						className='normal-3 focus-dropdown'
 						onChange={(e) => inputOnChangeHandler(e)}
 						type='email'
 						name='companyEmail'

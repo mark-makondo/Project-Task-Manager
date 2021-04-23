@@ -482,7 +482,10 @@ class GoogleDrive {
 
 					await this.moveResourceWithPermission(targetFolderId, parentFolderId, type, 'owner', companyEmail);
 
-					return { result: targetFolderId, message: `${parentFolderName} found and ${folderName} has been moved.` };
+					return {
+						result: targetFolderId,
+						message: `${parentFolderName} found and ${folderName} has been moved.`,
+					};
 				}
 			}
 
@@ -499,7 +502,10 @@ class GoogleDrive {
 				await this.moveResourceWithPermission(targetFolderId, parentFolderId, type, 'owner', companyEmail);
 			}
 
-			return { result: targetFolderId, message: `${parentFolderName} was created and ${folderName} has been moved.` };
+			return {
+				result: targetFolderId,
+				message: `${parentFolderName} was created and ${folderName} has been moved.`,
+			};
 		} catch (error) {
 			console.error(error.message);
 			return error.message;
@@ -507,7 +513,7 @@ class GoogleDrive {
 	}
 
 	/**
-	 * Combine all the permission into a one request. Usefull for minimizing the number of sent request to the
+	 * Combine all the permission into a one request. Useful for minimizing the number of sent request to the
 	 * google server, since they have a limit.
 	 *
 	 * @param {String} fileId The folder or file that we are going to give a batch of permission.
@@ -550,3 +556,33 @@ class GoogleDrive {
 }
 
 module.exports = GoogleDrive;
+
+/**
+ * for google drive development only! remove when finished developing.
+ */
+const googleDriveTesting = async () => {
+	// test
+	let google = new GoogleDrive();
+	await google.init();
+
+	// let id = '1eCDgz_GrUGOr3qybZYTrurTt0SpPkJvS';
+	// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
+	// let folderName = 'testing';
+
+	// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
+	// await google.createPermission;
+
+	// let link = await google.generatePublicUrl(id);
+
+	// await google.deleteResource(id);
+
+	// let get = await google.verifyCapabilitiesOrPermission(id, 'capabilities');
+
+	// let lists = await google.listFiles();
+
+	await google.findAllAndDelete();
+
+	// console.log(link);
+};
+
+// googleDriveTesting();

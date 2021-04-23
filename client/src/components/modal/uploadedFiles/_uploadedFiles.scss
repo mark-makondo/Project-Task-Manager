@@ -1,0 +1,131 @@
+.uploaded-files-modal {
+	@include setFlex(row, center, center);
+	position: fixed;
+	background: #80808040;
+	z-index: 99;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: 150ms linear;
+	text-transform: capitalize;
+
+	&-loading {
+		@include setFlex(row, center, center);
+		@include customLoading(getColors(btn-status-working));
+		margin-top: 1rem;
+		width: 100%;
+		height: 100%;
+	}
+
+	.empty-task-bg {
+		width: 15rem;
+		height: 100%;
+		padding: 1rem;
+		opacity: 0.8;
+	}
+
+	&.active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	&-wrapper {
+		@include setFlex(column, center, center);
+		position: relative;
+		max-width: fit-content;
+		height: auto;
+		background: white;
+		border-radius: 1rem;
+		padding-bottom: 1.5rem;
+		min-width: 15rem;
+		box-shadow: $little-shadow;
+		margin: 1rem;
+	}
+	&-header {
+		border-bottom: 2px solid;
+		border-color: getColors(fade-selected);
+		width: 100%;
+		padding: 0.5rem 0;
+		font-weight: bold;
+		text-align: center;
+		color: getColors(primary);
+	}
+	&-body {
+		@include customScrollbar();
+
+		width: 100%;
+		overflow-y: auto;
+		overflow-x: hidden;
+		max-height: 50vh;
+		padding: 0.5rem 1rem;
+		min-width: 25vw;
+
+		&__tasks {
+			@include setFlex(column, center, center);
+			color: black;
+			width: 100%;
+
+			section {
+				@include setFlex(column, center, center);
+
+				width: 100%;
+				.file-upload-info {
+					@include setFlex(row, flex-start, flex-start);
+
+					position: relative;
+					width: 100%;
+					border-bottom: 2px solid;
+					border-color: getColors(primary-fade);
+
+					span {
+						@include customStressImportance;
+						margin: 0.5rem 0;
+
+						&:last-of-type {
+							color: getColors(primary);
+							padding-left: 0.5rem;
+							margin-left: auto;
+							text-align: left;
+						}
+					}
+				}
+				.file-upload-list {
+					@include setFlex(column, center, center);
+					li {
+						@include setFlex(row, center, center);
+						padding: 0 0.5rem;
+						width: 100%;
+						a {
+							font-size: 1.3rem;
+							&:first-of-type {
+								margin: 0 0.5rem;
+							}
+
+							@include responsiveHover {
+								color: getColors(btn-status-working);
+							}
+						}
+					}
+
+					&__name {
+						display: inline-block;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						max-width: 20rem;
+						flex: 1;
+
+						a {
+							text-decoration: underline;
+							color: blue;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+@import './uploadedFilesResponsive';

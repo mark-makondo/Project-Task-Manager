@@ -14,7 +14,6 @@ const notificationListener = (socket, io) => {
 	socket.on('send_notif', async (content) => {
 		if (content.notifType === 'acceptInvite' || content.notifType === 'declineInvite') {
 			await addNotification(content, io);
-			// await updateNotification(content);
 			await updateMember(content, sendStatus);
 		} else if (content.notifType === 'deleteProject') {
 			await batchAddNotification(content, io);
@@ -135,24 +134,5 @@ const updateMember = async (content, sendStatus) => {
 		console.error(error);
 	}
 };
-
-// const updateNotification = async (content) => {
-// 	try {
-// 		let { dataToPush, notificationId } = content;
-// 		let { sender, response } = dataToPush;
-
-// 		let currentUserId = sender._id;
-
-// 		let findUser = await User.findById(currentUserId);
-// 		let notification = findUser.notifications.id(notificationId);
-
-// 		notification['hasRead'] = true;
-// 		notification['response'] = response;
-
-// 		await findUser.save();
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// };
 
 module.exports = notificationListener;

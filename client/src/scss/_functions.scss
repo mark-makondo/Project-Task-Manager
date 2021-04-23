@@ -127,16 +127,16 @@
 }
 @mixin setFontSize($type) {
 	.normal-1 {
-		font-size: getFontSize($type, normal-1);
+		font-size: getFontSize($type, normal-1) !important;
 	}
 	.normal-2 {
-		font-size: getFontSize($type, normal-2);
+		font-size: getFontSize($type, normal-2) !important;
 	}
 	.normal-3 {
-		font-size: getFontSize($type, normal-3);
+		font-size: getFontSize($type, normal-3) !important;
 	}
 	.normal-4 {
-		font-size: getFontSize($type, normal-4);
+		font-size: getFontSize($type, normal-4) !important;
 	}
 }
 
@@ -147,8 +147,8 @@
 
 // responsive mixin
 @mixin media-md {
-	@media screen and (min-width: 48em) {
-		// 768px
+	@media screen and (min-width: 56.25em) {
+		// 900px
 		@content;
 	}
 }

@@ -92,6 +92,7 @@
 			span {
 				font-family: $sub;
 				letter-spacing: 0.1rem;
+				display: none;
 			}
 			figure {
 				@include setFlex(row, center, center);
@@ -126,6 +127,9 @@
 				&.active {
 					opacity: 0.8;
 				}
+				span {
+					display: none;
+				}
 			}
 		}
 	}
@@ -145,7 +149,7 @@
 
 		&--grid {
 			display: grid;
-			grid-template-columns: 5fr repeat(3, 1fr);
+			grid-template-columns: 2fr repeat(3, 1fr);
 			gap: 0.5rem;
 			text-align: center;
 		}
@@ -391,7 +395,6 @@
 					text-align: center;
 					background: transparent;
 					outline: none;
-					border-color: getColors(secondary-fade);
 					font-weight: 600;
 					width: 80%;
 					border: none;
@@ -401,8 +404,10 @@
 					&.disabled {
 						pointer-events: none;
 					}
+
 					@include responsiveHover() {
 						border: 1px dashed;
+						border-color: getColors(secondary-fade);
 					}
 				}
 			}

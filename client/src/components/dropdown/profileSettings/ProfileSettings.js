@@ -1,11 +1,8 @@
 import React from 'react';
 
-const ProfileSettings = ({
-	showProfileClickHandler,
-	changePasswordClickHandler,
-}) => {
+const ProfileSettings = ({ showProfileClickHandler, changePasswordClickHandler }) => {
 	return (
-		<ul className='dropdown-content-profile-settings normal-2'>
+		<ul className='dropdown-content-profile-settings normal-3'>
 			<li onClick={(e) => showProfileClickHandler(e)}>Profile</li>
 			<li onClick={(e) => changePasswordClickHandler(e)}>Change Password</li>
 		</ul>

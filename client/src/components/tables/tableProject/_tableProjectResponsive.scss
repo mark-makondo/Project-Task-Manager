@@ -1,0 +1,26 @@
+// responsive medium screen //900px
+@include media-md {
+	.table-project {
+		&__title {
+			&-avatar {
+				span {
+					display: unset;
+				}
+			}
+			&-members-add-container {
+				button {
+					span {
+						display: unset;
+					}
+				}
+			}
+		}
+
+		&__content {
+			&--grid {
+				grid-template-columns: 4fr repeat(3, 1fr);
+				gap: 0.5rem;
+			}
+		}
+	}
+}

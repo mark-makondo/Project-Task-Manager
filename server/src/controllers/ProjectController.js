@@ -413,7 +413,6 @@ exports.addMessage = async (req, res, next) => {
 		await findProjectTask.save();
 
 		res.status(200).send(savedMsg);
-		// console.log('message return ctrl', savedMsg);
 
 		return next();
 	} catch (error) {

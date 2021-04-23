@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import Moment from 'moment';
 
 // ui
 import TableSettings from './TableSettings';
@@ -7,17 +6,18 @@ import TableSettings from './TableSettings';
 // modal
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
 import DetailsModalContainer from '../../modal/details/DetailsContainer.js';
+import UploadedFilesModalContainer from '../../modal/uploadedFiles/UploadedFIlesContainer.js';
 
 // context
-
 import Context from '../../../context/Context.js';
 import { RemoveProjectAction } from '../../../context/actions/project/ProjectAction';
 import { ProjectMembersGetAction } from '../../../context/actions/project/ProjectMembersAction';
-
 import { SocketContext } from '../../../context/SocketContext.js';
+
 const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 	const [confirmProjectDeleteDialogueOpen, setConfirmProjectDeleteDialogueOpen] = useState(false);
 	const [detailsIsActive, setDetailsIsActive] = useState(false);
+	const [uploadedModalIsActive, setUploadedModalIsActive] = useState(false);
 
 	const { projectDispatch } = useContext(Context);
 	const { projectMembersDispatch } = useContext(Context);
@@ -84,11 +84,18 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 
 	//#endregion
 
+	//#region show table uploaded files settings
+	const showUploadedFilesClickHandler = () => {
+		setUploadedModalIsActive(!uploadedModalIsActive);
+	};
+	//#endregion
+
 	return (
 		<>
 			<TableSettings
 				showProjectDetailsClickHandler={showProjectDetailsClickHandler}
 				deleteProjectClickHandler={deleteProjectClickHandler}
+				showUploadedFilesClickHandler={showUploadedFilesClickHandler}
 				isCurrentUserOwner={isCurrentUserOwner}
 			/>
 			<DialogueContainer
@@ -101,6 +108,11 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 				isActive={detailsIsActive}
 				setIsActive={setDetailsIsActive}
 				isCurrentUserOwner={isCurrentUserOwner}
+			/>
+			<UploadedFilesModalContainer
+				data={data}
+				isActive={uploadedModalIsActive}
+				setIsActive={setUploadedModalIsActive}
 			/>
 		</>
 	);

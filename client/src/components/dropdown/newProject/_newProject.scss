@@ -49,12 +49,13 @@
 			margin-bottom: 1rem;
 			&__label {
 				@include setFlex(row, center, center);
-				color: getColors(primary-fade);
+				color: getColors(primary);
 				margin-right: auto;
 				margin-bottom: 0.5rem;
 				label {
 					width: max-content;
 					margin-right: 0.5rem;
+					font-weight: 600;
 				}
 				i {
 					@include responsiveHover() {
@@ -70,7 +71,9 @@
 			}
 		}
 		button {
-			@include customButtonWithHover(white, getColors(btn-status-working));
+			@include customButtonWithHover(white, getColors(btn-status-working)) {
+				opacity: 0.8;
+			}
 			text-transform: capitalize;
 		}
 

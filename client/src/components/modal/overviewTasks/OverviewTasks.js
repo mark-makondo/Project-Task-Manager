@@ -51,16 +51,18 @@ const TaskStatusHolder = ({ toggleCollation, clicked, indexName, lists }) => {
 									{!!task.assigned && task.assigned.avatar !== 'no-avatar' ? (
 										<img className='normal-3' src={task.assigned.avatar} alt='avatar' />
 									) : (
-										<span>{getStringInitials(task.assigned.name)}</span>
+										<span title={task.assigned.name}>{getStringInitials(task.assigned.name)}</span>
 									)}
 								</div>
-								<span className='status-task-list__taskname'>{task.taskName}</span>
+								<span className='status-task-list__taskname' title={task.taskName}>
+									{task.taskName}
+								</span>
 								<div className='status-task-list__deadline'>
 									<div
 										style={{ width: `${getComparedDatePercent(task.created_at, task.deadline)}%` }}
 										className='status-task-list__deadline-indicator'
 									></div>
-									<span className='status-task-list__deadline-value'>
+									<span title={task.deadline} className='status-task-list__deadline-value'>
 										{task.deadline ? Moment(task.deadline).format('MMMM Do YYYY') : 'No Deadline'}
 									</span>
 								</div>
@@ -121,7 +123,7 @@ const OverviewTasks = ({
 	let projectOwnerAvatar = isProject?.owner.avatar;
 
 	let styleForLoading = {
-		overflow: `${isLoading ? 'hidden' : 'unset'}`,
+		overflow: `${isLoading ? 'hidden' : ''}`,
 	};
 
 	return (

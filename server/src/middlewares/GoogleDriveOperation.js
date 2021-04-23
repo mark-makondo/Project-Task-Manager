@@ -78,7 +78,8 @@ exports.createTaskFolder = async (req, res, next) => {
 /**
  * When uploading of images or document is a success then this middleware will run
  * and create a spefic file to the google drive that corresponds to the uploaded file
- * and put it inside of the current task folder.
+ * and put it inside of the current task folder. The result will also be saved
+ * to the uploaded documents in the project collection.
  */
 exports.createFile = async (req, res, next) => {
 	try {
@@ -88,19 +89,34 @@ exports.createFile = async (req, res, next) => {
 		let { originalname, mimetype, filename, path } = req.file;
 
 		let project = await Project.findById(_pid);
-		let { taskFolderId } = project.tasks.id(_tid);
+		let subdoc = project.tasks.id(_tid);
 
-		let { fileId, publicUrl } = await googleDrive.createFileAndMove(taskFolderId, originalname, path, mimetype);
+		let { fileId, publicUrl } = await googleDrive.createFileAndMove(
+			subdoc.taskFolderId,
+			originalname,
+			path,
+			mimetype
+		);
 		await googleDrive.createPermission(fileId);
 
-		if (req.isImage) {
-			res.status(200).json({ isImage: true, url: filename, publicUrl });
+		let formatToSendToUploadedFiles = {
+			googleDownloadLink: publicUrl.webContentLink,
+			googleViewLink: publicUrl.webViewLink,
+			fileName: originalname,
+		};
 
+		if (req.isImage) {
+			subdoc.fileUpload.push(formatToSendToUploadedFiles);
+			await project.save();
+
+			res.status(200).json({ isImage: true, url: filename, publicUrl });
 			return next();
 		}
 
-		res.status(200).json({ isImage: false, originalname, publicUrl });
+		subdoc.fileUpload.push(formatToSendToUploadedFiles);
+		await project.save();
 
+		res.status(200).json({ isImage: false, originalname, publicUrl });
 		return next();
 	} catch (error) {
 		console.error(error.message);

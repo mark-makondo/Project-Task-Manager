@@ -1,7 +1,3 @@
-// models
-const { User } = require('../models/UserModel');
-const { Project } = require('../models/ProjectModel');
-
 /**
  * socket notification response connections when a user
  * accepted or decline a notification.

@@ -382,6 +382,8 @@ const TableProjectContainer = () => {
 		projectOwner && setProjectMembers(projectOriginalMembers.concat(memberFormat));
 	}, [data?.project.owner, data?.project.members]);
 
+	//#endregion
+	console.log(data);
 	return (
 		<>
 			{!isLoading ? (
