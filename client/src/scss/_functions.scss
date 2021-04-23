@@ -81,6 +81,42 @@
 	}
 }
 
+// loading style
+@mixin customLoading($color) {
+	color: $color;
+	font-size: x-large;
+}
+
+// custom avatar for consistency
+@mixin customAvatarFallbackSpan($size) {
+	@include setFlex(row, center, center);
+	background-color: black;
+	color: white;
+	border-radius: 50%;
+	width: $size;
+	height: $size;
+	text-align: center;
+	img {
+		border-radius: 50%;
+		max-width: 100%;
+	}
+	span {
+		text-transform: uppercase;
+	}
+}
+
+// custom span strong combination of stressing importance
+@mixin customStressImportance {
+	color: getColors(primary);
+	font-weight: 600;
+	text-transform: lowercase;
+
+	strong {
+		text-transform: capitalize;
+		color: getColors(primary);
+	}
+}
+
 // font size
 @function getFontSize($type, $target) {
 	@if $type == s {

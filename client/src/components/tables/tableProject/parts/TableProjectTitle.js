@@ -26,7 +26,7 @@ const AddMembers = ({ data, showAddMembersDropdown }) => {
 const Avatar = ({ data }) => {
 	return (
 		<div className='table-project__title-avatar normal-2'>
-			<span>Owner: </span>
+			<span className='table-project__title-avatar__name-title'>Owner: </span>
 			<figure>
 				<div className='avatar avatar-global'>
 					{!!data && data.project.owner.avatar !== 'no-avatar' ? (
@@ -59,11 +59,17 @@ const TableProjectTitle = ({ data, showEllipsisDropdown, showAddMembersDropdown 
 
 	return (
 		<div className='table-project__title'>
-			<div className='table-project__title-name normal-1'>{data.project.projectName}</div>
+			<div className='table-project__title-name normal-1'>
+				<span>{data.project.projectName}</span>{' '}
+			</div>
 			<div className='table-project__title-right'>
 				{isCurrentUserOwner && <AddMembers data={data} showAddMembersDropdown={showAddMembersDropdown} />}
 				<Avatar data={data} />
-				<Ellipsis data={data} showEllipsisDropdown={showEllipsisDropdown} isCurrentUserOwner={isCurrentUserOwner} />
+				<Ellipsis
+					data={data}
+					showEllipsisDropdown={showEllipsisDropdown}
+					isCurrentUserOwner={isCurrentUserOwner}
+				/>
 			</div>
 		</div>
 	);

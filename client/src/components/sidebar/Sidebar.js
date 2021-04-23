@@ -3,6 +3,7 @@ import { NavLink, useRouteMatch, useHistory } from 'react-router-dom';
 
 // helper function
 import { getStringInitials } from '../../helper/helperFunctions.js';
+import { ToggleArrow } from '../../helper/helperFunctions.js';
 
 // dropdown
 import NewProjectContainer from '../dropdown/newProject/NewProjectContainer.js';
@@ -14,6 +15,8 @@ const Sidebar = ({
 	showCreateProjectDropdown,
 	userData,
 	projects,
+	toggleCollation,
+	projectClick,
 }) => {
 	// to prevent 'home' from always being active since home is not 'exact'.
 	let match = useRouteMatch();
@@ -35,31 +38,36 @@ const Sidebar = ({
 							overview
 						</NavLink>
 					</div>
-					<div className='sidebar-top__projects sidebar-top--title'>
-						<span className='title'>
+					<div className='sidebar-top__projects'>
+						<span onClick={() => toggleCollation('show')} className='title'>
 							projects-
 							<span className='project-num'>{`(${!!projects && projects.data ? projects.data.length : 0})`}</span>
+							<ToggleArrow click={projectClick} name='show' />
 						</span>
-						<ul className='normal-2'>
-							{!!projects &&
-								projects.data.map((project, i) => (
-									<NavLink
-										key={`${project._id}-${i}`}
-										to={`${homeUrl}/${project._id}`}
-										activeClassName='selected'
-										className='project-list normal-2 sidebar-hover'
-									>
-										<span>{project.projectName}</span>
-									</NavLink>
-								))}
-						</ul>
-					</div>
-					<div onClick={(e) => showCreateProjectDropdown(e)} className='sidebar-top__newProject dropdown'>
-						<button className='dropdown-button normal-2'>+ NEW</button>
-						<NewProjectContainer />
+						<div className='sidebar-top__projects-lists'>
+							<ul className='normal-2'>
+								{!!projects &&
+									projects.data.map((project, i) =>
+										projectClick === 'show' ? (
+											<NavLink
+												key={`${project._id}-${i}`}
+												to={`${homeUrl}/${project._id}`}
+												activeClassName='selected'
+												className='project-list normal-2'
+											>
+												<span>{project.projectName}</span>
+											</NavLink>
+										) : null
+									)}
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div className='sidebar-bottom'>
+					<div onClick={(e) => showCreateProjectDropdown(e)} className='sidebar-bottom__newProject dropdown'>
+						<button className='dropdown-button normal-2'>+ NEW</button>
+						<NewProjectContainer />
+					</div>
 					<div onClick={(e) => showProfileSettingsDropdown(e)} className='sidebar-bottom__profile dropdown'>
 						<div className='dropdown-button sidebar-bottom__profile-avatar'>
 							{userData && userData?.avatar !== 'no-avatar' ? (

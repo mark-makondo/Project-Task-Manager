@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 // helper function
 import Query from '../../helper/query.js';
@@ -11,6 +11,8 @@ import Sidebar from './Sidebar.js';
 import Context from '../../context/Context.js';
 
 const SidebarContainer = () => {
+	const [projectClick, setProjectClick] = useState(null);
+
 	const {
 		projectState: { project },
 	} = useContext(Context);
@@ -20,6 +22,11 @@ const SidebarContainer = () => {
 			user: { data },
 		},
 	} = useContext(Context);
+
+	const toggleCollation = (index) => {
+		if (projectClick === index) return setProjectClick(null);
+		return setProjectClick(index);
+	};
 
 	const collapseClickHandler = (e) => {
 		const sidebar = document.querySelector('.sidebar');
@@ -53,6 +60,8 @@ const SidebarContainer = () => {
 			showCreateProjectDropdown={showCreateProjectDropdown}
 			userData={data}
 			projects={project}
+			toggleCollation={toggleCollation}
+			projectClick={projectClick}
 		/>
 	);
 };

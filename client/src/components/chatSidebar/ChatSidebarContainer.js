@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 
 // context
 import { SocketContext } from '../../context/SocketContext.js';

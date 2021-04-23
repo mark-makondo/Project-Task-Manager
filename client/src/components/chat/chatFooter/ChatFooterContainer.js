@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
 
 // ui
@@ -111,7 +111,6 @@ const ChatFooterContainer = ({ data }) => {
 						type: 'image',
 					},
 				};
-				// socket.emit('send_message', messageformat);
 				sendMessageAndPost(_tid, messageformat);
 			} else {
 				let { originalname, publicUrl } = res.data;
@@ -126,7 +125,6 @@ const ChatFooterContainer = ({ data }) => {
 						url: publicUrl.webContentLink,
 					},
 				};
-				// socket.emit('send_message', messageformat);
 				sendMessageAndPost(_tid, messageformat);
 			}
 		} catch (error) {
@@ -135,10 +133,6 @@ const ChatFooterContainer = ({ data }) => {
 			setUploading(false);
 		}
 	};
-
-	useEffect(() => {
-		console.log(uploadPercent);
-	}, [uploadPercent, uploading]);
 
 	return (
 		<ChatFooter

@@ -1,4 +1,4 @@
-.details-modal {
+.overview-members-modal {
 	@include setFlex(row, center, center);
 	position: fixed;
 	background: #80808040;
@@ -12,16 +12,22 @@
 	transition: 150ms linear;
 	text-transform: capitalize;
 
+	&-loading {
+		@include setFlex(row, center, center);
+		@include customLoading(getColors(btn-status-working));
+
+		margin-top: 1rem;
+		width: 100%;
+		height: 100%;
+	}
+
 	.empty-members-bg {
 		width: 15rem;
 		height: 100%;
 		padding: 1rem;
 		opacity: 0.8;
 	}
-	&-members-loading {
-		margin: 1rem 0;
-		color: getColors(btn-status-working);
-	}
+
 	&.active {
 		opacity: 1;
 		visibility: visible;
@@ -43,9 +49,15 @@
 		border-color: getColors(fade-selected);
 		width: 100%;
 		padding: 0.5rem 0;
-		font-weight: bold;
 		text-align: center;
-		color: getColors(primary);
+
+		&__title {
+			font-weight: bold;
+		}
+		&__projectname {
+			font-weight: 600;
+			color: getColors(primary);
+		}
 	}
 	&-body {
 		@include customScrollbar();
@@ -76,26 +88,13 @@
 		}
 
 		&__avatar {
-			@include setFlex(row, center, center);
-			background-color: black;
-			color: white;
-			border-radius: 50%;
-			width: 2.5rem;
-			height: 2.5rem;
-			text-align: center;
+			@include customAvatarFallbackSpan(2.5rem);
+
 			margin-right: 1rem;
-			img {
-				border-radius: 50%;
-				max-width: 100%;
-			}
-			span {
-				text-transform: uppercase;
-			}
 		}
 
 		&__content {
 			@include setFlex(column, center, flex-start);
-			color: getColors(primary);
 			&-name {
 				font-weight: 600;
 			}
@@ -103,15 +102,6 @@
 				color: getColors(primary-fade);
 			}
 		}
-
-		&__delete {
-			margin-left: 2rem;
-			color: getColors(primary-fade);
-			@include responsiveHover() {
-				transition: 150ms ease-in-out;
-				color: getColors(btn-status-working);
-			}
-		}
 	}
 }
-@import './detailsResponsive';
+@import './overviewMembersResponsive';

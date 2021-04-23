@@ -16,13 +16,14 @@
 @import '../components/chatSidebar/chatSidebar';
 
 // table templates from dashboard
-@import '../components/tables/tableTemplate/tableTemplate';
 @import '../components/tables/tableProject/tableProject';
 
 // component modal
 @import '../components/modal/profileModal/profileModal';
 @import '../components/modal/dialogue/dialogue';
 @import '../components/modal/details/details';
+@import '../components/modal/overviewMembers/overviewMembers';
+@import '../components/modal/overviewTasks/overviewTasks';
 
 // component dropdown
 @import '../components/dropdown/profileSettings/profileSettings';

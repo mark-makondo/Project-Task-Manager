@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Moment from 'moment';
 
 // ui
@@ -41,7 +41,7 @@ const TableProjectContainer = () => {
 
 	const {
 		getOneProjectState: {
-			getOneProject: { data },
+			getOneProject: { data, isLoading },
 		},
 	} = useContext(Context);
 
@@ -247,13 +247,22 @@ const TableProjectContainer = () => {
 		let dropdownContentQuery = document.querySelector(
 			`.table-project__content-tr__status--${tid} .dropdown-content-select`
 		);
-		let dropdownWrapperQuery = document.querySelector(`.table-project__content-tr__status--${tid} .status-wrapper`);
+		let dropdownWrapperQuery = document.querySelector(
+			`.table-project__content-tr__status--${tid} .status-wrapper`
+		);
 
 		dropdownContentQuery.classList.toggle('active');
 		dropdownWrapperQuery.classList.toggle('active');
+
+		dropdownWrapperQuery.addEventListener('blur', () => {
+			dropdownContentQuery.classList.remove('active');
+			dropdownWrapperQuery.classList.remove('active');
+		});
 	};
 
 	const selectedStatusClickHandler = async (e) => {
+		e.preventDefault();
+
 		let tid = e.currentTarget.dataset.id;
 		let listValue = e.currentTarget.innerHTML;
 
@@ -278,7 +287,7 @@ const TableProjectContainer = () => {
 
 	//#region task deadline selection
 	const dateSelectHandler = async (date, tid) => {
-		let formattedDate = Moment.utc(date, 'MM/DD/YYYY').format('MM/DD/YYYY');
+		let formattedDate = Moment(date, 'MM/DD/YYYY').format('MM/DD/YYYY');
 
 		let updateData = {
 			_pid: data?.project._id,
@@ -317,13 +326,22 @@ const TableProjectContainer = () => {
 		let dropdownContentQuery = document.querySelector(
 			`.table-project__content-tr__avatar--${tid} .dropdown-content-select`
 		);
-		let dropdownWrapperQuery = document.querySelector(`.table-project__content-tr__avatar--${tid} .dropdown-button`);
+		let dropdownWrapperQuery = document.querySelector(
+			`.table-project__content-tr__avatar--${tid} .dropdown-button`
+		);
 
-		dropdownContentQuery.classList.toggle('active');
-		dropdownWrapperQuery.classList.toggle('active');
+		dropdownContentQuery.classList.add('active');
+		dropdownWrapperQuery.classList.add('active');
+
+		dropdownWrapperQuery.addEventListener('blur', () => {
+			dropdownContentQuery.classList.remove('active');
+			dropdownWrapperQuery.classList.remove('active');
+		});
 	};
 
 	const selectedPersonClickHandler = async (e) => {
+		e.preventDefault();
+
 		let tid = e.currentTarget.dataset.tid;
 		let personId = e.currentTarget.dataset.id;
 		let personName = e.currentTarget.dataset.name;
@@ -348,7 +366,6 @@ const TableProjectContainer = () => {
 				},
 			},
 		};
-
 		await updaterFunction(updateData);
 	};
 
@@ -365,30 +382,32 @@ const TableProjectContainer = () => {
 		projectOwner && setProjectMembers(projectOriginalMembers.concat(memberFormat));
 	}, [data?.project.owner, data?.project.members]);
 
-	//#endregion
-
 	return (
 		<>
-			<TableProject
-				data={data}
-				submitHandler={submitHandler}
-				inputOnChangeHandler={inputOnChangeHandler}
-				input={input}
-				taskDeleteClickHandler={taskDeleteClickHandler}
-				taskEditClickHandler={taskEditClickHandler}
-				taskSaveClickHandler={taskSaveClickHandler}
-				taskNameEditOnChange={taskNameEditOnChange}
-				showStatusDropdown={showStatusDropdown}
-				selectedStatusClickHandler={selectedStatusClickHandler}
-				dateSelectHandler={dateSelectHandler}
-				showEllipsisDropdown={showEllipsisDropdown}
-				showMessageSidebar={showMessageSidebar}
-				showAddMembersDropdown={showAddMembersDropdown}
-				showPersonsDropdown={showPersonsDropdown}
-				selectedPersonClickHandler={selectedPersonClickHandler}
-				projectTaskData={projectTaskData}
-				projectMembers={projectMembers}
-			/>
+			{!isLoading ? (
+				<TableProject
+					data={data}
+					submitHandler={submitHandler}
+					inputOnChangeHandler={inputOnChangeHandler}
+					input={input}
+					taskDeleteClickHandler={taskDeleteClickHandler}
+					taskEditClickHandler={taskEditClickHandler}
+					taskSaveClickHandler={taskSaveClickHandler}
+					taskNameEditOnChange={taskNameEditOnChange}
+					showStatusDropdown={showStatusDropdown}
+					selectedStatusClickHandler={selectedStatusClickHandler}
+					dateSelectHandler={dateSelectHandler}
+					showEllipsisDropdown={showEllipsisDropdown}
+					showMessageSidebar={showMessageSidebar}
+					showAddMembersDropdown={showAddMembersDropdown}
+					showPersonsDropdown={showPersonsDropdown}
+					selectedPersonClickHandler={selectedPersonClickHandler}
+					projectTaskData={projectTaskData}
+					projectMembers={projectMembers}
+				/>
+			) : (
+				<i className='project-loading fas fa-spinner fa-spin'></i>
+			)}
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}
 				setIsActive={setConfirmTaskDeleteDialogueOpen}

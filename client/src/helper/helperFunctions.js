@@ -22,10 +22,11 @@ export const getStringInitials = (fullname) => {
 				initials += getInitials;
 				return initials;
 			}
+			return initials;
 		});
 		return initials.substr(0, 2);
 	}
-	return <i className='helper-loading fas fa-spinner fa-spin'></i>;
+	return <i className='helper-loading fas fa-spinner fa-spin normal-3'></i>;
 };
 
 /**
@@ -44,7 +45,7 @@ export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
 			let dateCreated = Moment.utc(dateCreatedParams, Moment.ISO_8601);
 			let setDate = Moment.utc(setDateParams, 'MM/DD/YYYY');
 			let currentDate = Moment.utc();
-			// let currentDate = Moment.utc('04/13/2021');
+			// let currentDate = Moment.utc('04/24/2021');
 
 			let totalDays = setDate.diff(dateCreated, 'days');
 			let remainingDays = currentDate.diff(dateCreated, 'days');
@@ -52,13 +53,10 @@ export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
 
 			// console.log('valid', dateCreated.isValid());
 
-			if (remainingDaysPercent > 100) {
-				return 100;
-			} else if (remainingDaysPercent <= 0) {
-				return 0;
-			} else {
-				return remainingDaysPercent;
-			}
+			if (totalDays === remainingDays) return 100;
+			else if (remainingDaysPercent > 100) return 100;
+			else if (remainingDaysPercent <= 0 || !remainingDaysPercent) return 0;
+			else return remainingDaysPercent;
 		}
 	}
 };
@@ -113,6 +111,7 @@ export const decodedJwt = () => {
  * Make sure the click handler is placed on the 'parent' of the
  * dropdown button and dropdown content. If you want to control you dropdown
  * content from disapearing add 'focus-dropdown' in your class.
+ * Mainly used for modal since i used a different one on a spcefic dropdown.
  *
  * @param {e} event button event
  * @param {query} dropdownContent the class for the dropdown content
@@ -149,4 +148,22 @@ export const dropdownHandler = (event, dropdownContent, dropdownButton) => {
 	} catch (error) {
 		return console.log(`@Helper: Invalid parameters: ${error}`);
 	}
+};
+
+/**
+ * usefull for dropdown.
+ *
+ * @param {State} click state for storing index name
+ * @param {Index} name index name that you want to use for toggling arrow
+ */
+export const ToggleArrow = ({ click, name }) => {
+	return (
+		<span>
+			{click === name ? (
+				<i className='hide-project-list fas fa-caret-up'></i>
+			) : (
+				<i className='show-project-list fas fa-caret-down'></i>
+			)}
+		</span>
+	);
 };

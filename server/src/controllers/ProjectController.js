@@ -55,9 +55,11 @@ exports.findAllUserProjects = async (req, res, next) => {
 		let userData = await user.execPopulate({
 			path: 'projects',
 			model: Project,
-			populate: { path: 'members._id', model: User },
-			populate: { path: 'owner', model: User },
-			populate: { path: 'tasks.assigned', model: User },
+			populate: [
+				{ path: 'members._id', select: '_id name email avatar' },
+				{ path: 'owner', select: 'name email avatar' },
+				{ path: 'tasks.assigned', select: 'name email avatar' },
+			],
 		});
 
 		res.status(200).send(userData.projects);

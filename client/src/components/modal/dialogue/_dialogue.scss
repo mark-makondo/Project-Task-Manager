@@ -22,6 +22,7 @@
 		margin: 1rem;
 		box-shadow: $little-shadow;
 		text-align: center;
+		color: getColors(primary);
 
 		h2 {
 			text-transform: capitalize;

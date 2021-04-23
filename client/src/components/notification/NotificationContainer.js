@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
-// import Moment from 'moment';
-
 // ui
 import Notification from './Notifcation.js';
 
@@ -19,15 +17,12 @@ import {
 } from '../../context/actions/user/NotificationAction.js';
 
 // helper
-// import axiosInstance from '../../helper/axiosInstance.js';
 import Query from '../../helper/query.js';
 
 const NotificationContainer = () => {
 	const [notifCount, setNotifCount] = useState(0);
 	const [notificationData, setNotificationData] = useState([]);
 	const [isAlreadyClicked, setIsAlreadyClicked] = useState(false);
-	const [isAcceptLoading, setIsAcceptLoading] = useState(false);
-	const [isDeclineLoading, setIsDeclineLoading] = useState(false);
 
 	const params = useParams();
 	const history = useHistory();
@@ -133,20 +128,19 @@ const NotificationContainer = () => {
 
 	const userPushNotification = useCallback(
 		(result, emailToNotif) => {
-			data && data?.email === emailToNotif && PushNotification(result)(notificationDispatch);
-
-			GetAllProjectAction()(projectDispatch);
-			getAllNotifications();
+			if (data?.email === emailToNotif) {
+				PushNotification(result)(notificationDispatch);
+			}
 		},
-		[data, notificationDispatch, projectDispatch, getAllNotifications]
+		[data, notificationDispatch]
 	);
 
 	//#endregion
 
 	//#region socket notification logic.
 	useEffect(() => {
-		getAllNotifications();
-	}, [getAllNotifications]);
+		data && data.notifications.length !== 0 && getAllNotifications();
+	}, [getAllNotifications, data]);
 
 	useEffect(() => {
 		notifications && setNotificationData(notifications.data);
@@ -182,10 +176,21 @@ const NotificationContainer = () => {
 		projectDispatch,
 	]);
 
+	useEffect(() => {
+		socket.on('status', (statusData) => {
+			let { statusType, success } = statusData;
+
+			statusType === 'updateMember' && success && GetAllProjectAction()(projectDispatch);
+		});
+		return () => {
+			socket.off('status');
+		};
+	}, [socket, projectDispatch]);
+
 	//#endregion
 
 	//#region notification accept and decline logic.
-	const acceptClickHandler = (e) => {
+	const acceptClickHandler = async (e) => {
 		let projectId = e.target.dataset.pid;
 		let projectName = e.target.dataset.pname;
 		let notificationId = e.target.dataset.nid;
@@ -194,19 +199,12 @@ const NotificationContainer = () => {
 		let response = 'accepted';
 		let notifType = 'acceptInvite';
 
-		let currentUser = {
-			_id: data?._id,
-			name: data?.name,
-			email: data?.email,
-			avatar: data?.avatar,
-		};
-
 		if (isAlreadyClicked !== true) {
-			sendInviteResponse(currentUser, senderEmail, response, projectName, projectId, notifType, type, notificationId);
+			await sendInviteResponse(senderEmail, response, projectName, projectId, notifType, type, notificationId);
 		}
 	};
 
-	const declineClickHandler = (e) => {
+	const declineClickHandler = async (e) => {
 		let projectId = e.target.dataset.pid;
 		let projectName = e.target.dataset.pname;
 		let notificationId = e.target.dataset.nid;
@@ -215,30 +213,22 @@ const NotificationContainer = () => {
 		let response = 'declined';
 		let notifType = 'declineInvite';
 
+		if (isAlreadyClicked !== true) {
+			await sendInviteResponse(senderEmail, response, projectName, projectId, notifType, type, notificationId);
+		}
+	};
+
+	const sendInviteResponse = async (senderEmail, response, projectName, projectId, notifType, type, notificationId) => {
+		setIsAlreadyClicked(true);
+
+		let emailToNotif = senderEmail;
+
 		let currentUser = {
 			_id: data?._id,
 			name: data?.name,
 			email: data?.email,
 			avatar: data?.avatar,
 		};
-		if (isAlreadyClicked !== true) {
-			sendInviteResponse(currentUser, senderEmail, response, projectName, projectId, notifType, type, notificationId);
-		}
-	};
-
-	const sendInviteResponse = (
-		currentUser,
-		senderEmail,
-		response,
-		projectName,
-		projectId,
-		notifType,
-		type,
-		notificationId
-	) => {
-		setIsAlreadyClicked(true);
-
-		let emailToNotif = senderEmail;
 
 		let dataToPush = {
 			sender: currentUser,
@@ -249,7 +239,15 @@ const NotificationContainer = () => {
 		};
 
 		socket.emit('send_notif', { emailToNotif, dataToPush, notifType, notificationId });
-		getAllNotifications();
+
+		let formatToUdpdate = {
+			_nid: notificationId,
+			update: {
+				hasRead: true,
+				response,
+			},
+		};
+		await UpdateNotification(formatToUdpdate)(notificationDispatch);
 	};
 
 	//#endregion

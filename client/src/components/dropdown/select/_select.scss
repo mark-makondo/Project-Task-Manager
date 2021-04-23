@@ -1,6 +1,7 @@
 .dropdown-content-select {
 	display: none;
 	opacity: 0;
+	visibility: hidden;
 	position: absolute;
 	background-color: #f9f9f9;
 	font-family: $main;
@@ -21,8 +22,9 @@
 	border-top-color: getColors(btn-status-working);
 
 	&.active {
-		@include setFlex(column, flex-start, flex-start);
+		@include setFlex(column, center, center);
 		opacity: 1;
+		visibility: visible;
 	}
 
 	&::after {
@@ -50,6 +52,7 @@
 		text-transform: capitalize;
 		font-weight: 600;
 		transition: 150ms ease-in-out;
+		width: 100%;
 
 		@include responsiveHover() {
 			color: getColors(primary);

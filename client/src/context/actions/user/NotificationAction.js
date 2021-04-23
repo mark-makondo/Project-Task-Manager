@@ -40,7 +40,7 @@ export const PushNotification = (content) => async (notificationDispatch) => {
 		notificationDispatch({
 			type: NOTIFICATION_LOADING,
 		});
-		console.log(content);
+
 		notificationDispatch({
 			type: NOTIFICATION_CREATE,
 			payload: content,

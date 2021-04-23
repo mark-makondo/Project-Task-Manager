@@ -36,8 +36,8 @@ const TableProject = ({
 						showEllipsisDropdown={showEllipsisDropdown}
 						showAddMembersDropdown={showAddMembersDropdown}
 					/>
+					<TableHeader />
 					<div className='table-project__content normal-2'>
-						<TableHeader />
 						{projectTaskData &&
 							projectTaskData.data?.map((task) => (
 								<TableRow
@@ -58,14 +58,12 @@ const TableProject = ({
 									projectMembers={projectMembers}
 								/>
 							))}
-						{data.user._id === data.project.owner._id && (
-							<TableRowAdder submitHandler={submitHandler} inputOnChangeHandler={inputOnChangeHandler} />
-						)}
 					</div>
+					{data.user._id === data.project.owner._id && (
+						<TableRowAdder submitHandler={submitHandler} inputOnChangeHandler={inputOnChangeHandler} />
+					)}
 				</>
-			) : (
-				<i className='table-project-loading fas fa-spinner fa-spin'></i>
-			)}
+			) : null}
 		</div>
 	);
 };

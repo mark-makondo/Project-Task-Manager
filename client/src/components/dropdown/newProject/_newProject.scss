@@ -5,7 +5,7 @@
 	background-color: white;
 	font-family: $main;
 	width: auto;
-	top: -100%;
+	bottom: -100%;
 	left: 108%;
 	text-align: center;
 	box-shadow: $little-shadow;
@@ -36,7 +36,7 @@
 		z-index: -1;
 		left: -2%;
 		transform: rotate(40deg);
-		top: 2.3125rem;
+		bottom: 2.3rem;
 		box-shadow: $more-shadow;
 	}
 

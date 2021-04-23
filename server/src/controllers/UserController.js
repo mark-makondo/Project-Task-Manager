@@ -235,6 +235,7 @@ exports.getNotifications = async (req, res, next) => {
 		let findUser = await User.findById(id);
 
 		let notifications = await findUser.notifications;
+		if (!notifications) res.status(400).send('Empty notifications');
 
 		res.status(200).send(notifications);
 

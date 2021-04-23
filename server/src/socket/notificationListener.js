@@ -9,13 +9,13 @@ const { Project } = require('../models/ProjectModel');
  * @param {socket} io
  */
 const notificationListener = (socket, io) => {
-	// const sendStatus = (data) => socket.emit('status', data);
+	const sendStatus = (statusData) => socket.emit('status', statusData);
 
 	socket.on('send_notif', async (content) => {
 		if (content.notifType === 'acceptInvite' || content.notifType === 'declineInvite') {
 			await addNotification(content, io);
-			await updateNotification(content);
-			await updateMember(content);
+			// await updateNotification(content);
+			await updateMember(content, sendStatus);
 		} else if (content.notifType === 'deleteProject') {
 			await batchAddNotification(content, io);
 		} else {
@@ -104,7 +104,7 @@ const addNotification = async (content, io) => {
 	}
 };
 
-const updateMember = async (content) => {
+const updateMember = async (content, sendStatus) => {
 	try {
 		let { dataToPush, notifType } = content;
 		let { sender, _pid } = dataToPush;
@@ -129,27 +129,30 @@ const updateMember = async (content) => {
 				}
 			);
 		}
+
+		await sendStatus({ statusType: 'updateMember', success: true, message: 'Member added to the project.' });
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-const updateNotification = async (content) => {
-	try {
-		let { dataToPush, notificationId } = content;
-		let { sender, response } = dataToPush;
+// const updateNotification = async (content) => {
+// 	try {
+// 		let { dataToPush, notificationId } = content;
+// 		let { sender, response } = dataToPush;
 
-		let currentUserId = sender._id;
+// 		let currentUserId = sender._id;
 
-		let findUser = await User.findById(currentUserId);
-		let notification = findUser.notifications.id(notificationId);
+// 		let findUser = await User.findById(currentUserId);
+// 		let notification = findUser.notifications.id(notificationId);
 
-		notification['hasRead'] = true;
-		notification['response'] = response;
+// 		notification['hasRead'] = true;
+// 		notification['response'] = response;
 
-		await findUser.save();
-	} catch (error) {
-		console.error(error);
-	}
-};
+// 		await findUser.save();
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// };
+
 module.exports = notificationListener;

@@ -8,7 +8,12 @@ const StatusSelect = ({ data, itemClickHandler }) => {
 		<>
 			{data &&
 				data.map((item, i) => (
-					<li data-id={item.id} key={`${item.data}-${i}`} onClick={(e) => itemClickHandler(e)}>
+					<li
+						data-id={item.id}
+						key={`${item.data}-${i}`}
+						onMouseDown={(e) => itemClickHandler(e)}
+						onClick={(e) => itemClickHandler(e)}
+					>
 						{item.data}
 					</li>
 				))}
@@ -28,6 +33,7 @@ const PersonSelect = ({ data, itemClickHandler, tid }) => {
 						data-name={item._id.name}
 						data-email={item._id.email}
 						data-avatar={item._id.avatar}
+						onMouseDown={(e) => itemClickHandler(e)}
 						onClick={(e) => itemClickHandler(e)}
 					>
 						<div className='person-avatar'>
@@ -49,7 +55,7 @@ const PersonSelect = ({ data, itemClickHandler, tid }) => {
  */
 const Select = ({ data, itemClickHandler, type, tid }) => {
 	return (
-		<div className='dropdown-content-select'>
+		<div className={`dropdown-content-select `}>
 			{type === '1' ? (
 				<StatusSelect data={data} itemClickHandler={itemClickHandler} />
 			) : type === '2' ? (

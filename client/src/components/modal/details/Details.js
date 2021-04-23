@@ -54,7 +54,7 @@ const Details = ({ members, removeMemberClickHandler, isCurrentUserOwner }) => {
 			<div className='details-modal-wrapper'>
 				<div className='details-modal-header'>
 					<i className='fas fa-user-friends'></i>
-					<span className='normal-2'> project members</span>
+					<span className='normal-1'> project members</span>
 				</div>
 				<div className='details-modal-body normal-3'>
 					<ul>

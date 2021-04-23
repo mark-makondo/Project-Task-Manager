@@ -11,7 +11,7 @@ const query = {
 
 	// dropdown query for creating project @sidebar
 	dropdownCreateProjectContent: () => document.querySelector('.dropdown-content-new-project'),
-	dropdownCreateProjectButton: () => document.querySelector('.sidebar-top__newProject button'),
+	dropdownCreateProjectButton: () => document.querySelector('.sidebar-bottom__newProject button'),
 
 	// dropdown query for creating project @sidebar
 	dropdownTableSettingsContent: () => document.querySelector('.dropdown-content-table-settings'),
@@ -43,6 +43,9 @@ const query = {
 	// details modal container @tableSettingsContainer
 	detailsModalQuery: () => document.querySelector('.details-modal'),
 
+	// overview  modal container @overview
+	overviewMembersModalQuery: () => document.querySelector('.overview-members-modal'),
+	overviewTasksModalQuery: () => document.querySelector('.overview-tasks-modal'),
 	// more here
 };
 

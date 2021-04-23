@@ -1,4 +1,5 @@
 import React from 'react';
+import Moment from 'moment';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -47,7 +48,11 @@ const TaskName = ({
 				</div>
 			)}
 			{isCurrentUserOwner && (
-				<i data-tid={task._id} onClick={(e) => taskDeleteClickHandler(e)} className='icon delete fas fa-trash-alt'></i>
+				<i
+					data-tid={task._id}
+					onClick={(e) => taskDeleteClickHandler(e)}
+					className='icon delete fas fa-trash-alt'
+				></i>
 			)}
 
 			<i
@@ -71,6 +76,7 @@ const Person = ({
 	return (
 		<div className={`table-project__content-tr__avatar table-project__content-tr__avatar--${task._id} cell`}>
 			<div
+				tabIndex={-1}
 				data-tid={task._id}
 				onClick={(e) => isCurrentUserOwner & (data.project.members.length !== 0) && showPersonsDropdown(e)}
 				className='table-project__content-tr__avatar-wrapper avatar avatar-global dropdown-button'
@@ -84,7 +90,12 @@ const Person = ({
 				{isCurrentUserOwner && <i className='avatar-plus fas fa-plus'></i>}
 			</div>
 
-			<SelectContainer data={projectMembers} itemClickHandler={selectedPersonClickHandler} type='2' tid={task._id} />
+			<SelectContainer
+				data={projectMembers}
+				itemClickHandler={selectedPersonClickHandler}
+				type='2'
+				tid={task._id}
+			/>
 		</div>
 	);
 };
@@ -102,6 +113,7 @@ const Status = ({
 			{isCurrentUserOwner | isCurrentUserAssigned ? (
 				<>
 					<div
+						tabIndex={-1}
 						style={{ backgroundColor: getCurrentStatusColor }}
 						data-tid={task._id}
 						className='status-wrapper'
@@ -148,7 +160,7 @@ const Deadline = ({ task, calculatedDatePercent, dateSelectHandler, isCurrentUse
 				closeOnScroll={true}
 				showYearDropdown={true}
 				scrollableYearDropdown={true}
-				popperPlacement='top-end'
+				popperPlacement='bottom-end'
 				popperModifiers={{
 					offset: {
 						enabled: true,
