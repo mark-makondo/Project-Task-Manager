@@ -3,10 +3,12 @@ import React from 'react';
 // helper
 import { getStringInitials } from '../../../helper/helperFunctions.js';
 
-// sub components
-import CustomButton from './CustomButton.js';
-
-const ProjectHolder = ({ project, showMembersOnClickHandler, showTasksOnClickHandler }) => {
+const ProjectHolder = ({
+	project,
+	showMembersOnClickHandler,
+	showTasksOnClickHandler,
+	showUploadedFilesOnClickHandler,
+}) => {
 	return (
 		<div className='overview-container__body-project'>
 			<div className='overview-container__body-project__title'>{project.projectName}</div>
@@ -18,18 +20,32 @@ const ProjectHolder = ({ project, showMembersOnClickHandler, showTasksOnClickHan
 				)}
 			</div>
 			<div className='overview-container__body-project__buttons'>
-				<CustomButton
-					pid={project._id}
-					content='Tasks'
-					customClass='overview-container__body-project__buttons-tasks'
+				<button
+					data-pid={project._id}
 					onClick={(e) => showTasksOnClickHandler(e)}
-				/>
-				<CustomButton
-					pid={project._id}
-					content='Members'
-					customClass='overview-container__body-project__buttons-members'
+					className='overview-container__buttons overview-container__body-project__buttons-tasks'
+				>
+					<i data-pid={project._id} className='fas fa-thumbtack'></i>
+					<span data-pid={project._id}> Tasks</span>
+				</button>
+
+				<button
+					data-pid={project._id}
 					onClick={(e) => showMembersOnClickHandler(e)}
-				/>
+					className='overview-container__buttons overview-container__body-project__buttons-tasks'
+				>
+					<i data-pid={project._id} className='fas fa-user-friends'></i>
+					<span data-pid={project._id}>Members</span>
+				</button>
+
+				<button
+					data-pid={project._id}
+					onClick={(e) => showUploadedFilesOnClickHandler(e)}
+					className='overview-container__buttons overview-container__body-project__buttons-tasks'
+				>
+					<i data-pid={project._id} className='fas fa-archive'></i>
+					<span data-pid={project._id}>Files</span>
+				</button>
 			</div>
 		</div>
 	);

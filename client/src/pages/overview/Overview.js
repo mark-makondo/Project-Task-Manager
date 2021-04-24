@@ -9,10 +9,10 @@ const Overview = ({
 	isLoading,
 	projectCount,
 	ownedProjects,
-	clicked,
-	toggleCollation,
 	showMembersOnClickHandler,
 	showTasksOnClickHandler,
+	showUploadedFilesOnClickHandler,
+	showOwnedProjectsDropdown,
 }) => {
 	return (
 		<div className='overview'>
@@ -22,8 +22,7 @@ const Overview = ({
 						data={data}
 						projectCount={projectCount}
 						ownedProjects={ownedProjects}
-						clicked={clicked}
-						toggleCollation={toggleCollation}
+						showOwnedProjectsDropdown={showOwnedProjectsDropdown}
 					/>
 
 					<div className='overview-container__body'>
@@ -34,6 +33,7 @@ const Overview = ({
 									project={project}
 									showMembersOnClickHandler={showMembersOnClickHandler}
 									showTasksOnClickHandler={showTasksOnClickHandler}
+									showUploadedFilesOnClickHandler={showUploadedFilesOnClickHandler}
 								/>
 							))}
 					</div>

@@ -223,7 +223,7 @@ exports.getMembers = async (req, res, next) => {
 };
 //#endregion
 
-//#region Query for project tasks: ADD, REMOVE, UPDATE, FILE UPLOAD.
+//#region Query for project tasks: ADD, REMOVE, UPDATE.
 exports.addTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;

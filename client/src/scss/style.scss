@@ -21,10 +21,10 @@
 // component modal
 @import '../components/modal/profileModal/profileModal';
 @import '../components/modal/dialogue/dialogue';
-@import '../components/modal/details/details';
+@import '../components/modal/members/members';
+@import '../components/modal/uploadedFiles/uploadedFiles';
 @import '../components/modal/overviewMembers/overviewMembers';
 @import '../components/modal/overviewTasks/overviewTasks';
-@import '../components/modal/uploadedFiles/uploadedFiles';
 
 // component dropdown
 @import '../components/dropdown/profileSettings/profileSettings';
@@ -32,6 +32,7 @@
 @import '../components/dropdown/addMembers/addMembers';
 @import '../components/dropdown/tableSettings/tableSettings';
 @import '../components/dropdown/select/select';
+@import '../components/dropdown/ownedProjects/ownedProjects';
 
 // component chat
 @import '../components/chat/chatHeader/chatHeader';

@@ -43,11 +43,7 @@ const TableProjectContainer = () => {
 		getOneProjectState: {
 			getOneProject: { data, isLoading },
 		},
-	} = useContext(Context);
-
-	const { taskMessageDispatch } = useContext(Context);
-
-	const {
+		taskMessageDispatch,
 		projectTaskState: { projectTasks },
 		projectTaskDispatch,
 	} = useContext(Context);
@@ -383,7 +379,7 @@ const TableProjectContainer = () => {
 	}, [data?.project.owner, data?.project.members]);
 
 	//#endregion
-	console.log(data);
+
 	return (
 		<>
 			{!isLoading ? (

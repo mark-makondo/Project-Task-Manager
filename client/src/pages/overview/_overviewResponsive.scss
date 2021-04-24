@@ -1,0 +1,20 @@
+// responsive medium screen //1200px
+@include media-lg {
+	.overview {
+		&-container {
+			&__body {
+				&-project {
+					&__buttons {
+						button {
+							width: 5.5rem;
+							font-weight: 600;
+							span {
+								display: inline-block;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

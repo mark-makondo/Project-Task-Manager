@@ -1,4 +1,4 @@
-.details-modal {
+.members-modal {
 	@include setFlex(row, center, center);
 	position: fixed;
 	background: #80808040;
@@ -13,6 +13,8 @@
 	text-transform: capitalize;
 
 	.empty-members-bg {
+		display: flex;
+		margin: auto;
 		width: 15rem;
 		height: 100%;
 		padding: 1rem;
@@ -115,4 +117,4 @@
 		}
 	}
 }
-@import './detailsResponsive';
+@import './membersResponsive';

@@ -19,7 +19,6 @@ const GetOneProjectReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				getOneProject: {
-					...state.getOneProject,
 					error: false,
 					isLoading: false,
 					data: payload,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ui
 import OverviewMembers from './OverviewMembers.js';
@@ -7,6 +7,12 @@ import OverviewMembers from './OverviewMembers.js';
 import Query from '../../../helper/query.js';
 
 const OverviewMembersContainer = ({ data, isLoading, isActive, setIsActive }) => {
+	const [project, setProject] = useState({});
+
+	useEffect(() => {
+		data && setProject(data?.project);
+	}, [project, data]);
+
 	// current modal active modifier
 	useEffect(() => {
 		let overviewMembersModalQuery = Query.overviewMembersModalQuery();
@@ -27,7 +33,7 @@ const OverviewMembersContainer = ({ data, isLoading, isActive, setIsActive }) =>
 	}, [isActive, setIsActive]);
 
 	if (isActive) {
-		return <OverviewMembers data={data} isLoading={isLoading} />;
+		return <OverviewMembers project={project} data={data} isLoading={isLoading} />;
 	}
 	return <></>;
 };

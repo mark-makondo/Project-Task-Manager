@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 // ui
-import Details from './Details.js';
+import Members from './Members.js';
 
 // helper
 import Query from '../../../helper/query.js';
@@ -16,11 +16,12 @@ import {
 } from '../../../context/actions/project/ProjectMembersAction';
 
 // sub modal
-import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
+import DialogueContainer from '../dialogue/DialogueContainer.js';
 
-const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) => {
+const MembersContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) => {
 	const [confirmDialogueOpen, setConfirmDialogueOpen] = useState(false);
 	const [currentClickedMember, setCurrentClickedMember] = useState({});
+	const [members, setMembers] = useState([]);
 
 	const socket = useContext(SocketContext);
 
@@ -34,6 +35,10 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 
 		ProjectMembersGetAction(pid)(projectMembersDispatch);
 	}, [projectMembersDispatch, data?.project._id]);
+
+	useEffect(() => {
+		projectMembers.data && setMembers(projectMembers.data);
+	}, [projectMembers.data, members]);
 
 	const removeMemberClickHandler = (e) => {
 		let currentMemberId = e.target.dataset.mid;
@@ -55,7 +60,6 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 		setConfirmDialogueOpen(!confirmDialogueOpen);
 	};
 
-	// make this as a bsis when we create the notification for member removal notice
 	const sendRemoveNoticeToMembers = () => {
 		let emailToNotif = currentClickedMember.email;
 
@@ -75,17 +79,17 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 
 	// current modal active modifier
 	useEffect(() => {
-		let detailsModalQuery = Query.detailsModalQuery();
+		let membersModalQuery = Query.membersModalQuery();
 
-		if (detailsModalQuery) {
+		if (membersModalQuery) {
 			if (isActive) {
-				detailsModalQuery.classList.add('active');
+				membersModalQuery.classList.add('active');
 			} else {
-				detailsModalQuery.classList.remove('active');
+				membersModalQuery.classList.remove('active');
 			}
 
-			detailsModalQuery.addEventListener('click', (e) => {
-				if (e.target === detailsModalQuery) {
+			membersModalQuery.addEventListener('click', (e) => {
+				if (e.target === membersModalQuery) {
 					setIsActive(false);
 				}
 			});
@@ -95,9 +99,8 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 	if (isActive) {
 		return (
 			<>
-				<Details
-					data={data}
-					members={projectMembers}
+				<Members
+					members={members}
 					removeMemberClickHandler={removeMemberClickHandler}
 					isCurrentUserOwner={isCurrentUserOwner}
 				/>
@@ -112,4 +115,4 @@ const DetailsContainer = ({ data, isActive, setIsActive, isCurrentUserOwner }) =
 	return <></>;
 };
 
-export default DetailsContainer;
+export default MembersContainer;

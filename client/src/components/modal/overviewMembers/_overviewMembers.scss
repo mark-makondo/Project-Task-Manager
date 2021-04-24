@@ -22,6 +22,8 @@
 	}
 
 	.empty-members-bg {
+		display: flex;
+		margin: auto;
 		width: 15rem;
 		height: 100%;
 		padding: 1rem;
@@ -58,6 +60,10 @@
 		&__projectname {
 			font-weight: 600;
 			color: getColors(primary);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 15rem;
 		}
 	}
 	&-body {

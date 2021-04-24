@@ -12,6 +12,20 @@
 	}
 }
 
+// default button for consistency with hover
+@mixin defaultButtonWithHover($color, $bg) {
+	outline: none;
+	border: none;
+	background: $bg;
+	padding: 0.2rem 0.3rem;
+	border-radius: 1rem;
+	color: $color;
+
+	@include responsiveHover {
+		@content;
+	}
+}
+
 // ignore touch screen devices for hover
 // must be inluded inside of an element to be hovered
 @mixin responsiveHover() {

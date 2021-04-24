@@ -6,13 +6,19 @@ import UploadedFiles from './UploadedFiles.js';
 // helper
 import Query from '../../../helper/query.js';
 
-const UploadedFilesContainer = ({ data, isActive, setIsActive }) => {
+// this component will be used for displaying uploaded files in project and overview page.
+const UploadedFilesContainer = ({ data, isActive, setIsActive, isLoading = false }) => {
 	const [clicked, setClicked] = useState(false);
+	const [project, setProject] = useState({});
 
 	const toggleCollation = (index) => {
 		if (clicked === index) return setClicked(null);
 		return setClicked(index);
 	};
+
+	useEffect(() => {
+		data && setProject(data?.project);
+	}, [project, data]);
 
 	// current modal active modifier
 	useEffect(() => {
@@ -34,7 +40,9 @@ const UploadedFilesContainer = ({ data, isActive, setIsActive }) => {
 	}, [isActive, setIsActive]);
 
 	if (isActive) {
-		return <UploadedFiles data={data} toggleCollation={toggleCollation} clicked={clicked} />;
+		return (
+			<UploadedFiles project={project} toggleCollation={toggleCollation} clicked={clicked} isLoading={isLoading} />
+		);
 	}
 	return <></>;
 };

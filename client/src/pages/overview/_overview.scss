@@ -15,26 +15,14 @@
 
 	&-container {
 		@include setFlex(column, flex-start, center);
+
 		min-height: min-content;
 		height: 100%;
 		width: 100%;
 
-		button {
-			outline: none;
-			border: none;
-			background: getColors(btn-status-working);
-			padding: 0.2rem 0.3rem;
-			border-radius: 1rem;
-			color: white;
-			text-transform: capitalize;
-
-			@include responsiveHover {
-				opacity: 0.8;
-			}
-		}
-
 		&__header {
 			@include setFlex(column, center, flex-start);
+
 			position: relative;
 			width: 100%;
 			padding-bottom: 0.5rem;
@@ -50,11 +38,13 @@
 			}
 
 			&-owned-projects {
-				@include setFlex(column, center, flex-start);
-				ul {
-					margin-left: 1rem;
-					text-transform: capitalize;
-					font-weight: 600;
+				@include setFlex(row, center, center);
+
+				.show-list {
+					font-size: 1.5rem;
+					@include responsiveHover() {
+						color: getColors(btn-status-working);
+					}
 				}
 			}
 			.group {
@@ -62,30 +52,23 @@
 				span {
 					margin: 0 0.2rem;
 				}
-
-				.highlight {
-					font-weight: bold;
-				}
-
-				button {
-					margin-left: 1rem;
-				}
 			}
 		}
 		&__body {
 			@include setFlex(column, flex-start, center);
+			@include customScrollbar;
+
+			position: relative;
 			overflow-y: auto;
 			max-height: 65vh;
 			width: 100%;
 			padding: 0.5rem 0;
 
-			@include customScrollbar;
-
 			&-project {
 				@include setFlex(row, center, center);
 
 				min-width: 0;
-				width: 40vw;
+				width: 60vw;
 				margin-bottom: 0.2rem;
 				padding: 0.3rem 1.5rem;
 				background-color: getColors(primary);
@@ -108,19 +91,30 @@
 
 				&__buttons {
 					button {
-						width: 4.5rem;
+						width: 2rem;
 						font-weight: 600;
-						&:first-child {
-							margin-right: 0.5rem;
+						text-align: center;
+						i {
+							font-size: 1.2rem;
+							margin-right: 0.3rem;
+							width: 100%;
 						}
-						&:nth-child(2) {
-							background: getColors(fade-selected);
-							color: black;
+
+						span {
+							display: none;
+						}
+						&:nth-child(even) {
+							margin: 0 0.5rem;
+						}
+
+						@include defaultButtonWithHover(black, getColors(fade-selected)) {
+							transition: 100ms linear;
+							color: white;
+							background: getColors(btn-status-working);
 						}
 					}
 				}
 			}
-			position: relative;
 		}
 	}
 }

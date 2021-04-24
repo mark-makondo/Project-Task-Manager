@@ -5,8 +5,8 @@ import TableSettings from './TableSettings';
 
 // modal
 import DialogueContainer from '../../modal/dialogue/DialogueContainer.js';
-import DetailsModalContainer from '../../modal/details/DetailsContainer.js';
-import UploadedFilesModalContainer from '../../modal/uploadedFiles/UploadedFIlesContainer.js';
+import MembersModalContainer from '../../modal/members/MembersContainer.js';
+import UploadedFilesModalContainer from '../../modal/uploadedFiles/UploadedFilesContainer.js';
 
 // context
 import Context from '../../../context/Context.js';
@@ -19,11 +19,11 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 	const [detailsIsActive, setDetailsIsActive] = useState(false);
 	const [uploadedModalIsActive, setUploadedModalIsActive] = useState(false);
 
-	const { projectDispatch } = useContext(Context);
-	const { projectMembersDispatch } = useContext(Context);
+	const { projectDispatch, projectMembersDispatch } = useContext(Context);
+
 	const socket = useContext(SocketContext);
 
-	//#region table details settings
+	//#region table members settings
 	const showProjectDetailsClickHandler = (e) => {
 		let pid = data?.project._id;
 
@@ -103,7 +103,7 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 				setIsActive={setConfirmProjectDeleteDialogueOpen}
 				confirmActionHandler={confirmProjectDeleteHandler}
 			/>
-			<DetailsModalContainer
+			<MembersModalContainer
 				data={data}
 				isActive={detailsIsActive}
 				setIsActive={setDetailsIsActive}

@@ -9,30 +9,31 @@ import { GetAllProjectAction } from '../../context/actions/project/ProjectAction
 import { GetOneProjectAction } from '../../context/actions/project/GetOneProjectAction';
 
 // modal
-import OverviewModalMembersContainer from '../../components/modal/overviewMembers/OverviewMembersContainer.js';
-import OverviewModalTasksContainer from '../../components/modal/overviewTasks/OverviewTasksContainer.js';
+import MembersModalContainer from '../../components/modal/overviewMembers/OverviewMembersContainer.js';
+import TasksModalContainer from '../../components/modal/overviewTasks/OverviewTasksContainer.js';
+import UploadedFilesModalContainer from '../../components/modal/uploadedFiles/UploadedFilesContainer';
+
+// helper
+import { dropdownHandler } from '../../helper/helperFunctions.js';
+import Query from '../../helper/query';
 
 const OverviewContainer = () => {
 	const [isOverviewMemberModalActive, setIsOverviewMemberModalActive] = useState(false);
 	const [isOverviewTasksModalActive, setIsOverviewTasksModalActive] = useState(false);
+	const [isOverviewUploadedFilesModalActive, setIsOverviewUploadedFilesModalActive] = useState(false);
 	const [projectCount, setProjectCount] = useState(0);
 	const [ownedProjects, setOwnedProjects] = useState([]);
-	const [clicked, setClicked] = useState(false);
 
 	const {
+		userState: { user },
+
 		projectState: {
 			project: { data, isLoading },
 		},
 		projectDispatch,
-	} = useContext(Context);
 
-	const {
 		getOneProjectState: { getOneProject },
 		getOneProjectDispatch,
-	} = useContext(Context);
-
-	const {
-		userState: { user },
 	} = useContext(Context);
 
 	useEffect(() => {
@@ -43,7 +44,6 @@ const OverviewContainer = () => {
 	useEffect(() => {
 		let isUser = user && user;
 		let projects = data && data;
-
 		let currentUser = isUser.data?._id;
 
 		let projectLength = projects.length;
@@ -56,33 +56,55 @@ const OverviewContainer = () => {
 		setOwnedProjects(ownedProjects);
 	}, [data, user]);
 
-	const toggleCollation = (index) => {
-		if (clicked === index) return setClicked(null);
-		return setClicked(index);
-	};
-
 	//#endregion
 
 	//#region project holder click handler for modals
-	const showMembersOnClickHandler = (e) => {
-		let pid = e.target.dataset.pid;
-
+	const actionWhenModalIsOpen = (pid, type) => {
 		GetOneProjectAction(pid)(getOneProjectDispatch);
 
-		setIsOverviewMemberModalActive(!isOverviewMemberModalActive);
+		switch (type) {
+			case 'OPEN_MEMBERS_MODAL':
+				return setIsOverviewMemberModalActive(!isOverviewMemberModalActive);
+			case 'OPEN_TASKS_MODAL':
+				return setIsOverviewTasksModalActive(!isOverviewTasksModalActive);
+			case 'OPEN_UPLOADED_FILES__MODAL':
+				return setIsOverviewUploadedFilesModalActive(!isOverviewUploadedFilesModalActive);
+			default:
+				return;
+		}
+	};
+
+	const showMembersOnClickHandler = (e) => {
+		let pid = e.target.dataset.pid;
+		let type = 'OPEN_MEMBERS_MODAL';
+
+		actionWhenModalIsOpen(pid, type);
 	};
 
 	const showTasksOnClickHandler = (e) => {
 		let pid = e.target.dataset.pid;
+		let type = 'OPEN_TASKS_MODAL';
 
-		console.log(pid);
-		GetOneProjectAction(pid)(getOneProjectDispatch);
+		actionWhenModalIsOpen(pid, type);
+	};
 
-		setIsOverviewTasksModalActive(!isOverviewTasksModalActive);
+	const showUploadedFilesOnClickHandler = (e) => {
+		let pid = e.target.dataset.pid;
+		let type = 'OPEN_UPLOADED_FILES__MODAL';
+
+		actionWhenModalIsOpen(pid, type);
+	};
+	//#endregion
+
+	//#region dropdown
+	const showOwnedProjectsDropdown = (e) => {
+		const dropdownContentQuery = Query.dropdownOwnedProjectsContent();
+		const dropdownButtonQuery = Query.dropdownOwnedProjectsButton();
+
+		dropdownHandler(e, dropdownContentQuery, dropdownButtonQuery);
 	};
 
 	//#endregion
-
 	return (
 		<>
 			<Overview
@@ -90,23 +112,31 @@ const OverviewContainer = () => {
 				isLoading={isLoading}
 				projectCount={projectCount}
 				ownedProjects={ownedProjects}
-				clicked={clicked}
-				toggleCollation={toggleCollation}
 				showMembersOnClickHandler={showMembersOnClickHandler}
 				showTasksOnClickHandler={showTasksOnClickHandler}
+				showUploadedFilesOnClickHandler={showUploadedFilesOnClickHandler}
+				showOwnedProjectsDropdown={showOwnedProjectsDropdown}
 			/>
 
-			<OverviewModalMembersContainer
+			<MembersModalContainer
 				data={getOneProject.data}
 				isLoading={getOneProject.isLoading}
 				isActive={isOverviewMemberModalActive}
 				setIsActive={setIsOverviewMemberModalActive}
 			/>
-			<OverviewModalTasksContainer
+
+			<TasksModalContainer
 				data={getOneProject.data}
 				isLoading={getOneProject.isLoading}
 				isActive={isOverviewTasksModalActive}
 				setIsActive={setIsOverviewTasksModalActive}
+			/>
+
+			<UploadedFilesModalContainer
+				data={getOneProject.data}
+				isLoading={getOneProject.isLoading}
+				isActive={isOverviewUploadedFilesModalActive}
+				setIsActive={setIsOverviewUploadedFilesModalActive}
 			/>
 		</>
 	);

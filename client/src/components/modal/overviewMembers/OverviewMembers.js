@@ -36,10 +36,9 @@ const MemberHolder = ({ member }) => {
 /**
  * Main component modal members.
  */
-const OverviewMembers = ({ data, isLoading }) => {
-	let isProject = data && data.project;
-	let projectMembers = isProject?.members;
-	let projectName = isProject?.projectName;
+const OverviewMembers = ({ project, isLoading }) => {
+	let projectMembers = project?.members;
+	let projectName = project?.projectName;
 
 	let styleForLoading = {
 		overflow: `${isLoading ? 'hidden' : 'unset'}`,

@@ -21,6 +21,8 @@
 	}
 
 	.empty-task-bg {
+		display: flex;
+		margin: auto;
 		width: 15rem;
 		height: 100%;
 		padding: 1rem;
@@ -49,9 +51,20 @@
 		border-color: getColors(fade-selected);
 		width: 100%;
 		padding: 0.5rem 0;
-		font-weight: bold;
 		text-align: center;
-		color: getColors(primary);
+
+		&__title {
+			font-weight: bold;
+			color: getColors(primary);
+		}
+		&__projectname {
+			font-weight: 600;
+			color: getColors(primary);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 15rem;
+		}
 	}
 	&-body {
 		@include customScrollbar();
