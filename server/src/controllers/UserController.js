@@ -172,16 +172,16 @@ exports.find = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
 	try {
-		let id = req.user._id;
-		if (!id) return res.status(400).send('_id not found from user');
+		let _id = req.user._id;
 
-		let findUserAndUpdate = await User.findOneAndUpdate({ _id: id }, req.body, {
+		let findUserAndUpdate = await User.findOneAndUpdate({ _id }, req.body, {
 			new: true,
 			useFindAndModify: false,
 		});
-		if (!findUserAndUpdate) return res.status(400).send(`Unable to update user with ${id}`);
 
-		res.status(200).send('Update Success');
+		if (!findUserAndUpdate) return res.status(400).send('Update failed.');
+
+		res.sendStatus(200);
 
 		return next();
 	} catch (error) {
@@ -193,7 +193,7 @@ exports.update = async (req, res, next) => {
 exports.changePassword = async (req, res, next) => {
 	try {
 		let id = req.params.id;
-		if (!id) return res.status(400).send('user id does not exist on the path params.');
+		if (!id) return res.status(400).send('Params id is required.');
 
 		let currentPassword = req.body.currentPassword;
 		if (!currentPassword) return res.status(400).send('Current password input not found.');
@@ -206,7 +206,7 @@ exports.changePassword = async (req, res, next) => {
 		if (error) return res.status(400).send(error.details[0].message);
 
 		let user = await User.findById(id);
-		if (!user) return res.status(400).send(`Unable to update find user with ${id}`);
+		if (!user) return res.status(400).send('Update failed.');
 
 		const validPassword = await bcrypt.compare(req.body.currentPassword, user.password);
 		if (!validPassword) return res.status(400).send('Invalid password.');
@@ -215,9 +215,9 @@ exports.changePassword = async (req, res, next) => {
 		const hashedNewPassword = await bcrypt.hash(value.newPassword, salt);
 
 		const updatePassword = await user.updateOne({ password: hashedNewPassword });
-		if (!updatePassword) return res.status(400).send('password update failed.');
+		if (!updatePassword) return res.status(400).send('Password update failed.');
 
-		res.status(200).send({ message: 'Password changed successfully.', result: hashedNewPassword });
+		res.status(200).send({ password: hashedNewPassword });
 
 		return next();
 	} catch (error) {

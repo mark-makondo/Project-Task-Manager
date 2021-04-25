@@ -52,11 +52,6 @@ exports.changePassValidation = (data) => {
 	const validation = Joi.object({
 		currentPassword: Joi.string().min(6).required().label('Current Password'),
 		newPassword: Joi.string().min(6).required().label('New Password'),
-		confirmNewPassword: Joi.any()
-			.equal(Joi.ref('newPassword'))
-			.required()
-			.label('Confirm New Password')
-			.messages({ 'any.only': '{{#label}} does not match' }),
 	});
 
 	return validation.validate(data);

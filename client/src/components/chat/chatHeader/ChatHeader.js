@@ -1,9 +1,9 @@
 import React from 'react';
 
 const ChatHeader = ({ taskData, sidebarCloseHandler }) => {
-	let assignedEmail = taskData && taskData.assigned.email;
-	let taskName = taskData && taskData.taskName;
-	let assignedName = taskData && taskData.assigned.name;
+	let assignedEmail = taskData && taskData.assigned?.email;
+	let taskName = taskData && taskData?.taskName;
+	let assignedName = taskData && taskData.assigned?.name;
 
 	return (
 		<div className='chat-header'>

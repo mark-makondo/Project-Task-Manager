@@ -84,7 +84,6 @@ const ChatFooterContainer = ({ data }) => {
 
 		const config = {
 			headers: { 'content-type': 'multipart/form-data' },
-			// onUploadProgress: (e) => setUploadPercent(Math.round((e.loaded * 100) / e.total)),
 		};
 
 		formData.append('file', files[0]);

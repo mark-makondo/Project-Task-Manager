@@ -94,6 +94,7 @@
 						width: 2rem;
 						font-weight: 600;
 						text-align: center;
+
 						i {
 							font-size: 1.2rem;
 							margin-right: 0.3rem;
@@ -103,6 +104,12 @@
 						span {
 							display: none;
 						}
+
+						&:first-child {
+							color: white;
+							background: getColors(btn-status-working);
+						}
+
 						&:nth-child(even) {
 							margin: 0 0.5rem;
 						}

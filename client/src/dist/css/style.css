@@ -1035,17 +1035,29 @@ ul {
   justify-content: center;
   align-items: center;
   align-content: center;
+  background-color: black;
+  color: white;
   border-radius: 50%;
-  margin: 0 0.5rem;
-  margin-top: 1rem;
-  letter-spacing: 0.15rem;
-  background: #6c63ff;
   width: 5.5rem;
   height: 5.5rem;
-  font-size: 2rem;
-  padding: 0.2rem;
+  text-align: center;
   cursor: pointer;
+  margin: 0 0.5rem;
+  margin-top: 1rem;
+  padding: 0.2rem;
+  font-size: 2rem;
+  background: #6c63ff;
   transition: 150ms ease-in-out;
+}
+
+.sidebar-bottom__profile-avatar img {
+  border-radius: 50%;
+  max-width: 100%;
+}
+
+.sidebar-bottom__profile-avatar span {
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
 .sidebar-bottom__profile-avatar img {
@@ -1062,6 +1074,11 @@ ul {
 }
 
 .sidebar-bottom__profile-avatar .helper-loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   color: white;
   font-size: x-large;
 }
@@ -1089,7 +1106,7 @@ ul {
   color: #82828290;
   background: white;
   transition: 150ms linear;
-  z-index: 99;
+  z-index: 15;
 }
 
 .sidebar-collapsed.rotate {
@@ -1823,7 +1840,7 @@ ul {
   align-items: center;
   align-content: center;
   position: fixed;
-  background: #0e0e0e78;
+  background: #80808040;
   z-index: 99;
   top: 0;
   left: 0;
@@ -1832,6 +1849,21 @@ ul {
   opacity: 0;
   visibility: hidden;
   transition: 150ms linear;
+  font-family: "Open Sans", sans-serif;
+}
+
+.profile-modal-loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  color: #6c63ff;
+  font-size: x-large;
+  font-size: 1.5rem !important;
+  margin-top: 1rem;
+  width: 100%;
+  height: 100%;
 }
 
 .profile-modal.active {
@@ -1846,15 +1878,62 @@ ul {
   align-items: center;
   align-content: center;
   position: relative;
-  width: 60vmin !important;
+  max-width: fit-content;
   height: auto;
-  background: #828282;
+  background: white;
   border-radius: 1rem;
-  padding: 2rem;
-  margin-top: 1rem;
+  padding-bottom: 1.5rem;
+  min-width: 15rem;
+  box-shadow: 0px 3px 8px #00000025;
+  margin: 1rem;
 }
 
-.profile-modal__wrapper form {
+.profile-modal__wrapper-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-bottom: 2px solid;
+  border-color: #e5e5e5;
+  width: 100%;
+  padding: 0.5rem 0;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.profile-modal__wrapper-header__avatar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: black;
+  color: white;
+  border-radius: 50%;
+  width: 4.5rem;
+  height: 4.5rem;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-modal__wrapper-header__avatar img {
+  border-radius: 50%;
+  max-width: 100%;
+}
+
+.profile-modal__wrapper-header__avatar span {
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.profile-modal__wrapper-header__avatar img,
+.profile-modal__wrapper-header__avatar span {
+  pointer-events: none;
+}
+
+.profile-modal__wrapper-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1862,65 +1941,195 @@ ul {
   align-content: center;
   position: relative;
   width: 100%;
-  height: 100%;
+  padding: 0 2rem;
 }
 
-.profile-modal__wrapper form .fa-spin {
-  font-size: 3rem;
+.profile-modal__wrapper-body .error {
+  color: red;
 }
 
-.profile-modal__wrapper form div {
-  position: relative;
-  display: flex;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-.profile-modal__wrapper form div label {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  font-weight: bold;
-  opacity: 0.4;
-  transition: 150ms all linear;
-}
-
-.profile-modal__wrapper form div input {
-  padding: 0 1rem;
-  padding-bottom: 0.5rem;
-  padding-top: 1.2rem;
-  outline: none;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid gray;
+.profile-modal__wrapper-body__info {
   text-align: center;
   width: 100%;
 }
 
-.profile-modal__wrapper form div input:focus ~ label, .profile-modal__wrapper form div input:valid ~ label {
-  width: 50%;
-  height: 30%;
-  margin-bottom: 1rem;
-  opacity: 1;
+.profile-modal__wrapper-body__info .input-icons {
+  display: flex;
+  flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  font-size: 1.1rem;
+  color: #a1a1a1;
 }
 
-.profile-modal__wrapper form button {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+.profile-modal__wrapper-body__info .input-icons i.edit {
+  font-size: 0.9rem;
+}
+
+.profile-modal__wrapper-body__info .input-icons i.edit, .profile-modal__wrapper-body__info .input-icons i.cancel {
+  margin: 0 0.5rem;
+}
+
+.profile-modal__wrapper-body__info .input-icons i.cancel, .profile-modal__wrapper-body__info .input-icons i.save {
+  display: none;
+}
+
+@media (hover: hover) {
+  .profile-modal__wrapper-body__info .input-icons i:hover {
+    color: #6c63ff;
+  }
+}
+
+.profile-modal__wrapper-body__info-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.profile-modal__wrapper-body__info-name .input-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.profile-modal__wrapper-body__info-name .input-group span {
+  text-transform: capitalize;
+  padding-left: 0.3rem;
+  font-weight: 600;
+}
+
+.profile-modal__wrapper-body__info-name .input-group input {
+  display: none;
+  border: none;
+  outline: none;
+  padding-left: 0.3rem;
+  border-bottom: 1px solid;
+  border-color: #a1a1a1;
+  text-align: center;
+}
+
+.profile-modal__wrapper-body__info-name.editable .input-icons .edit {
+  display: none;
+  color: #6c63ff;
+}
+
+.profile-modal__wrapper-body__info-name.editable .input-icons .cancel,
+.profile-modal__wrapper-body__info-name.editable .input-icons .save,
+.profile-modal__wrapper-body__info-name.editable .input-group input {
+  display: block;
+}
+
+.profile-modal__wrapper-body__info-name.editable .input-group span {
+  display: none;
+}
+
+.profile-modal__wrapper-body__info-loggedinas {
+  margin: 0.5rem 0;
+}
+
+.profile-modal__wrapper-body__info-password {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  margin-top: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-modal__wrapper-body__info-password .input-group label {
+  margin-right: 0.5rem;
+}
+
+.profile-modal__wrapper-body__info-password .input-group input {
+  border: none;
+  outline: none;
+  max-width: 5rem;
+}
+
+.profile-modal__wrapper-body__info-password.editable .input-icons .edit {
+  display: none;
+  color: #6c63ff;
+}
+
+.profile-modal__wrapper-body__info-password.editable .input-icons .cancel {
+  display: block;
+}
+
+.profile-modal__wrapper-body__change-password {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.profile-modal__wrapper-body__change-password .fa-spin {
+  font-size: 3rem;
+}
+
+.profile-modal__wrapper-body__change-password__current, .profile-modal__wrapper-body__change-password__new {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.profile-modal__wrapper-body__change-password__current label.disabled, .profile-modal__wrapper-body__change-password__new label.disabled {
+  opacity: 0.7;
+}
+
+.profile-modal__wrapper-body__change-password__current input, .profile-modal__wrapper-body__change-password__new input {
+  outline: none;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.2rem;
+  border: 2px solid;
+  border-color: #5d5d5d;
+  margin: 0.2rem 0;
+}
+
+.profile-modal__wrapper-body__change-password__current input:disabled, .profile-modal__wrapper-body__change-password__new input:disabled {
+  opacity: 0.5;
+}
+
+.profile-modal__wrapper-body__change-password__current input:focus, .profile-modal__wrapper-body__change-password__current input:valid, .profile-modal__wrapper-body__change-password__new input:focus, .profile-modal__wrapper-body__change-password__new input:valid {
+  border-color: #6c63ff;
+}
+
+.profile-modal__wrapper-body__change-password button {
   padding: 0.3rem 1rem;
   border-radius: 1rem;
   border: none;
   color: #2f2e41;
-  text-transform: uppercase;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   outline: none;
-  transition: 150ms linear;
+  transition: 100ms linear;
+  margin: 1rem 0;
+}
+
+.profile-modal__wrapper-body__change-password button .active {
+  color: white;
+  background: #6c63ff;
+}
+
+.profile-modal__wrapper-body__change-password button:disabled {
+  opacity: 0.7;
+}
+
+@media (hover: hover) {
+  .profile-modal__wrapper-body__change-password button:not(:disabled):hover {
+    color: white;
+    background: #6c63ff;
+  }
 }
 
 .confirm-dialogue {
@@ -2548,6 +2757,7 @@ ul {
   width: 2.5rem;
   height: 2.5rem;
   text-align: center;
+  cursor: pointer;
   margin-right: 1rem;
 }
 
@@ -2558,6 +2768,7 @@ ul {
 
 .overview-members-modal-body__avatar span {
   text-transform: uppercase;
+  pointer-events: none;
 }
 
 .overview-members-modal-body__content {
@@ -2685,6 +2896,7 @@ ul {
   width: 2.5rem;
   height: 2.5rem;
   text-align: center;
+  cursor: pointer;
   margin-right: 0.5rem;
 }
 
@@ -2695,6 +2907,7 @@ ul {
 
 .overview-tasks-modal-body__title-avatar span {
   text-transform: uppercase;
+  pointer-events: none;
 }
 
 .overview-tasks-modal-body__title-info {
@@ -2799,6 +3012,7 @@ ul {
   width: 1.5rem;
   height: 1.5rem;
   text-align: center;
+  cursor: pointer;
   flex: 20%;
   margin-right: 0.5rem;
 }
@@ -2810,6 +3024,7 @@ ul {
 
 .overview-tasks-modal-body__status .status-task-list__avatar span {
   text-transform: uppercase;
+  pointer-events: none;
 }
 
 .overview-tasks-modal-body__status .status-task-list__taskname {
@@ -3824,6 +4039,7 @@ ul {
   width: 2.5rem;
   height: 2.5rem;
   text-align: center;
+  cursor: pointer;
   margin-right: 1rem;
 }
 
@@ -3834,6 +4050,7 @@ ul {
 
 .overview-container__body-project__avatar span {
   text-transform: uppercase;
+  pointer-events: none;
 }
 
 .overview-container__body-project__buttons button {
@@ -3856,6 +4073,11 @@ ul {
 
 .overview-container__body-project__buttons button span {
   display: none;
+}
+
+.overview-container__body-project__buttons button:first-child {
+  color: white;
+  background: #6c63ff;
 }
 
 .overview-container__body-project__buttons button:nth-child(even) {

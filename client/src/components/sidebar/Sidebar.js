@@ -7,7 +7,7 @@ import { ToggleArrow } from '../../helper/helperFunctions.js';
 
 // dropdown
 import NewProjectContainer from '../dropdown/newProject/NewProjectContainer.js';
-import ProfileSettingsContainer from '../dropdown/profileSettings/ProfileSettingsContainer.js';
+import UserSettingsContainer from '../dropdown/userSettings/UserSettingsContainer.js';
 
 const Sidebar = ({
 	collapseClickHandler,
@@ -76,7 +76,7 @@ const Sidebar = ({
 								<span>{getStringInitials(userData?.name)}</span>
 							)}
 						</div>
-						<ProfileSettingsContainer />
+						<UserSettingsContainer />
 					</div>
 				</div>
 			</div>

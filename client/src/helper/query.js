@@ -47,6 +47,9 @@ const query = {
 
 	//#region MODAL QUERY
 
+	// @sidebar
+	profileModalQuery: () => document.querySelector('.profile-modal'),
+
 	// @project page
 	membersModalQuery: () => document.querySelector('.members-modal'),
 

@@ -13,7 +13,7 @@ router.route('/register').post(userController.register);
 router.route('/login').post(userController.login);
 router.route('/:id').get(verifyToken, userController.find);
 router.route('/update').put(verifyToken, userController.update);
-router.put('/changePassword/:id', verifyToken, userController.changePassword);
+router.put('/change-password/:id', verifyToken, userController.changePassword);
 
 // notifications
 router.route('/:id/notifications').get(verifyToken, userController.getNotifications);

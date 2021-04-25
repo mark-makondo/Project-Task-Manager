@@ -1,6 +1,6 @@
 export const UserInitialStates = {
 	user: {
-		isFound: false,
+		isLoading: false,
 		data: null,
 		error: false,
 	},

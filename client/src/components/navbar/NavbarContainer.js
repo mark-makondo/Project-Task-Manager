@@ -9,14 +9,12 @@ import Navbar from './Navbar.js';
 
 // context actions
 import Context from '../../context/Context.js';
-import { GetUserInfo } from '../../context/actions/user/GetUserInfo.js';
+import { GetUserInfo } from '../../context/actions/user/UserAction.js';
 import { LogoutAction } from '../../context/actions/auth/LogoutAction.js';
 import { GetAllProjectAction } from '../../context/actions/project/ProjectAction.js';
 
 const NavbarContainer = () => {
-	const { userDispatch } = useContext(Context);
-	const { authDispatch } = useContext(Context);
-	const { projectDispatch } = useContext(Context);
+	const { userDispatch, authDispatch, projectDispatch } = useContext(Context);
 
 	const history = useHistory();
 	const params = useParams();

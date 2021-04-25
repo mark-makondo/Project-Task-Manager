@@ -104,18 +104,22 @@
 // custom avatar for consistency
 @mixin customAvatarFallbackSpan($size) {
 	@include setFlex(row, center, center);
+
 	background-color: black;
 	color: white;
 	border-radius: 50%;
 	width: $size;
 	height: $size;
 	text-align: center;
+	cursor: pointer;
+
 	img {
 		border-radius: 50%;
 		max-width: 100%;
 	}
 	span {
 		text-transform: uppercase;
+		pointer-events: none;
 	}
 }
 

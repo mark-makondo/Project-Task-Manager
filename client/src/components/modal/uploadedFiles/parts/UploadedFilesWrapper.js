@@ -16,11 +16,14 @@ const UploadedFilesWrapper = ({
 }) => {
 	return (
 		<div className='uploaded-files-modal-wrapper'>
-			<div className='uploaded-files-modal-header__title'>
-				<i className='fas fa-archive'></i>
-				<span className='normal-1'> uploaded files</span>
+			<div className='overview-members-modal-header'>
+				<div className='uploaded-files-modal-header__title'>
+					<i className='fas fa-archive'></i>
+					<span className='normal-1'> uploaded files</span>
+				</div>
+				<span className='uploaded-files-modal-header__projectname normal-2'>{projectName}</span>
 			</div>
-			<span className='uploaded-files-modal-header__projectname normal-2'>{projectName}</span>
+
 			<div style={styleForLoading} className='uploaded-files-modal-body normal-3'>
 				{!isLoading ? (
 					projectTasks && projectTasks?.length !== 0 ? (

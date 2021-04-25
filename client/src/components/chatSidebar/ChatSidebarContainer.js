@@ -56,15 +56,19 @@ const ChatSidebarContainer = ({ taskID }) => {
 	}, [localtid, taskMessageDispatch]);
 
 	useEffect(() => {
-		socket.on('connect', () => {
-			// console.log(socket.id);
-			// console.log('coonnected', socket.connected);
-			// console.log('disconnected', socket.disconnected);
-		});
+		// socket.on('connect', () => {
+		// 	// console.log(socket.id);
+		// 	// console.log('coonnected', socket.connected);
+		// 	// console.log('disconnected', socket.disconnected);
+		// });
 
 		socket.on('disconnect', () => {
-			// socket.connect();
+			socket.connect();
 		});
+
+		return () => {
+			socket.off('disconnect');
+		};
 	}, [socket]);
 	//#endregion
 

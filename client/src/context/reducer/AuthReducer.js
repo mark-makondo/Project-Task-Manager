@@ -27,7 +27,6 @@ const AuthReducer = (state, { payload, type }) => {
 			return {
 				...state,
 				auth: {
-					...state.auth,
 					error: false,
 					loading: false,
 					user: payload,

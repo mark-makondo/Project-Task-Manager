@@ -1,62 +1,49 @@
 import React from 'react';
 
-const ProfileModal = ({ formSubmitHandler }) => {
-	let isLoading = false;
-	let error = false;
+// parts
+import ProfileHeader from './parts/ProfileHeader.js';
+import ProfileInfo from './parts/ProfileInfo.js';
+import ProfileChangePassword from './parts/ProfileChangePassword.js';
 
+const ProfileModal = ({
+	user,
+	input,
+	error,
+	isLoading,
+	changePassSubmitHandler,
+	nameSaveClickHandler,
+	inputOnChangeHandler,
+	isEditable,
+	setIsEditable,
+	isChangingPassword,
+	setIsChangingPassword,
+}) => {
 	return (
 		<div className='profile-modal'>
 			<div className='profile-modal__wrapper'>
-				<form onSubmit={formSubmitHandler}>
-					<div>
-						<input
-							id='firstName'
-							className='normal-1'
-							type='text'
-							autoComplete='off'
-							name='firstName'
-							required
-						/>
-						<label className='normal-1' htmlFor='firstName'>
-							First Name
-						</label>
-					</div>
-					<div>
-						<input
-							id='lastName'
-							className='normal-1'
-							type='text'
-							autoComplete='off'
-							name='lastName'
-							required
-						/>
-						<label className='normal-1' htmlFor='lastName'>
-							Last Name
-						</label>
-					</div>
-					<div>
-						<input
-							id='email'
-							className='normal-1'
-							type='email'
-							autoComplete='off'
-							name='email'
-							required
-						/>
-						<label className='normal-1' htmlFor='email'>
-							Email
-						</label>
-					</div>
-					{error ? <span className='error'>{error}</span> : ''}
+				<ProfileHeader user={user} />
 
-					{isLoading ? (
-						<i className='fas fa-spinner fa-spin'></i>
-					) : (
-						<button className='normal-1' type='submit'>
-							update
-						</button>
-					)}
-				</form>
+				<div className='profile-modal__wrapper-body normal-3'>
+					<ProfileInfo
+						user={user}
+						input={input}
+						nameSaveClickHandler={nameSaveClickHandler}
+						inputOnChangeHandler={inputOnChangeHandler}
+						isEditable={isEditable}
+						setIsEditable={setIsEditable}
+						isChangingPassword={isChangingPassword}
+						setIsChangingPassword={setIsChangingPassword}
+					/>
+					<ProfileChangePassword
+						isLoading={isLoading}
+						changePassSubmitHandler={changePassSubmitHandler}
+						inputOnChangeHandler={inputOnChangeHandler}
+						isChangingPassword={isChangingPassword}
+						setIsChangingPassword={setIsChangingPassword}
+						input={input}
+					/>
+					{error && <span className='error normal-3'>{error}</span>}
+				</div>
 			</div>
 		</div>
 	);

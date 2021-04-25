@@ -1,7 +1,7 @@
 .profile-modal {
 	@include setFlex(row, center, center);
 	position: fixed;
-	background: #0e0e0e78;
+	background: #80808040;
 	z-index: 99;
 	top: 0;
 	left: 0;
@@ -10,6 +10,17 @@
 	opacity: 0;
 	visibility: hidden;
 	transition: 150ms linear;
+	font-family: $main;
+
+	&-loading {
+		@include setFlex(row, center, center);
+		@include customLoading(getColors(btn-status-working));
+
+		font-size: 1.5rem !important;
+		margin-top: 1rem;
+		width: 100%;
+		height: 100%;
+	}
 
 	&.active {
 		opacity: 1;
@@ -18,86 +29,220 @@
 
 	&__wrapper {
 		@include setFlex(column, center, center);
-		position: relative;
-		width: 60vmin !important;
-		height: auto;
-		background: getColors(secondary);
-		border-radius: 1rem;
-		padding: 2rem;
-		margin-top: 1rem;
 
-		form {
+		position: relative;
+		max-width: fit-content;
+		height: auto;
+		background: white;
+		border-radius: 1rem;
+		padding-bottom: 1.5rem;
+		min-width: 15rem;
+		box-shadow: $little-shadow;
+		margin: 1rem;
+
+		&-header {
+			@include setFlex(row, center, center);
+
+			border-bottom: 2px solid;
+			border-color: getColors(fade-selected);
+			width: 100%;
+			padding: 0.5rem 0;
+			text-align: center;
+			margin-bottom: 1rem;
+
+			&__avatar {
+				@include customAvatarFallbackSpan(4.5rem);
+
+				position: relative;
+
+				img,
+				span {
+					pointer-events: none;
+				}
+			}
+		}
+
+		&-body {
 			@include setFlex(column, center, center);
+
 			position: relative;
 			width: 100%;
-			height: 100%;
+			padding: 0 2rem;
 
-			.fa-spin {
-				font-size: 3rem;
+			.error {
+				color: red;
 			}
 
-			div {
-				position: relative;
-				display: flex;
+			&__info {
+				text-align: center;
 				width: 100%;
-				margin-bottom: 1rem;
-				label {
-					position: absolute;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					width: 100%;
-					height: 100%;
-					pointer-events: none;
-					font-weight: bold;
-					opacity: 0.4;
-					transition: 150ms all linear;
+
+				.input-icons {
+					@include setFlex(row, flex-start, center);
+
+					font-size: 1.1rem;
+					color: getColors(primary-fade);
+
+					i {
+						&.edit {
+							font-size: 0.9rem;
+						}
+						&.edit,
+						&.cancel {
+							margin: 0 0.5rem;
+						}
+
+						&.cancel,
+						&.save {
+							display: none;
+						}
+
+						@include responsiveHover {
+							color: getColors(btn-status-working);
+						}
+					}
 				}
 
-				input {
-					padding: 0 1rem;
-					padding-bottom: 0.5rem;
-					padding-top: 1.2rem;
-					outline: none;
-					background: transparent;
-					border: none;
-					border-bottom: 2px solid gray;
-					text-align: center;
-					width: 100%;
+				&-name {
+					@include setFlex(row, center, center);
 
-					&:focus,
-					&:valid {
-						border-color: getColors(active);
-						color: getColors(active-light);
+					position: relative;
+					margin-bottom: 0.5rem;
 
-						& ~ label {
-							width: 50%;
-							height: 30%;
-							margin-bottom: 1rem;
-							color: getColors(active);
-							opacity: 1;
-							justify-content: flex-start;
+					.input-group {
+						@include setFlex(row, center, center);
+						span {
+							text-transform: capitalize;
+							padding-left: 0.3rem;
+							font-weight: 600;
+						}
+						input {
+							display: none;
+							border: none;
+							outline: none;
+							padding-left: 0.3rem;
+							border-bottom: 1px solid;
+							border-color: getColors(primary-fade);
+							text-align: center;
+						}
+					}
+
+					&.editable {
+						.input-icons .edit {
+							display: none;
+							color: getColors(btn-status-working);
+						}
+						.input-icons .cancel,
+						.input-icons .save,
+						.input-group input {
+							display: block;
+						}
+
+						.input-group span {
+							display: none;
+						}
+					}
+				}
+
+				&-loggedinas {
+					margin: 0.5rem 0;
+				}
+
+				&-password {
+					@include setFlex(row, flex-start, center);
+
+					margin-top: 1.3rem;
+					margin-bottom: 0.5rem;
+
+					.input-group {
+						label {
+							margin-right: 0.5rem;
+						}
+						input {
+							border: none;
+							outline: none;
+							max-width: 5rem;
+						}
+					}
+
+					&.editable {
+						.input-icons .edit {
+							display: none;
+							color: getColors(btn-status-working);
+						}
+						.input-icons .cancel {
+							display: block;
 						}
 					}
 				}
 			}
 
-			button {
-				margin-top: 2rem;
-				margin-bottom: 2rem;
-				padding: 0.3rem 1rem;
-				border-radius: 1rem;
-				border: none;
-				background: getColors(dark);
-				color: getColors(primary);
-				text-transform: uppercase;
-				font-weight: bold;
-				letter-spacing: 2px;
-				outline: none;
-				transition: 150ms linear;
-				@media (hover: hover) {
-					&:hover {
-						color: getColors(secondary-light);
+			&__change-password {
+				@include setFlex(column, flex-start, center);
+
+				position: relative;
+				width: 100%;
+				height: 100%;
+
+				.fa-spin {
+					font-size: 3rem;
+				}
+
+				&__current,
+				&__new {
+					display: grid;
+					grid-template-columns: 1fr 1fr;
+
+					label {
+						&.disabled {
+							opacity: 0.7;
+						}
+					}
+
+					input {
+						outline: none;
+						padding: 0.1rem 0.3rem;
+						border-radius: 0.2rem;
+						border: 2px solid;
+						border-color: getColors(border-dark);
+						margin: 0.2rem 0;
+
+						&:disabled {
+							opacity: 0.5;
+						}
+
+						&:focus,
+						&:valid {
+							border-color: getColors(btn-status-working);
+						}
+					}
+				}
+
+				button {
+					padding: 0.3rem 1rem;
+					border-radius: 1rem;
+					border: none;
+					background: getColors(dark);
+					color: getColors(primary);
+					font-weight: bold;
+					letter-spacing: 1px;
+					outline: none;
+					transition: 100ms linear;
+					margin: 1rem 0;
+
+					.active {
+						color: white;
+						background: getColors(btn-status-working);
+					}
+
+					&:disabled {
+						opacity: 0.7;
+					}
+					&:not(:disabled) {
+						@include responsiveHover {
+							color: white;
+							background: getColors(btn-status-working);
+						}
 					}
 				}
 			}

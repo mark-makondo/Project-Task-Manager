@@ -1,8 +1,4 @@
-import {
-	USER_FOUND,
-	USER_NOT_FOUND,
-	USER_LOADING,
-} from '../../constants/actionTypes/ActionTypes.js';
+import { USER_LOADING, USER_GET, USER_UPDATE, USER_ERROR } from '../../constants/actionTypes/ActionTypes.js';
 
 const UserReducer = (state, { payload, type }) => {
 	switch (type) {
@@ -12,29 +8,35 @@ const UserReducer = (state, { payload, type }) => {
 				user: {
 					...state.user,
 					isLoading: true,
-					isFound: false,
 					error: false,
 				},
 			};
 		}
-		case USER_FOUND: {
+		case USER_GET: {
 			return {
 				...state,
 				user: {
-					...state.user,
-					isFound: false,
+					isLoading: false,
 					data: payload,
 					error: false,
-					isLoading: false,
 				},
 			};
 		}
-		case USER_NOT_FOUND: {
+		case USER_UPDATE: {
+			return {
+				...state,
+				user: {
+					isLoading: false,
+					data: { ...state.user.data, ...payload },
+					error: false,
+				},
+			};
+		}
+		case USER_ERROR: {
 			return {
 				...state,
 				user: {
 					...state.user,
-					isFound: false,
 					error: payload,
 					isLoading: false,
 				},
