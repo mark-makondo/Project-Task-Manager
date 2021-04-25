@@ -1,0 +1,10 @@
+// responsive medium screen //900px
+@include media-md {
+	.login {
+		&-form {
+			&__left {
+				@include setFlex(row, center, center);
+			}
+		}
+	}
+}

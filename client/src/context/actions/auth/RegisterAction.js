@@ -11,7 +11,7 @@ export const RegisterAction = (input, history = null) => async (authDispatch) =>
 	try {
 		authDispatch({
 			type: REGISTER_LOADING,
-		}); // call dispatch to set loading to true
+		});
 
 		const res = await axiosInstance().post('/user/register', input);
 
@@ -30,11 +30,11 @@ export const RegisterAction = (input, history = null) => async (authDispatch) =>
 		authDispatch({
 			type: REGISTER_SUCCESS,
 			payload: res.data,
-		}); // call dispatch and store data to payload
+		});
 	} catch (err) {
 		authDispatch({
 			type: REGISTER_ERROR,
 			payload: err.response ? err.response.data : COULD_NOT_CONNECT,
-		}); // call dispatch and store error to payload
+		});
 	}
 };

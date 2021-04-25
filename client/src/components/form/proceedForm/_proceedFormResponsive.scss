@@ -1,0 +1,14 @@
+// responsive medium screen //900px
+@include media-md {
+	.proceed {
+		&-form {
+			&-card {
+				height: 50vh;
+
+				&__left {
+					@include setFlex(row, center, center);
+				}
+			}
+		}
+	}
+}

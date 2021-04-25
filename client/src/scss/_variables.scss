@@ -1,26 +1,25 @@
 // font size variables
 $font-size-s: (
-	'normal-1': 1.25rem,
+	// 28.8px
+	'stand-out': 1.5rem,
 	// 20px
-	'normal-2': 1rem,
+	'normal-1': 1.25rem,
 	// 16px
-	'normal-3': 0.875rem,
+	'normal-2': 1rem,
 	// 14px
-	'normal-4': 0.75rem,
+	'normal-3': 0.875rem,
 	// 12px
+	'normal-4': 0.75rem
 );
 
-// max width variables
-$max-width: (
-	's': 20rem,
-	'm': 40rem,
-	'l': 50rem,
-	'xl': 95rem,
+$font-size-l: (
+	'stand-out': 1.8rem,
 );
 
 // colors
 $colors: (
 	'primary': #2f2e41,
+	'primary-fade95': #2f2e41ed,
 	'primary-fade': #a1a1a1,
 	'primary-less-fade': #727272,
 	'secondary': #828282,
@@ -31,6 +30,8 @@ $colors: (
 	'selected': #cecece,
 	'fade-selected': #e5e5e5,
 	'border': #707070,
+	'border-fade': #5a5a5a,
+	'border-dark': #5d5d5d,
 	'btn-status-stuck': #ff0000,
 	'btn-status-working': #6c63ff,
 	'btn-status-working-faded': #b0abff,

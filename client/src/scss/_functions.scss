@@ -135,11 +135,17 @@
 @function getFontSize($type, $target) {
 	@if $type == s {
 		@return map-get($font-size-s, $target);
+	}
+	@if $type == l {
+		@return map-get($font-size-l, $target);
 	} @else {
 		@error "Invalid type #{type}.";
 	}
 }
 @mixin setFontSize($type) {
+	.stand-out {
+		font-size: getFontSize($type, stand-out) !important;
+	}
 	.normal-1 {
 		font-size: getFontSize($type, normal-1) !important;
 	}

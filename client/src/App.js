@@ -7,7 +7,6 @@ import DashboardContainer from './pages/dashboard/DashboardContainer.js';
 
 // components
 import ProceedFormContainer from './components/form/proceedForm/ProceedFormContainer.js';
-import RegisterFormContainer from './components/form/registerForm/RegisterFormContainer.js';
 
 // context
 import AppState from './context/AppState.js';
@@ -18,12 +17,7 @@ const App = () => {
 			<Router>
 				<div className='App'>
 					<Route exact path='/' component={HomeContainer} />
-					<Route exact path='/register' component={RegisterFormContainer} />
-					<Route
-						exact
-						path='/no-user-found/register'
-						component={ProceedFormContainer}
-					/>
+					<Route exact path='/no-user-found/register' component={ProceedFormContainer} />
 					<Route path='/:userid/dashboard' component={DashboardContainer} />
 				</div>
 			</Router>

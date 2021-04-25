@@ -19,7 +19,9 @@ const OverviewHeader = ({ projectCount, ownedProjects, showOwnedProjectsDropdown
 				</span>
 				<i className='show-list fas fa-caret-down dropdown-button'></i>
 
-				<OwnedProjectsDropdownContainer projects={ownedProjects} />
+				{ownedProjects && ownedProjects.length !== 0 && (
+					<OwnedProjectsDropdownContainer projects={ownedProjects} />
+				)}
 			</div>
 		</div>
 	);

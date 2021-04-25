@@ -21,12 +21,11 @@ ul {
 
 .home-background {
   position: absolute;
-  background-image: url(../../assets/none-svg/home/home-1280-medium.jpg);
+  background-image: url(../../assets/none-svg/home/home-bg-1280.jpg);
   background-color: #cccccc;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-blend-mode: difference;
   top: 0;
   left: 0;
   bottom: 0;
@@ -38,34 +37,182 @@ ul {
 .login-loading {
   margin: 1rem 0;
   font-size: 3rem;
-  color: white;
+  color: #6c63ff;
 }
 
 .login-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  background: #2f2e41ed;
+  border-radius: 1rem;
+  max-width: 50vw;
+  min-width: 25rem;
+  height: 65vh;
+  padding: 0.3rem;
+  overflow: hidden;
+}
+
+.login-form__left {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  display: none;
+  flex: 70%;
+  border-radius: 1rem;
+  background: #6c63ff;
+  width: 15rem;
+  height: 100%;
+}
+
+.login-form__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 2rem;
+}
+
+.login-form__right__header-title {
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.login-form__right__header-info {
+  color: #cecece;
+  font-weight: 600;
+}
+
+.login-form__right form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
   position: relative;
-  background: #82828290;
-  border-radius: 1rem;
-  max-width: 30rem;
-  width: 25rem;
-  height: auto;
-  margin: 1rem;
-  padding: 1.5rem 1rem;
+  width: 100%;
+  padding-top: 1.5rem;
 }
 
-.login-form__bg {
+.login-form__right form .grouped-input {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background: #2f2e41;
+  color: white;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-form__right form .grouped-input label {
   position: absolute;
-  max-width: 100%;
-  max-height: 100%;
-  bottom: 0;
-  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: 150ms all linear;
+  color: white;
 }
 
-.login-form .error {
+.login-form__right form .grouped-input input {
+  padding: 0 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 1.2rem;
+  outline: none;
+  background: #2f2e41;
+  border-style: solid;
+  border-color: #5d5d5d;
+  text-align: center;
+  width: 100%;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.login-form__right form .grouped-input input:focus, .login-form__right form .grouped-input input:valid, .login-form__right form .grouped-input input:-webkit-autofill, .login-form__right form .grouped-input input:-webkit-autofill:hover, .login-form__right form .grouped-input input:-webkit-autofill:focus, .login-form__right form .grouped-input input:-webkit-autofill:active {
+  border-color: #6c63ff;
+  color: white;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.login-form__right form .grouped-input input:focus ~ label, .login-form__right form .grouped-input input:valid ~ label, .login-form__right form .grouped-input input:-webkit-autofill ~ label, .login-form__right form .grouped-input input:-webkit-autofill:hover ~ label, .login-form__right form .grouped-input input:-webkit-autofill:focus ~ label, .login-form__right form .grouped-input input:-webkit-autofill:active ~ label {
+  width: 100%;
+  height: 30%;
+  left: 0.5rem;
+  top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #cecece;
+  opacity: 1;
+  justify-content: flex-start;
+}
+
+.login-form__right form button {
+  outline: none;
+  border: none;
+  background: #6c63ff;
+  padding: 0.2rem 0.3rem;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  width: 4rem;
+}
+
+@media (hover: hover) {
+  .login-form__right form button:hover {
+    opacity: 0.8;
+  }
+}
+
+.login-form__right__or {
+  display: flex;
+  font-weight: 600;
+  color: #5d5d5d;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.login-form__right .google-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  outline: none;
+  border: none;
+  background: #277eef;
+  padding: 0.2rem 0.3rem;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .login-form__right .google-button:hover {
+    opacity: 0.8;
+  }
+}
+
+.login-form__right .google-button figcaption {
+  font-size: 12px !important;
+}
+
+.login-form__right .google-button svg {
+  margin-right: 0.3rem;
+}
+
+.login-form__right .error {
   text-decoration: none;
   margin-bottom: 0.3rem;
   color: #ff0000;
@@ -77,146 +224,17 @@ ul {
   margin-top: 1rem;
 }
 
-.login-form .error span {
+.login-form__right .error span {
   color: white;
 }
 
-.login-form .google-button {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  align-content: center;
-  padding: 0.35rem 0.8rem;
-  border-radius: 0.4rem;
-  border: none;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 1px;
-  outline: none;
-  transition: 150ms linear;
-  z-index: 1;
-  cursor: pointer;
-  text-align: center;
-  background: #277eef;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-@media (hover: hover) {
-  .login-form .google-button:hover {
-    opacity: 0.8;
-  }
-}
-
-.login-form .google-button svg {
-  margin-right: 0.3rem;
-}
-
-.login-form form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  position: relative;
-  width: 90%;
-  border-top: 2px solid;
-  border-color: #2f2e41;
-  padding-top: 1.5rem;
-}
-
-.login-form form .grouped-input {
-  position: relative;
-  display: flex;
-  width: 100%;
-  background: #2f2e41;
-  color: white;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.login-form form .grouped-input label {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  font-weight: 600;
-  pointer-events: none;
-  transition: 150ms all linear;
-  color: #82828290;
-}
-
-.login-form form .grouped-input input {
-  padding: 0 1rem;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding-top: 1.2rem;
-  outline: none;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid;
-  text-align: center;
-  width: 100%;
-  border-color: #82828290;
-}
-
-.login-form form .grouped-input input:focus, .login-form form .grouped-input input:valid, .login-form form .grouped-input input:-webkit-autofill, .login-form form .grouped-input input:-webkit-autofill:hover, .login-form form .grouped-input input:-webkit-autofill:focus, .login-form form .grouped-input input:-webkit-autofill:active {
-  border-color: #82828290;
-  color: white;
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: #fff !important;
-}
-
-.login-form form .grouped-input input:focus ~ label, .login-form form .grouped-input input:valid ~ label, .login-form form .grouped-input input:-webkit-autofill ~ label, .login-form form .grouped-input input:-webkit-autofill:hover ~ label, .login-form form .grouped-input input:-webkit-autofill:focus ~ label, .login-form form .grouped-input input:-webkit-autofill:active ~ label {
-  width: 30%;
-  height: 30%;
-  left: 0.2rem;
-  top: 0.2rem;
-  margin-bottom: 1rem;
-  color: #828282;
-  opacity: 1;
-  justify-content: flex-start;
-}
-
-.login-form form button {
-  padding: 0.35rem 0.8rem;
-  border-radius: 0.4rem;
-  border: none;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 1px;
-  outline: none;
-  transition: 150ms linear;
-  z-index: 1;
-  cursor: pointer;
-  text-align: center;
-  background: #6c63ff;
-  text-transform: uppercase;
-  margin-top: 1rem;
-}
-
-@media (hover: hover) {
-  .login-form form button:hover {
-    opacity: 0.8;
-  }
-}
-
-.login-form__gotoreg {
-  margin-top: 1rem;
-  z-index: 1;
-  color: white;
-  font-weight: 600;
-  transition: 200ms all linear;
-  text-decoration: underline transparent;
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .login-form__gotoreg:hover {
-    text-decoration: underline;
+@media screen and (min-width: 56.25em) {
+  .login-form__left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
   }
 }
 
@@ -234,185 +252,148 @@ ul {
 .proceed-loading {
   margin: 1rem 0;
   font-size: 3rem;
-  color: white;
+  color: #6c63ff;
 }
 
 .proceed-form-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  position: relative;
-  background: #82828290;
-  border-radius: 1rem;
-  max-width: 30rem;
-  width: 25rem;
-  height: 20rem;
-  margin: 1rem;
-  padding: 1.5rem 1rem;
-}
-
-.proceed-form-card__bg {
-  position: absolute;
-  max-width: 100%;
-  max-height: 100%;
-  bottom: 0;
-}
-
-.proceed-form-card .error {
-  text-decoration: none;
-  margin-bottom: 0.3rem;
-  color: #ff0000;
-  font-weight: 600;
-  z-index: 1;
-  background-color: #2f2e41;
-  padding: 0.1rem 0.3rem;
-  border-radius: 0.2rem;
-  margin-top: 1rem;
-}
-
-.proceed-form-card .error span {
-  color: white;
-}
-
-.proceed-form-card form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  position: relative;
-  width: 90%;
-  border-color: #2f2e41;
-  padding-top: 1.5rem;
-}
-
-.proceed-form-card form .grouped-input {
-  position: relative;
-  display: flex;
-  width: 100%;
-  background: #2f2e41;
-  color: white;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.proceed-form-card form .grouped-input label {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  font-weight: 600;
-  pointer-events: none;
-  transition: 150ms all linear;
-  color: #82828290;
-}
-
-.proceed-form-card form .grouped-input input {
-  padding: 0 1rem;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding-top: 1.2rem;
-  outline: none;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid;
-  text-align: center;
-  width: 100%;
-  border-color: #82828290;
-}
-
-.proceed-form-card form .grouped-input input:focus, .proceed-form-card form .grouped-input input:valid, .proceed-form-card form .grouped-input input:-webkit-autofill, .proceed-form-card form .grouped-input input:-webkit-autofill:hover, .proceed-form-card form .grouped-input input:-webkit-autofill:focus, .proceed-form-card form .grouped-input input:-webkit-autofill:active {
-  border-color: #82828290;
-  color: white;
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: #fff !important;
-}
-
-.proceed-form-card form .grouped-input input:focus ~ label, .proceed-form-card form .grouped-input input:valid ~ label, .proceed-form-card form .grouped-input input:-webkit-autofill ~ label, .proceed-form-card form .grouped-input input:-webkit-autofill:hover ~ label, .proceed-form-card form .grouped-input input:-webkit-autofill:focus ~ label, .proceed-form-card form .grouped-input input:-webkit-autofill:active ~ label {
-  width: 100%;
-  height: 30%;
-  left: 0.2rem;
-  top: 0.2rem;
-  margin-bottom: 1rem;
-  color: #828282;
-  opacity: 1;
-  justify-content: flex-start;
-}
-
-.proceed-form-card form button {
-  padding: 0.35rem 0.8rem;
-  border-radius: 0.4rem;
-  border: none;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 1px;
-  outline: none;
-  transition: 150ms linear;
-  z-index: 1;
-  cursor: pointer;
-  text-align: center;
-  background: #6c63ff;
-  text-transform: uppercase;
-  margin-top: 1rem;
-}
-
-@media (hover: hover) {
-  .proceed-form-card form button:hover {
-    opacity: 0.8;
-  }
-}
-
-.register {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   align-content: center;
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  background: #2f2e41ed;
+  border-radius: 1rem;
+  max-width: 50vw;
+  min-width: 35vw;
+  max-height: 65vh;
+  padding: 0.3rem;
+  overflow: hidden;
 }
 
-.register-loading {
-  margin: 1rem 0;
-  font-size: 3rem;
+.proceed-form-card__left {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  display: none;
+  flex: 50%;
+  border-radius: 1rem;
+  background: #6c63ff;
+  width: 15rem;
+  height: 100%;
+  padding: 2rem;
+}
+
+.proceed-form-card__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex: 50%;
+  padding: 2rem;
+}
+
+.proceed-form-card__right__header {
+  width: 100%;
+}
+
+.proceed-form-card__right__header-title {
   color: white;
+  margin-bottom: 0.5rem;
 }
 
-.register-form-card {
+.proceed-form-card__right__header-info {
+  color: #cecece;
+  font-weight: 600;
+}
+
+.proceed-form-card__right form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
   position: relative;
-  background: #82828290;
-  border-radius: 1rem;
-  max-width: 30rem;
-  width: 25rem;
-  height: auto;
-  margin: 1rem;
-  padding: 1.5rem 1rem;
+  width: 100%;
+  padding-top: 1.5rem;
 }
 
-.register-form-card__bg {
+.proceed-form-card__right form .grouped-input {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background: #2f2e41;
+  color: white;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.proceed-form-card__right form .grouped-input label {
   position: absolute;
-  max-width: 100%;
-  max-height: 100%;
-  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: 150ms all linear;
+  color: white;
 }
 
-.register-form-card .fa-spin {
-  margin: 1rem 0;
-  font-size: 2rem;
-  color: #2f2e41;
+.proceed-form-card__right form .grouped-input input {
+  padding: 0 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 1.2rem;
+  outline: none;
+  background: #2f2e41;
+  border-style: solid;
+  border-color: #5d5d5d;
+  text-align: center;
+  width: 100%;
+  border-radius: 0.5rem;
+  color: white;
 }
 
-.register-form-card .error {
+.proceed-form-card__right form .grouped-input input:focus, .proceed-form-card__right form .grouped-input input:valid, .proceed-form-card__right form .grouped-input input:-webkit-autofill, .proceed-form-card__right form .grouped-input input:-webkit-autofill:hover, .proceed-form-card__right form .grouped-input input:-webkit-autofill:focus, .proceed-form-card__right form .grouped-input input:-webkit-autofill:active {
+  border-color: #6c63ff;
+  color: white;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.proceed-form-card__right form .grouped-input input:focus ~ label, .proceed-form-card__right form .grouped-input input:valid ~ label, .proceed-form-card__right form .grouped-input input:-webkit-autofill ~ label, .proceed-form-card__right form .grouped-input input:-webkit-autofill:hover ~ label, .proceed-form-card__right form .grouped-input input:-webkit-autofill:focus ~ label, .proceed-form-card__right form .grouped-input input:-webkit-autofill:active ~ label {
+  width: 100%;
+  height: 30%;
+  left: 0.5rem;
+  top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #cecece;
+  opacity: 1;
+  justify-content: flex-start;
+}
+
+.proceed-form-card__right form button {
+  outline: none;
+  border: none;
+  background: #6c63ff;
+  padding: 0.2rem 0.3rem;
+  border-radius: 1rem;
+  color: white;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  width: 5rem;
+}
+
+@media (hover: hover) {
+  .proceed-form-card__right form button:hover {
+    opacity: 0.8;
+  }
+}
+
+.proceed-form-card__right .error {
   text-decoration: none;
   margin-bottom: 0.3rem;
   color: #ff0000;
@@ -424,113 +405,20 @@ ul {
   margin-top: 1rem;
 }
 
-.register-form-card .error span {
-  color: white;
+.proceed-form-card__right .error span {
+  color: #2f2e41;
 }
 
-.register-form-card form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  position: relative;
-  width: 90%;
-  border-color: #2f2e41;
-  padding-top: 1.5rem;
-}
-
-.register-form-card form .grouped-input {
-  position: relative;
-  display: flex;
-  width: 100%;
-  background: #2f2e41;
-  color: white;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.register-form-card form .grouped-input label {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  font-weight: 600;
-  pointer-events: none;
-  transition: 150ms all linear;
-  color: #82828290;
-}
-
-.register-form-card form .grouped-input input {
-  padding: 0 1rem;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding-top: 1.2rem;
-  outline: none;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid;
-  text-align: center;
-  width: 100%;
-  border-color: #82828290;
-}
-
-.register-form-card form .grouped-input input:focus, .register-form-card form .grouped-input input:valid, .register-form-card form .grouped-input input:-webkit-autofill, .register-form-card form .grouped-input input:-webkit-autofill:hover, .register-form-card form .grouped-input input:-webkit-autofill:focus, .register-form-card form .grouped-input input:-webkit-autofill:active {
-  border-color: #82828290;
-  color: white;
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: #fff !important;
-}
-
-.register-form-card form .grouped-input input:focus ~ label, .register-form-card form .grouped-input input:valid ~ label, .register-form-card form .grouped-input input:-webkit-autofill ~ label, .register-form-card form .grouped-input input:-webkit-autofill:hover ~ label, .register-form-card form .grouped-input input:-webkit-autofill:focus ~ label, .register-form-card form .grouped-input input:-webkit-autofill:active ~ label {
-  width: 100%;
-  height: 30%;
-  left: 0.2rem;
-  top: 0.2rem;
-  margin-bottom: 1rem;
-  color: #828282;
-  opacity: 1;
-  justify-content: flex-start;
-}
-
-.register-form-card form button {
-  padding: 0.35rem 0.8rem;
-  border-radius: 0.4rem;
-  border: none;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 1px;
-  outline: none;
-  transition: 150ms linear;
-  z-index: 1;
-  cursor: pointer;
-  text-align: center;
-  background: #6c63ff;
-  text-transform: uppercase;
-  margin-top: 1rem;
-}
-
-@media (hover: hover) {
-  .register-form-card form button:hover {
-    opacity: 0.8;
+@media screen and (min-width: 56.25em) {
+  .proceed-form-card {
+    height: 50vh;
   }
-}
-
-.register-form-card__gotologin {
-  margin-top: 1rem;
-  z-index: 1;
-  color: white;
-  font-weight: 600;
-  transition: 200ms all linear;
-  text-decoration: underline transparent;
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .register-form-card__gotologin:hover {
-    text-decoration: underline;
+  .proceed-form-card__left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
   }
 }
 
@@ -4022,6 +3910,10 @@ ul {
   height: 40vh;
 }
 
+.stand-out {
+  font-size: 1.5rem !important;
+}
+
 .normal-1 {
   font-size: 1.25rem !important;
 }
@@ -4036,5 +3928,41 @@ ul {
 
 .normal-4 {
   font-size: 0.75rem !important;
+}
+
+@media screen and (min-width: 56.25em) {
+  .stand-out {
+    font-size: 1.5rem !important;
+  }
+  .normal-1 {
+    font-size: 1.25rem !important;
+  }
+  .normal-2 {
+    font-size: 1rem !important;
+  }
+  .normal-3 {
+    font-size: 0.875rem !important;
+  }
+  .normal-4 {
+    font-size: 0.75rem !important;
+  }
+}
+
+@media screen and (min-width: 75em) {
+  .stand-out {
+    font-size: 1.8rem !important;
+  }
+  .normal-1 {
+    font-size: !important;
+  }
+  .normal-2 {
+    font-size: !important;
+  }
+  .normal-3 {
+    font-size: !important;
+  }
+  .normal-4 {
+    font-size: !important;
+  }
 }
 /*# sourceMappingURL=style.css.map */

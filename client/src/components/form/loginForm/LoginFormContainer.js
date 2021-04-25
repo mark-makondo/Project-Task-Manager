@@ -39,9 +39,6 @@ const LoginFormContainer = () => {
 
 	const handleGoogleLogin = (response) => {
 		if (!response.error) {
-			// just to check if an error occured, i will not handle it since i like it when
-			// it shows the failed google login error on the back end
-
 			LoginAction({ response, path: 'google-proceed' })(authDispatch);
 		}
 	};

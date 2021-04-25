@@ -30,6 +30,7 @@ const ProceedFormContainer = () => {
 
 		RegisterAction(input)(authDispatch);
 	};
+
 	const inputChangeHandler = (e) => {
 		setInput({
 			...input,

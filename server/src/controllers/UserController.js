@@ -70,6 +70,7 @@ exports.register = async (req, res, next) => {
 		// conditional check if the request is comming from google-proceed or normal register.
 		let isGoogleProceed = req.body.path === 'google-proceed';
 		let tempAvatar;
+
 		if (isGoogleProceed) {
 			tempAvatar = req.body.avatar;
 		} else {
