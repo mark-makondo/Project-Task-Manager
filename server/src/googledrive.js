@@ -28,7 +28,7 @@ class GoogleDrive {
 			await token.authorize();
 
 			this.auth = token;
-			// console.log('User permission granted.');
+			// console.log('User permission granted.', token);
 			return true;
 		} catch (error) {
 			console.error(error.message);
@@ -40,12 +40,13 @@ class GoogleDrive {
 	 * @param {String?} targetFolderId optional if we want to be specific.
 	 * @param {String?} trashed include the trashed items if true.
 	 */
-	async listFiles(targetFolderId = null, trashed = false) {
+	async listFiles(folderOnly = false, targetFolderId = null, trashed = false) {
 		try {
 			let q = null;
 
 			if (targetFolderId) q = "'" + targetFolderId + "' in parents and trashed=false";
 			if (!trashed) q = 'trashed=false';
+			if (folderOnly) q = "mimeType = 'application/vnd.google-apps.folder'";
 
 			let response = await this.drive.files.list({
 				auth: this.auth,
@@ -320,12 +321,13 @@ class GoogleDrive {
 
 			for await (let file of lists) {
 				let res = await this.verifyCapabilitiesOrPermission(file.id, 'capabilities');
+
 				if (res.capabilities.canDelete === true) {
 					await this.deleteResource(file.id);
 					console.log('deleting', file.id);
 				}
-				console.log('creating url for files tht cant be deleted.');
-				await this.generatePublicUrl(file.id);
+				// console.log('creating url for files tht cant be deleted.');
+				// await this.generatePublicUrl(file.id);
 			}
 			console.log('done, showing lists');
 			console.log(lists);
@@ -469,10 +471,13 @@ class GoogleDrive {
 			let createFolder = await this.createFolder(folderName);
 			let targetFolderId = createFolder.result.id;
 
-			let list = await this.listFiles();
+			let list = await this.listFiles(true);
 
 			// check if the 'root' folder that was created already exists.
 			for await (let file of list) {
+				// console.log(file.name);
+				// console.log(file.name === parentFolderName);
+
 				if (file.name === parentFolderName) {
 					let parentFolderId = file.id;
 
@@ -561,28 +566,38 @@ module.exports = GoogleDrive;
  * for google drive development only! remove when finished developing.
  */
 const googleDriveTesting = async () => {
-	// test
-	let google = new GoogleDrive();
-	await google.init();
+	try {
+		// test
+		let google = new GoogleDrive();
+		await google.init();
 
-	// let id = '1eCDgz_GrUGOr3qybZYTrurTt0SpPkJvS';
-	// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
-	// let folderName = 'testing';
+		// let test = await google.drive.files.get({
+		// 	auth: google.auth,
+		// 	fileId: '1zBEbdANZUAwkkxWzbM9ilMknYy_JDcYC',
+		// 	supportsAllDrives: true,
+		// });
 
-	// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
-	// await google.createPermission;
+		let id = '1uHVQTMm6WaGiSFuqd1vm_304_XFwfp5m';
+		// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
+		// let folderName = 'testing';
 
-	// let link = await google.generatePublicUrl(id);
+		// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
+		// await google.createPermission;
 
-	// await google.deleteResource(id);
+		// let link = await google.generatePublicUrl(id);
 
-	// let get = await google.verifyCapabilitiesOrPermission(id, 'capabilities');
+		// let res = await google.deleteResource(id);
 
-	// let lists = await google.listFiles();
+		// let get = await google.verifyCapabilitiesOrPermission(id, 'capabilities');
 
-	await google.findAllAndDelete();
+		// let lists = await google.listFiles();
 
-	// console.log(link);
+		// await google.findAllAndDelete();
+
+		// console.log(lists);
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 // googleDriveTesting();

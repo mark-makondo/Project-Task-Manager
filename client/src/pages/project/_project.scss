@@ -9,10 +9,6 @@
 	height: 100%;
 	overflow-x: auto;
 
-	&-loading {
-		@include customLoading(getColors(btn-status-working));
-	}
-
 	&-container {
 		@include setFlex(column, center, center);
 

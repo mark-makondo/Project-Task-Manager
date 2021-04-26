@@ -5,7 +5,7 @@ import { ToggleArrow } from '../../../../helper/helperFunctions.js';
 
 const TaskUploadedFilesHolder = ({ toggleCollation, clicked, indexName, lists }) => {
 	return (
-		<section className={`uploaded-files-modal-body__tasks-${indexName}`}>
+		<section className={`uploaded-files-modal-body__tasks`}>
 			<div onClick={() => toggleCollation(indexName)} className='file-upload-info'>
 				<span>
 					<strong>{indexName}</strong>

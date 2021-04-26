@@ -4,6 +4,13 @@
 	margin: auto 0;
 	height: 100%;
 
+	.project-loading {
+		@include customLoading(getColors(btn-status-working));
+
+		display: flex;
+		margin: auto;
+	}
+
 	.avatar-global {
 		letter-spacing: 0.15rem;
 		border-radius: 50%;

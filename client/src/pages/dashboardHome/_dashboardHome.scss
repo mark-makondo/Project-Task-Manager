@@ -1,0 +1,24 @@
+.dashboard-home {
+	@include setFlex(column, center, center);
+
+	position: relative;
+	padding: 0 2rem;
+	padding-top: 1rem;
+	padding-bottom: 0;
+	width: 100%;
+	flex: 1;
+	overflow: auto;
+
+	&-wrapper {
+		max-width: 80%;
+		&__header {
+			h1 {
+				margin-bottom: 0.2rem;
+				span {
+					text-transform: capitalize;
+				}
+			}
+		}
+	}
+}
+@import './dashboardHomeResponsive';

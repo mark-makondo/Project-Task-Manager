@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading }) => {
+const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading, input }) => {
 	return (
 		<div className='dropdown-content-new-project'>
 			<form onSubmit={(e) => formSubmitHandler(e)}>
@@ -19,6 +19,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 						onChange={(e) => inputOnChangeHandler(e)}
 						type='text'
 						name='projectName'
+						value={input.projectName}
 					/>
 				</div>
 				<div className='input-group'>
@@ -36,6 +37,7 @@ const NewProject = ({ formSubmitHandler, inputOnChangeHandler, error, isLoading 
 						onChange={(e) => inputOnChangeHandler(e)}
 						type='email'
 						name='companyEmail'
+						value={input.companyEmail}
 					/>
 				</div>
 

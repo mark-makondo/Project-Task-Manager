@@ -100,11 +100,12 @@ const TableProjectContainer = () => {
 			let { type, data, emails, pid } = content;
 
 			emails &&
+				emails.length !== 0 &&
 				emails.forEach((email) => {
 					if (email === currentUserEmail && paramsPid === pid) {
-						if (type === 'create') TaskActionCreate(data)(projectTaskDispatch);
-						if (type === 'remove') TaskActionRemove(data)(projectTaskDispatch);
-						if (type === 'taskUpdate') TaskActionUpdate(data)(projectTaskDispatch);
+						type === 'create' && TaskActionCreate(data)(projectTaskDispatch);
+						type === 'remove' && TaskActionRemove(data)(projectTaskDispatch);
+						type === 'taskUpdate' && TaskActionUpdate(data)(projectTaskDispatch);
 					}
 					return;
 				});
@@ -153,6 +154,10 @@ const TableProjectContainer = () => {
 		};
 
 		socket.emit('row_send_update', formatToSend);
+
+		setInput({
+			taskName: '',
+		});
 	};
 
 	const inputOnChangeHandler = (e) => {
@@ -382,30 +387,27 @@ const TableProjectContainer = () => {
 
 	return (
 		<>
-			{!isLoading ? (
-				<TableProject
-					data={data}
-					submitHandler={submitHandler}
-					inputOnChangeHandler={inputOnChangeHandler}
-					input={input}
-					taskDeleteClickHandler={taskDeleteClickHandler}
-					taskEditClickHandler={taskEditClickHandler}
-					taskSaveClickHandler={taskSaveClickHandler}
-					taskNameEditOnChange={taskNameEditOnChange}
-					showStatusDropdown={showStatusDropdown}
-					selectedStatusClickHandler={selectedStatusClickHandler}
-					dateSelectHandler={dateSelectHandler}
-					showEllipsisDropdown={showEllipsisDropdown}
-					showMessageSidebar={showMessageSidebar}
-					showAddMembersDropdown={showAddMembersDropdown}
-					showPersonsDropdown={showPersonsDropdown}
-					selectedPersonClickHandler={selectedPersonClickHandler}
-					projectTaskData={projectTaskData}
-					projectMembers={projectMembers}
-				/>
-			) : (
-				<i className='project-loading fas fa-spinner fa-spin'></i>
-			)}
+			<TableProject
+				isLoading={isLoading}
+				data={data}
+				submitHandler={submitHandler}
+				inputOnChangeHandler={inputOnChangeHandler}
+				input={input}
+				taskDeleteClickHandler={taskDeleteClickHandler}
+				taskEditClickHandler={taskEditClickHandler}
+				taskSaveClickHandler={taskSaveClickHandler}
+				taskNameEditOnChange={taskNameEditOnChange}
+				showStatusDropdown={showStatusDropdown}
+				selectedStatusClickHandler={selectedStatusClickHandler}
+				dateSelectHandler={dateSelectHandler}
+				showEllipsisDropdown={showEllipsisDropdown}
+				showMessageSidebar={showMessageSidebar}
+				showAddMembersDropdown={showAddMembersDropdown}
+				showPersonsDropdown={showPersonsDropdown}
+				selectedPersonClickHandler={selectedPersonClickHandler}
+				projectTaskData={projectTaskData}
+				projectMembers={projectMembers}
+			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}
 				setIsActive={setConfirmTaskDeleteDialogueOpen}

@@ -20,12 +20,12 @@ exports.create = async (req, res, next) => {
 		let projectName = req.body.projectName;
 		if (!projectName) return res.status(400).send('Project name is required.');
 
-		let project = new Project({
+		let project = await new Project({
 			projectName: projectName,
 			companyEmail: req.body.companyEmail,
 			owner: user._id,
 			projectFolderId: '',
-		});
+		}).execPopulate({ path: 'owner', select: 'name email avatar' });
 
 		let savedProject = await project.save();
 
@@ -71,9 +71,6 @@ exports.findAllUserProjects = async (req, res, next) => {
 	}
 };
 
-/**
- * Get one project data from our projects collection.
- */
 exports.findOne = async (req, res, next) => {
 	try {
 		let user = req.user;
@@ -85,7 +82,7 @@ exports.findOne = async (req, res, next) => {
 		if (!findProject) return res.status(400).send('Project not found.');
 
 		let project = await findProject
-			.populate('owner')
+			.populate({ path: 'owner', select: 'name email avatar' })
 			.populate('members._id')
 			.populate({
 				path: 'tasks.assigned',
@@ -111,18 +108,23 @@ exports.deleteProject = async (req, res, next) => {
 		if (!project) return res.status(400).send('Project removal failed.');
 
 		let membersId = project.members.map((id) => id._id);
-		let ownerId = project.owner;
 
 		// get all the matching id using $in and pull out the project from the users collection.
-		await User.updateMany(
-			{ _id: { $in: [...membersId, ownerId] } },
-			{ $pull: { projects: project._id } },
-			{
-				multi: true,
-			}
-		);
+		if (membersId.length !== 0) {
+			await User.updateMany(
+				{ _id: { $in: [...membersId, project.owner._id] } },
+				{ $pull: { projects: pid } },
+				{
+					multi: true,
+					new: true,
+				}
+			);
+			return res.sendStatus(200);
+		}
 
-		res.status(200).send({ message: 'Project and associated refs removed successfuly.' });
+		await User.updateOne({ _id: project.owner._id }, { $pull: { projects: pid } });
+
+		res.sendStatus(200);
 
 		return next();
 	} catch (error) {

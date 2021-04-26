@@ -1203,6 +1203,13 @@ ul {
   height: 100%;
 }
 
+.table-project .project-loading {
+  color: #6c63ff;
+  font-size: x-large;
+  display: flex;
+  margin: auto;
+}
+
 .table-project .avatar-global {
   letter-spacing: 0.15rem;
   border-radius: 50%;
@@ -3378,6 +3385,7 @@ ul {
   text-align: center;
   margin-top: 0.3rem;
   text-transform: none;
+  color: #2f2e41;
 }
 
 .dropdown-content-table-settings {
@@ -3865,6 +3873,17 @@ ul {
   }
 }
 
+.home {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
 .dashboard {
   position: relative;
   display: flex;
@@ -3880,15 +3899,31 @@ ul {
   overflow: hidden;
 }
 
-.home {
+.dashboard-home {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  padding: 0 2rem;
+  padding-top: 1rem;
+  padding-bottom: 0;
+  width: 100%;
+  flex: 1;
+  overflow: auto;
+}
+
+.dashboard-home-wrapper {
+  max-width: 80%;
+}
+
+.dashboard-home-wrapper__header h1 {
+  margin-bottom: 0.2rem;
+}
+
+.dashboard-home-wrapper__header h1 span {
+  text-transform: capitalize;
 }
 
 .overview {
@@ -4115,11 +4150,6 @@ ul {
   padding: 0 2rem;
   height: 100%;
   overflow-x: auto;
-}
-
-.project-loading {
-  color: #6c63ff;
-  font-size: x-large;
 }
 
 .project-container {

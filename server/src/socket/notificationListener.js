@@ -16,7 +16,7 @@ const notificationListener = (socket, io) => {
 			await addNotification(content, io);
 			await updateMember(content, sendStatus);
 		} else if (content.notifType === 'deleteProject') {
-			await batchAddNotification(content, io);
+			if (content.emailToNotif.length !== 0) await batchAddNotification(content, io);
 		} else {
 			await addNotification(content, io);
 		}
@@ -52,7 +52,7 @@ const batchAddNotification = async (content, io) => {
 			{
 				$push: { notifications: formatToPush },
 			},
-			{ upsert: true }
+			{ multi: true, new: true }
 		);
 
 		io.emit('rcv_notif', { emailToNotif, result: formatToPush, originalData: content });

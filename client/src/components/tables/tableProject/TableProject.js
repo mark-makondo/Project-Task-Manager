@@ -7,9 +7,11 @@ import TableRow from './parts/TableRow.js';
 import TableRowAdder from './parts/TableRowAdder.js';
 
 const TableProject = ({
+	isLoading,
 	data,
 	submitHandler,
 	inputOnChangeHandler,
+	input,
 	taskDeleteClickHandler,
 	taskEditClickHandler,
 	taskSaveClickHandler,
@@ -38,7 +40,8 @@ const TableProject = ({
 					/>
 					<TableHeader />
 					<div className='table-project__content normal-2'>
-						{projectTaskData &&
+						{!isLoading ? (
+							projectTaskData &&
 							projectTaskData.data?.length !== 0 &&
 							projectTaskData.data?.map((task) => (
 								<TableRow
@@ -58,10 +61,17 @@ const TableProject = ({
 									selectedPersonClickHandler={selectedPersonClickHandler}
 									projectMembers={projectMembers}
 								/>
-							))}
+							))
+						) : (
+							<i className='project-loading fas fa-spinner fa-spin'></i>
+						)}
 					</div>
 					{data.user._id === data.project.owner._id && (
-						<TableRowAdder submitHandler={submitHandler} inputOnChangeHandler={inputOnChangeHandler} />
+						<TableRowAdder
+							submitHandler={submitHandler}
+							inputOnChangeHandler={inputOnChangeHandler}
+							input={input}
+						/>
 					)}
 				</>
 			) : null}

@@ -43,6 +43,8 @@ export const CreateProjectAction = (input) => async (projectDispatch) => {
 
 		let project = await axiosInstance().post('/project/create', input);
 
+		console.log(project.data);
+
 		if (project.data) {
 			let createProjectContent = Query.dropdownCreateProjectButton();
 			let createProjectButton = Query.dropdownCreateProjectContent();

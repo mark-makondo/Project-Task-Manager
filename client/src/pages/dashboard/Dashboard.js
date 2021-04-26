@@ -6,6 +6,7 @@ import NavbarContainer from '../../components/navbar/NavbarContainer.js';
 import SidebarContainer from '../../components/sidebar/SidebarContainer.js';
 
 // pages
+import DashboardHomeContainer from '../../pages/dashboardHome/DashboardHomeContainer.js';
 import OverviewContainer from '../../pages/overview/OverviewContainer.js';
 import ProjectContainer from '../../pages/project/ProjectContainer.js';
 
@@ -22,6 +23,11 @@ const Dashboard = () => {
 				<div className='dashboard-content'>
 					<SidebarContainer />
 					<Switch>
+						<Route
+							exact
+							path={`${match.url}/`}
+							component={(props) => <DashboardHomeContainer {...props} key={match.path} />}
+						/>
 						<Route
 							exact
 							path={`${match.url}/project-overview`}

@@ -24,6 +24,11 @@ const NewProjectContainer = () => {
 		e.preventDefault();
 
 		CreateProjectAction(input)(projectDispatch);
+
+		setInput({
+			projectName: '',
+			companyEmail: '',
+		});
 	};
 
 	const inputOnChangeHandler = (e) => {
@@ -39,6 +44,7 @@ const NewProjectContainer = () => {
 			isLoading={isLoading}
 			formSubmitHandler={formSubmitHandler}
 			inputOnChangeHandler={inputOnChangeHandler}
+			input={input}
 		/>
 	);
 };
