@@ -13,6 +13,7 @@ import { dropdownHandler } from '../../../helper/helperFunctions.js';
 // context
 import Context from '../../../context/Context.js';
 import { SocketContext } from '../../../context/SocketContext.js';
+import { ProjectMembersGetAction } from '../../../context/actions/project/ProjectMembersAction';
 import { TaskMessageGetAction } from '../../../context/actions/project/TaskMessageAction.js';
 import {
 	TaskActionCreate,
@@ -27,7 +28,6 @@ import ChatSidebarContainer from '../../chatSidebar/ChatSidebarContainer.js';
 const TableProjectContainer = () => {
 	const [projectTaskData, setProjectTaskData] = useState([]);
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
-	const [projectMembers, setProjectMembers] = useState([]);
 	const [taskID, setTaskID] = useState();
 	const [input, setInput] = useState({
 		_pid: '',
@@ -43,6 +43,7 @@ const TableProjectContainer = () => {
 		getOneProjectState: {
 			getOneProject: { data, isLoading },
 		},
+		projectMembersDispatch,
 		taskMessageDispatch,
 		projectTaskState: { projectTasks },
 		projectTaskDispatch,
@@ -94,27 +95,33 @@ const TableProjectContainer = () => {
 
 	useEffect(() => {
 		let currentUserEmail = data?.user.email;
+		let projectOwnerEmail = data?.project.owner.email;
 		let paramsPid = params.pid;
 
 		socket.on('row_receive_update', (content) => {
 			let { type, data, emails, pid } = content;
 
-			emails &&
-				emails.length !== 0 &&
-				emails.forEach((email) => {
+			if (emails && emails.length !== 0) {
+				let emailsWithOwner = [...emails, projectOwnerEmail];
+
+				emailsWithOwner.forEach((email) => {
 					if (email === currentUserEmail && paramsPid === pid) {
-						type === 'create' && TaskActionCreate(data)(projectTaskDispatch);
-						type === 'remove' && TaskActionRemove(data)(projectTaskDispatch);
+						if (email !== projectOwnerEmail) {
+							type === 'create' && TaskActionCreate(data)(projectTaskDispatch);
+							type === 'remove' && TaskActionRemove(data)(projectTaskDispatch);
+						}
+
 						type === 'taskUpdate' && TaskActionUpdate(data)(projectTaskDispatch);
 					}
 					return;
 				});
+			}
 		});
 
 		return () => {
 			socket.off('row_receive_update');
 		};
-	}, [socket, projectTaskDispatch, data?.user.email, params.pid]);
+	}, [socket, projectTaskDispatch, data?.user.email, params.pid, data?.project.owner.email]);
 
 	//#endregion
 
@@ -323,6 +330,9 @@ const TableProjectContainer = () => {
 	//#region task person
 	const showPersonsDropdown = (e) => {
 		let tid = e.currentTarget.dataset.tid;
+		let pid = data?.project._id;
+
+		ProjectMembersGetAction(pid)(projectMembersDispatch);
 
 		let dropdownContentQuery = document.querySelector(
 			`.table-project__content-tr__avatar--${tid} .dropdown-content-select`
@@ -370,19 +380,6 @@ const TableProjectContainer = () => {
 		await updaterFunction(updateData);
 	};
 
-	useEffect(() => {
-		let projectOwner = data?.project.owner;
-		let projectOwnerCreatedAt = data?.project.owner.createdAt;
-		let projectOriginalMembers = data?.project.members;
-
-		let memberFormat = {
-			_id: projectOwner,
-			isAccepted: true,
-			joinedDate: Moment(projectOwnerCreatedAt).format('ddd MMM D yy'),
-		};
-		projectOwner && setProjectMembers(projectOriginalMembers.concat(memberFormat));
-	}, [data?.project.owner, data?.project.members]);
-
 	//#endregion
 
 	return (
@@ -392,7 +389,6 @@ const TableProjectContainer = () => {
 				data={data}
 				submitHandler={submitHandler}
 				inputOnChangeHandler={inputOnChangeHandler}
-				input={input}
 				taskDeleteClickHandler={taskDeleteClickHandler}
 				taskEditClickHandler={taskEditClickHandler}
 				taskSaveClickHandler={taskSaveClickHandler}
@@ -406,7 +402,6 @@ const TableProjectContainer = () => {
 				showPersonsDropdown={showPersonsDropdown}
 				selectedPersonClickHandler={selectedPersonClickHandler}
 				projectTaskData={projectTaskData}
-				projectMembers={projectMembers}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}

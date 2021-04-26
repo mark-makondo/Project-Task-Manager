@@ -3941,11 +3941,6 @@ ul {
   overflow: auto;
 }
 
-.overview-loading {
-  color: #6c63ff;
-  font-size: x-large;
-}
-
 .overview-container {
   display: flex;
   flex-direction: column;

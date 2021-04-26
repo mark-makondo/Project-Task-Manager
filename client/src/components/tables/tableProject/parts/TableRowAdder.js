@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TableRowAdder = ({ inputOnChangeHandler, submitHandler, input }) => {
+const TableRowAdder = ({ inputOnChangeHandler, submitHandler }) => {
 	return (
 		<div className='table-project__content-tr-adder'>
 			<div className='indicator'></div>
@@ -11,7 +11,6 @@ const TableRowAdder = ({ inputOnChangeHandler, submitHandler, input }) => {
 					className='normal-2'
 					placeholder='+ Add new row'
 					name='taskName'
-					value={input.taskName}
 				></input>
 				<button type='submit'>Add</button>
 			</form>

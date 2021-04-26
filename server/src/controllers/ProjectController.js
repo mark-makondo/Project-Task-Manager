@@ -337,13 +337,18 @@ exports.getTasks = async (req, res, next) => {
 		let pid = req.params.pid;
 
 		let project = await Project.findById(pid);
-		let projectTasks = await project.execPopulate({
-			path: 'tasks.assigned',
-			select: 'name email avatar',
-			model: User,
-		});
+		if (!project) res.status(400).send('Project not found.');
 
-		res.status(200).send(projectTasks.tasks);
+		if (project.tasks.length !== 0) {
+			let projectTasks = await project.execPopulate({
+				path: 'tasks.assigned',
+				select: 'name email avatar',
+				model: User,
+			});
+			return res.status(200).send(projectTasks.tasks);
+		}
+
+		res.status(200).send(project.tasks);
 
 		return next();
 	} catch (error) {

@@ -9,10 +9,6 @@
 	flex: 1;
 	overflow: auto;
 
-	&-loading {
-		@include customLoading(getColors(btn-status-working));
-	}
-
 	&-container {
 		@include setFlex(column, flex-start, center);
 

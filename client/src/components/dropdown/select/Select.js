@@ -1,4 +1,5 @@
 import React from 'react';
+import Moment from 'moment';
 
 // helper functions
 import { getStringInitials } from '../../../helper/helperFunctions.js';
@@ -22,11 +23,28 @@ const StatusSelect = ({ data, itemClickHandler }) => {
 	);
 };
 
-const PersonSelect = ({ data, itemClickHandler, tid }) => {
+const PersonSelect = ({ data, members, itemClickHandler, tid }) => {
+	let projectOwner = data?.project.owner;
+	let projectOwnerCreatedAt = data?.project.owner.createdAt;
+
+	let ownerData = {
+		_id: projectOwner,
+		isAccepted: true,
+		joinedDate: Moment(projectOwnerCreatedAt).format('ddd MMM D yy'),
+	};
+
+	let membersWithOwner = [...members, ownerData];
+
+	let filteredMembers =
+		members &&
+		membersWithOwner.filter((member) => {
+			return member.joinedDate !== 'pending';
+		});
+
 	return (
 		<>
-			{data &&
-				data.map((item) => (
+			{members &&
+				filteredMembers.map((item) => (
 					<li
 						className='normal-3'
 						key={item._id._id}
@@ -55,13 +73,13 @@ const PersonSelect = ({ data, itemClickHandler, tid }) => {
 /**
  * Main select.
  */
-const Select = ({ data, itemClickHandler, type, tid }) => {
+const Select = ({ data, members, itemClickHandler, type, tid }) => {
 	return (
 		<div className={`dropdown-content-select `}>
 			{type === '1' ? (
 				<StatusSelect data={data} itemClickHandler={itemClickHandler} />
 			) : type === '2' ? (
-				<PersonSelect data={data} itemClickHandler={itemClickHandler} tid={tid} />
+				<PersonSelect data={data} members={members} itemClickHandler={itemClickHandler} tid={tid} />
 			) : (
 				<span></span>
 			)}

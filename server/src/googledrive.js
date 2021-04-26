@@ -475,9 +475,6 @@ class GoogleDrive {
 
 			// check if the 'root' folder that was created already exists.
 			for await (let file of list) {
-				// console.log(file.name);
-				// console.log(file.name === parentFolderName);
-
 				if (file.name === parentFolderName) {
 					let parentFolderId = file.id;
 
@@ -577,7 +574,7 @@ const googleDriveTesting = async () => {
 		// 	supportsAllDrives: true,
 		// });
 
-		let id = '1uHVQTMm6WaGiSFuqd1vm_304_XFwfp5m';
+		// let id = '1uHVQTMm6WaGiSFuqd1vm_304_XFwfp5m';
 		// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
 		// let folderName = 'testing';
 

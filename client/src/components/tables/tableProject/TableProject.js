@@ -11,7 +11,6 @@ const TableProject = ({
 	data,
 	submitHandler,
 	inputOnChangeHandler,
-	input,
 	taskDeleteClickHandler,
 	taskEditClickHandler,
 	taskSaveClickHandler,
@@ -26,7 +25,6 @@ const TableProject = ({
 	showPersonsDropdown,
 	selectedPersonClickHandler,
 	projectTaskData,
-	projectMembers,
 }) => {
 	return (
 		<div className='table-project'>
@@ -59,7 +57,6 @@ const TableProject = ({
 									showMessageSidebar={showMessageSidebar}
 									showPersonsDropdown={showPersonsDropdown}
 									selectedPersonClickHandler={selectedPersonClickHandler}
-									projectMembers={projectMembers}
 								/>
 							))
 						) : (
@@ -67,11 +64,7 @@ const TableProject = ({
 						)}
 					</div>
 					{data.user._id === data.project.owner._id && (
-						<TableRowAdder
-							submitHandler={submitHandler}
-							inputOnChangeHandler={inputOnChangeHandler}
-							input={input}
-						/>
+						<TableRowAdder submitHandler={submitHandler} inputOnChangeHandler={inputOnChangeHandler} />
 					)}
 				</>
 			) : null}

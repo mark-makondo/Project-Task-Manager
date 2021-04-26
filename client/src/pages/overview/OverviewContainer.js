@@ -28,7 +28,7 @@ const OverviewContainer = () => {
 		userState: { user },
 
 		projectState: {
-			project: { data, isLoading },
+			project: { data },
 		},
 		projectDispatch,
 
@@ -109,7 +109,6 @@ const OverviewContainer = () => {
 		<>
 			<Overview
 				data={data}
-				isLoading={isLoading}
 				projectCount={projectCount}
 				ownedProjects={ownedProjects}
 				showMembersOnClickHandler={showMembersOnClickHandler}

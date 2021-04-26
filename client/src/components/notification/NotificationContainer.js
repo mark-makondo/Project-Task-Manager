@@ -13,7 +13,6 @@ import {
 	GetAllNotifications,
 	PushNotification,
 	UpdateNotification,
-	// RemoveNotification,
 } from '../../context/actions/user/NotificationAction.js';
 
 // helper
@@ -89,6 +88,8 @@ const NotificationContainer = () => {
 
 				emailToNotif.forEach((email) => {
 					if (email === currentUserEmail) {
+						PushNotification(result)(notificationDispatch);
+
 						let currentUserParams = params.userid;
 						let path = history.location.pathname;
 						let toPush = `/${currentUserParams}/dashboard`;
@@ -101,7 +102,7 @@ const NotificationContainer = () => {
 			GetAllProjectAction()(projectDispatch);
 			getAllNotifications();
 		},
-		[data, history, params.userid, projectDispatch, getAllNotifications]
+		[data, history, params.userid, projectDispatch, getAllNotifications, notificationDispatch]
 	);
 
 	const responseForRemovedMember = useCallback(
@@ -151,12 +152,10 @@ const NotificationContainer = () => {
 			let { emailToNotif, result, originalData } = content;
 			let { notifType } = originalData;
 
-			if (notifType === 'inviteMembers') {
+			if (notifType === 'inviteMembers' || notifType === 'acceptInvite' || notifType === 'declineInvite') {
 				userPushNotification(result, emailToNotif);
 			} else if (notifType === 'deleteProject') {
 				responseForDeletedProject(result, emailToNotif);
-			} else if (notifType === 'acceptInvite' || notifType === 'declineInvite') {
-				userPushNotification(result, emailToNotif);
 			} else if (notifType === 'removedMember') {
 				responseForRemovedMember(result, emailToNotif);
 			}
@@ -218,7 +217,15 @@ const NotificationContainer = () => {
 		}
 	};
 
-	const sendInviteResponse = async (senderEmail, response, projectName, projectId, notifType, type, notificationId) => {
+	const sendInviteResponse = async (
+		senderEmail,
+		response,
+		projectName,
+		projectId,
+		notifType,
+		type,
+		notificationId
+	) => {
 		setIsAlreadyClicked(true);
 
 		let emailToNotif = senderEmail;
