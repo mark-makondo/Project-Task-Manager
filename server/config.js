@@ -11,12 +11,6 @@ const config = {
 		ALL: '*',
 	},
 
-	googleDrive: {
-		// The main folder of the service google account in the google drive.
-		// All the created files/folders will be stored in this folder.
-		ROOT_FOLDER_ID: process.env.GOOGLE_DRIVE_ROOT_FOLDER,
-	},
-
 	mongoDB: {
 		url: process.env.MONGODB_CONNECTION_STRING,
 		options: {

@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'react-moment';
 
 // constants
-import { BACKEND_SERVER } from '../../../constants/Config.js';
+import { AXIOS_SERVER } from '../../../constants/Config.js';
 
 // helper
 import { getStringInitials } from '../../../helper/helperFunctions.js';
@@ -19,7 +19,7 @@ const TextMessage = ({ display, name, isAuthorIsEqualToUser, msg }) => {
 };
 
 const ImageMessage = ({ msg }) => {
-	return <img width='200' src={`${BACKEND_SERVER}/uploads/${msg}`} alt={`${msg} jpg`}></img>;
+	return <img width='200' src={`${AXIOS_SERVER}/uploads/${msg}`} alt={`${msg} jpg`}></img>;
 };
 
 const DocsMessage = ({ showDownloadableLink, msg }) => {
