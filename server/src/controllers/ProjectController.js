@@ -90,9 +90,9 @@ exports.findOne = async (req, res, next) => {
 			})
 			.execPopulate();
 
-		res.status(200).send({ project, user });
+		return res.status(200).send({ project, user });
 
-		return next();
+		// return next();
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -135,7 +135,7 @@ exports.deleteProject = async (req, res, next) => {
 
 //#endregion
 
-//#region Query for project members: ADD, REMOVE.
+//#region Query for project members: ADD, REMOVE GET.
 exports.addMember = async (req, res, next) => {
 	try {
 		let uid = req.user._id;
@@ -214,10 +214,10 @@ exports.getMembers = async (req, res, next) => {
 				select: 'name email avatar',
 			});
 
-			res.status(200).send(members);
+			return res.status(200).send(members);
 		}
 
-		return next();
+		// return next();
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -225,7 +225,7 @@ exports.getMembers = async (req, res, next) => {
 };
 //#endregion
 
-//#region Query for project tasks: ADD, REMOVE, UPDATE.
+//#region Query for project tasks: ADD, REMOVE, UPDATE, GET.
 exports.addTask = async (req, res, next) => {
 	try {
 		let pid = req.body._pid;
@@ -346,11 +346,11 @@ exports.getTasks = async (req, res, next) => {
 				model: User,
 			});
 			return res.status(200).send(projectTasks.tasks);
+		} else {
+			return res.status(200).send(project.tasks);
 		}
 
-		res.status(200).send(project.tasks);
-
-		return next();
+		// return next();
 	} catch (error) {
 		console.error(error);
 		return next(error);

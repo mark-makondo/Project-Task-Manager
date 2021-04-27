@@ -4,11 +4,6 @@ const config = require('../../config');
 /**
  * Checks if the request contains a jwt_token header.
  * 'req.user' contains the decoded token.
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- * @returns
  */
 const jwtVerify = async (req, res, next) => {
 	try {

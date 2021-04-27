@@ -16,10 +16,10 @@ router.route('/delete/:pid').delete(verifyToken, projectController.deleteProject
 // project members routes
 router.route('/member/add').post(verifyToken, projectController.addMember);
 router.route('/member/remove/:pid/:mid').delete(verifyToken, projectController.removeMember);
-router.route('/member/findAll/:pid').get(verifyToken, projectController.getMembers);
+router.route('/member/findAll/:pid').get(projectController.getMembers);
 
 // project tasks routes
-router.route('/:pid/tasks').get(verifyToken, projectController.getTasks);
+router.route('/:pid/tasks').get(projectController.getTasks);
 router.route('/task/remove/:pid/:tid').delete(verifyToken, projectController.removeTask);
 router.route('/task/update').put(verifyToken, projectController.updateTask);
 
