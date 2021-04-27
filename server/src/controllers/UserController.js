@@ -1,3 +1,5 @@
+'use strict';
+
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -47,9 +49,7 @@ exports.googleLogin = async (req, res, next) => {
 			expiresIn: 604800, // 1 week
 		});
 
-		res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
-
-		return next();
+		return res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -104,12 +104,10 @@ exports.register = async (req, res, next) => {
 			let jwt_token = jwt.sign(gatheredData, config.userAuth.JWT_SECRET, {
 				expiresIn: 604800, // 1 week
 			});
-			res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
+			return res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
 		} else {
-			res.status(200).send(gatheredData);
+			return res.status(200).send(gatheredData);
 		}
-
-		return next();
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -140,9 +138,7 @@ exports.login = async (req, res, next) => {
 			expiresIn: 604800, // 1 week
 		});
 
-		res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
-
-		return next();
+		return res.status(200).header('jwt_token', jwt_token).send({ jwt_token, result: gatheredData });
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -154,16 +150,14 @@ exports.login = async (req, res, next) => {
 //#region User operations: Find, Update, Change password.
 exports.find = async (req, res, next) => {
 	try {
-		if (req.params.id) {
-			let id = req.params.id;
-			let findSingleUser = await User.findById(id);
+		let id = req.params.id;
+		if (!id) return res.status(400).send('Params id is required.');
 
-			if (!findSingleUser) return res.status(400).send('User not found.');
+		let findSingleUser = await User.findById(id);
 
-			res.status(200).send(findSingleUser);
-		}
+		if (!findSingleUser) return res.status(400).send('User not found.');
 
-		return next();
+		return res.status(200).send(findSingleUser);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -181,9 +175,7 @@ exports.update = async (req, res, next) => {
 
 		if (!findUserAndUpdate) return res.status(400).send('Update failed.');
 
-		res.sendStatus(200);
-
-		return next();
+		return res.sendStatus(200);
 	} catch (error) {
 		// console.error(error)
 		return next(error);
@@ -217,9 +209,7 @@ exports.changePassword = async (req, res, next) => {
 		const updatePassword = await user.updateOne({ password: hashedNewPassword });
 		if (!updatePassword) return res.status(400).send('Password update failed.');
 
-		res.status(200).send({ password: hashedNewPassword });
-
-		return next();
+		return res.status(200).send({ password: hashedNewPassword });
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -232,15 +222,14 @@ exports.changePassword = async (req, res, next) => {
 exports.getNotifications = async (req, res, next) => {
 	try {
 		let id = req.params.id;
+		if (!id) return res.status(400).send('Params id is required.');
 
 		let findUser = await User.findById(id);
 
 		let notifications = await findUser.notifications;
 		if (!notifications) res.status(400).send('Empty notifications');
 
-		res.status(200).send(notifications);
-
-		return next();
+		return res.status(200).send(notifications);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -251,8 +240,6 @@ exports.addNotification = async (req, res, next) => {
 	try {
 		let { emailToNotif, dataToPush } = req.body;
 		let { sender, type, _pid, projectName } = dataToPush;
-
-		console.log(emailToNotif);
 
 		let findEmail = await User.find({ email: emailToNotif });
 		let findUser = await User.findById(findEmail[0]._id);
@@ -285,9 +272,7 @@ exports.addNotification = async (req, res, next) => {
 
 		let latestSingleNotification = findUser.notifications.id(latestDoc._id);
 
-		res.status(200).send(latestSingleNotification);
-
-		return next();
+		return res.status(200).send(latestSingleNotification);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -296,19 +281,17 @@ exports.addNotification = async (req, res, next) => {
 
 exports.removeNotification = async (req, res, next) => {
 	try {
-		// let userId = req.user._id;
-		// let notificationsId = req.body._nid;
+		let userId = req.user._id;
+		let notificationsId = req.body._nid;
 
-		// await User.updateOne(
-		// 	{ _id: userId },
-		// 	{
-		// 		$pull: { notifications: { _id: notificationsId } },
-		// 	}
-		// );
+		await User.updateOne(
+			{ _id: userId },
+			{
+				$pull: { notifications: { _id: notificationsId } },
+			}
+		);
 
-		// res.status(200).send(notificationsId);
-
-		return next();
+		return res.status(200).send(notificationsId);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -332,9 +315,7 @@ exports.updateNotification = async (req, res, next) => {
 		let savedUser = await findUser.save();
 		let updatedUserNotification = savedUser.notifications.id(notificationsId);
 
-		res.status(200).send(updatedUserNotification);
-
-		return next();
+		return res.status(200).send(updatedUserNotification);
 	} catch (error) {
 		// console.error(error);
 		return next(error);

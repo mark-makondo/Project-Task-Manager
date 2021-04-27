@@ -77,7 +77,7 @@ const Person = ({
 			<div
 				tabIndex={-1}
 				data-tid={task._id}
-				onClick={(e) => isCurrentUserOwner & (data.project.members.length !== 0) && showPersonsDropdown(e)}
+				onClick={(e) => isCurrentUserOwner && showPersonsDropdown(e)}
 				className='table-project__content-tr__avatar-wrapper avatar avatar-global dropdown-button'
 			>
 				{!!task.assigned &&
@@ -88,6 +88,7 @@ const Person = ({
 					))}
 				{isCurrentUserOwner && <i className='avatar-plus fas fa-plus'></i>}
 			</div>
+
 			<SelectContainer
 				data={data}
 				itemClickHandler={selectedPersonClickHandler}

@@ -43,7 +43,7 @@ const PersonSelect = ({ data, members, itemClickHandler, tid }) => {
 
 	return (
 		<>
-			{members &&
+			{members && filteredMembers.length !== 0 ? (
 				filteredMembers.map((item) => (
 					<li
 						className='normal-3'
@@ -65,7 +65,10 @@ const PersonSelect = ({ data, members, itemClickHandler, tid }) => {
 						</div>
 						<span className='person-avatar-name normal-3'>{item._id.name.split(' ')[0]}</span>
 					</li>
-				))}
+				))
+			) : (
+				<li>No Members.</li>
+			)}
 		</>
 	);
 };

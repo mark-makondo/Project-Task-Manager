@@ -62,9 +62,7 @@ exports.findAllUserProjects = async (req, res, next) => {
 			],
 		});
 
-		res.status(200).send(userData.projects);
-
-		return next();
+		return res.status(200).send(userData.projects);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -91,8 +89,6 @@ exports.findOne = async (req, res, next) => {
 			.execPopulate();
 
 		return res.status(200).send({ project, user });
-
-		// return next();
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -124,9 +120,7 @@ exports.deleteProject = async (req, res, next) => {
 
 		await User.updateOne({ _id: project.owner._id }, { $pull: { projects: pid } });
 
-		res.sendStatus(200);
-
-		return next();
+		return res.sendStatus(200);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -163,11 +157,9 @@ exports.addMember = async (req, res, next) => {
 
 		let latestDoc = members[members.length - 1];
 
-		res.status(200).send(latestDoc);
-
 		socket.io.emit('invitation_sent', { success: true, result: latestDoc, currentUserId: uid });
 
-		return next();
+		return res.status(200).send(latestDoc);
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -193,9 +185,7 @@ exports.removeMember = async (req, res, next) => {
 		// remove the specified project's id from our user collection.
 		await User.updateOne({ _id: mid }, { $pull: { projects: pid } });
 
-		res.status(200).send({ success: true, message: 'Members update successfull.' });
-
-		return next();
+		return res.status(200).send({ success: true, message: 'Members update successfull.' });
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -217,7 +207,7 @@ exports.getMembers = async (req, res, next) => {
 			return res.status(200).send(members);
 		}
 
-		// return next();
+		return res.sendStatus(200);
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -288,9 +278,7 @@ exports.removeTask = async (req, res, next) => {
 
 		if (!findAndRemoveTask) return res.status(400).send('Removal of task failed.');
 
-		res.status(200).send({ message: 'Task removed successfully.', result: findAndRemoveTask });
-
-		return next();
+		return res.status(200).send({ message: 'Task removed successfully.', result: findAndRemoveTask });
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -323,9 +311,7 @@ exports.updateTask = async (req, res, next) => {
 		let savedProject = await project.save();
 		let updatedTask = savedProject.tasks.id(tid);
 
-		res.status(200).send({ message: 'Task updated successfully.', result: updatedTask });
-
-		return next();
+		return res.status(200).send({ message: 'Task updated successfully.', result: updatedTask });
 	} catch (error) {
 		// console.error(error);
 		return next(error);
@@ -346,11 +332,9 @@ exports.getTasks = async (req, res, next) => {
 				model: User,
 			});
 			return res.status(200).send(projectTasks.tasks);
-		} else {
-			return res.status(200).send(project.tasks);
 		}
 
-		// return next();
+		return res.status(200).send(project.tasks);
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -380,8 +364,7 @@ exports.getMessages = async (req, res, next) => {
 
 		let findTask = populateMessage.tasks.id(tid);
 
-		res.status(200).json(findTask);
-		return next();
+		return res.status(200).json(findTask);
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -419,9 +402,7 @@ exports.addMessage = async (req, res, next) => {
 
 		await findProjectTask.save();
 
-		res.status(200).send(savedMsg);
-
-		return next();
+		return res.status(200).send(savedMsg);
 	} catch (error) {
 		console.error(error);
 		return next(error);
@@ -446,7 +427,7 @@ exports.fileUploadTask = async (req, res, next) => {
 		return next();
 	} catch (error) {
 		// console.error(error);
-		if (error.name === 'MulterError') res.status(400).send(error.message);
+		if (error.name === 'MulterError') return res.status(400).send(error.message);
 		return;
 	}
 };

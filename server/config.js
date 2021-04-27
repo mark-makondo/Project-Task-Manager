@@ -8,6 +8,7 @@ const config = {
 
 	socket: {
 		CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
+		ALL: '*',
 	},
 
 	googleDrive: {
