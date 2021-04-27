@@ -45,16 +45,18 @@ export const getComparedDatePercent = (dateCreatedParams, setDateParams) => {
 			let dateCreated = Moment.utc(dateCreatedParams, Moment.ISO_8601);
 			let setDate = Moment.utc(setDateParams, 'MM/DD/YYYY');
 			let currentDate = Moment.utc();
-			// let currentDate = Moment.utc('04/24/2021');
 
-			let totalDays = setDate.diff(dateCreated, 'days');
-			let remainingDays = currentDate.diff(dateCreated, 'days');
-			let remainingDaysPercent = Math.round((remainingDays / totalDays) * 100);
+			// let currentDate = Moment.utc('04/28/2021');
+
+			let totalDays = setDate.day() - dateCreated.day();
+
+			let dateCreatedToNow = currentDate.day() - dateCreated.day();
+
+			let remainingDaysPercent = (dateCreatedToNow / totalDays) * 100;
 
 			// console.log('valid', dateCreated.isValid());
 
-			if (totalDays === remainingDays) return 100;
-			else if (remainingDaysPercent > 100) return 100;
+			if (remainingDaysPercent > 100) return 100;
 			else if (remainingDaysPercent <= 0 || !remainingDaysPercent) return 0;
 			else return remainingDaysPercent;
 		}

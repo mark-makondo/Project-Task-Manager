@@ -64,7 +64,14 @@ const TaskName = ({
 	);
 };
 
-const Person = ({ task, data, isCurrentUserOwner, showPersonsDropdown, selectedPersonClickHandler }) => {
+const Person = ({
+	task,
+	data,
+	isCurrentUserOwner,
+	showPersonsDropdown,
+	selectedPersonClickHandler,
+	projectMembers,
+}) => {
 	return (
 		<div className={`table-project__content-tr__avatar table-project__content-tr__avatar--${task._id} cell`}>
 			<div
@@ -81,7 +88,13 @@ const Person = ({ task, data, isCurrentUserOwner, showPersonsDropdown, selectedP
 					))}
 				{isCurrentUserOwner && <i className='avatar-plus fas fa-plus'></i>}
 			</div>
-			<SelectContainer data={data} itemClickHandler={selectedPersonClickHandler} type='2' tid={task._id} />
+			<SelectContainer
+				data={data}
+				itemClickHandler={selectedPersonClickHandler}
+				type='2'
+				tid={task._id}
+				projectMembers={projectMembers}
+			/>
 		</div>
 	);
 };

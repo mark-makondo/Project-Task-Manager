@@ -25,6 +25,7 @@ const TableProject = ({
 	showPersonsDropdown,
 	selectedPersonClickHandler,
 	projectTaskData,
+	projectMembers,
 }) => {
 	return (
 		<div className='table-project'>
@@ -57,6 +58,7 @@ const TableProject = ({
 									showMessageSidebar={showMessageSidebar}
 									showPersonsDropdown={showPersonsDropdown}
 									selectedPersonClickHandler={selectedPersonClickHandler}
+									projectMembers={projectMembers}
 								/>
 							))
 						) : (

@@ -43,6 +43,7 @@ const TableProjectContainer = () => {
 		getOneProjectState: {
 			getOneProject: { data, isLoading },
 		},
+		projectMembersState: { projectMembers },
 		projectMembersDispatch,
 		taskMessageDispatch,
 		projectTaskState: { projectTasks },
@@ -402,6 +403,7 @@ const TableProjectContainer = () => {
 				showPersonsDropdown={showPersonsDropdown}
 				selectedPersonClickHandler={selectedPersonClickHandler}
 				projectTaskData={projectTaskData}
+				projectMembers={projectMembers}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}

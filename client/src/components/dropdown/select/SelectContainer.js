@@ -1,28 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ui
 import Select from './Select.js';
 
-// context
-import Context from '../../../context/Context.js';
-import { ProjectMembersGetAction } from '../../../context/actions/project/ProjectMembersAction.js';
-
-const SelectContainer = ({ data, itemClickHandler, type, tid }) => {
+const SelectContainer = ({ data, itemClickHandler, type, tid, projectMembers = null }) => {
 	const [members, setMembers] = useState([]);
-
-	const {
-		projectMembersState: { projectMembers },
-		projectMembersDispatch,
-	} = useContext(Context);
-
-	//#region members logic
-	useEffect(() => {
-		if (type === '2') {
-			let projectId = data?.project?._id;
-
-			data.project && ProjectMembersGetAction(projectId)(projectMembersDispatch);
-		}
-	}, [projectMembersDispatch, data?.project?._id, data, type]);
 
 	useEffect(() => {
 		if (type === '2') {

@@ -37,11 +37,11 @@ app.use('/api/auth/user', userRoutes);
 app.use('/api/auth/project', projectRoutes);
 
 // Production
-// app.use(express.static(path.join(__dirname, '../../client/build')));
+app.use(express.static(path.join(__dirname, '../../client/build')));
 
-// app.get('*', (req, res) => {
-// 	res.sendFile(path.resolve(__dirname, '../', '../', 'client', 'build', 'index.html'));
-// });
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, '../', '../', 'client', 'build', 'index.html'));
+});
 
 exports.io = io;
 mongoose.run(server, PORT);

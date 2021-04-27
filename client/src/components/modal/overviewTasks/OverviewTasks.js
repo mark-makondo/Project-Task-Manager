@@ -9,7 +9,7 @@ import { getStringInitials, getComparedDatePercent } from '../../../helper/helpe
 import { ToggleArrow } from '../../../helper/helperFunctions.js';
 
 const TaskTitle = ({ projectOwnerAvatar, projectOwnerName, projectCreated }) => {
-	let formattedDate = Moment(projectCreated).format('MMMM Do YYYY');
+	let formattedDate = Moment(projectCreated).format('MMM Do YYYY');
 
 	return (
 		<div className='overview-tasks-modal-body__title'>
@@ -63,7 +63,7 @@ const TaskStatusHolder = ({ toggleCollation, clicked, indexName, lists }) => {
 										className='status-task-list__deadline-indicator'
 									></div>
 									<span title={task.deadline} className='status-task-list__deadline-value'>
-										{task.deadline ? Moment(task.deadline).format('MMMM Do YYYY') : 'No Deadline'}
+										{task.deadline ? Moment(task.deadline, 'MM/DD/YYYY').format('MMMM Do YYYY') : 'No Deadline'}
 									</span>
 								</div>
 							</li>
