@@ -1,9 +1,12 @@
 const multer = require('multer');
 const crypto = require('crypto');
+const path = require('path');
+
+let uploadPath = path.join(__dirname, 'uploads');
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'src/uploads');
+		cb(null, uploadPath);
 	},
 
 	filename: function (req, file, cb) {
@@ -26,9 +29,11 @@ const imageFilterV2 = (req, file, cb) => {
 	cb(null, true);
 };
 
-module.exports = upload = multer({ storage, limits: { fileSize: 1024 * 1024 * 5 }, fileFilter: imageFilterV2 }).single(
-	'file'
-);
+module.exports = upload = multer({
+	storage,
+	limits: { fileSize: 1024 * 1024 * 5 },
+	fileFilter: imageFilterV2,
+}).single('file');
 
 // const imageFilterV1 = (req, file, cb) => {
 // 	const ext = path.extname(file.originalname);

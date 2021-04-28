@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const upload = require('../multer');
 const fs = require('fs');
+const path = require('path');
 const socket = require('../server.js');
 
 // models
@@ -413,7 +414,7 @@ exports.addMessage = async (req, res, next) => {
 
 //#region Query for project tasks upload: UPLOAD, DELETE, GENERATE A LINK
 exports.fileUploadTask = async (req, res, next) => {
-	const uploadPath = './src/uploads';
+	const uploadPath = path.join(__dirname, '../', 'uploads');
 
 	try {
 		const startUpload = promisify(upload);
@@ -426,7 +427,7 @@ exports.fileUploadTask = async (req, res, next) => {
 
 		return next();
 	} catch (error) {
-		// console.error(error);
+		console.error(error);
 		if (error.name === 'MulterError') return res.status(400).send(error.message);
 		return;
 	}

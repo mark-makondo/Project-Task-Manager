@@ -1,11 +1,12 @@
-require('dotenv').config();
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../', '.env') });
 
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const Mongoose = require('./mongodb.js');
 const socket = require('socket.io');
-const path = require('path');
 
 const config = require('../config');
 const userRoutes = require('./routes/UserRouters');

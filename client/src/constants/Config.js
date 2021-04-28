@@ -13,6 +13,6 @@ export const SOCKET_OPTIONS = {
 	// fixes the cors error for socket io
 	transports: ['websocket'],
 };
-export const BACKEND_SERVER = 'http://104.236.120.68.xip.io:5000 ';
+export const BACKEND_SERVER = 'http://104.236.120.68.xip.io:5000';
 // axios intance
 export const AXIOS_SERVER = '';
