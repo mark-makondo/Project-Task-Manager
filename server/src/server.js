@@ -22,6 +22,8 @@ const io = socket(server, {
 		origin: config.socket.ALL,
 		methods: ['GET', 'POST'],
 	},
+	// production
+	transports: ['polling'],
 });
 
 require('./socket/root')(io);

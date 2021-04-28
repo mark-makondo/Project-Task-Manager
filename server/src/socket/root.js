@@ -14,5 +14,10 @@ module.exports = (io) => {
 		socket.on('disconnect', () => {
 			// console.log(`${socket.id} disconnected`);
 		});
+
+		socket.on('connect_error', function () {
+			console.log('error!');
+			socket.io.close();
+		});
 	});
 };

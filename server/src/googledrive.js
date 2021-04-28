@@ -574,14 +574,11 @@ const googleDriveTesting = async () => {
 		// 	supportsAllDrives: true,
 		// });
 
-		// let id = '1uHVQTMm6WaGiSFuqd1vm_304_XFwfp5m';
-		// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
-		// let folderName = 'testing';
-
+		let id = '1DCe7l30S1k3GCrx_FahO0S8TY7281DJQ';
 		// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
 		// await google.createPermission;
 
-		// let link = await google.generatePublicUrl(id);
+		let link = await google.generatePublicUrl(id);
 
 		// let res = await google.deleteResource(id);
 
@@ -589,9 +586,9 @@ const googleDriveTesting = async () => {
 
 		// let lists = await google.listFiles();
 
-		// await google.findAllAndDelete();
+		await google.findAllAndDelete();
 
-		// console.log(lists);
+		// console.log(link);
 	} catch (error) {
 		console.error(error);
 	}

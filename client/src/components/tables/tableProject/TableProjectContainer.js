@@ -29,6 +29,7 @@ const TableProjectContainer = () => {
 	const [projectTaskData, setProjectTaskData] = useState([]);
 	const [confirmTaskDeleteDialogueOpen, setConfirmTaskDeleteDialogueOpen] = useState(false);
 	const [taskID, setTaskID] = useState();
+	const [newTaskNameInput, setNewTaskNameInput] = useState({ newTaskName: '' });
 	const [input, setInput] = useState({
 		_pid: '',
 		taskName: '',
@@ -54,7 +55,7 @@ const TableProjectContainer = () => {
 
 	//#region globally used functions in this js file.
 	const returnIsAcceptedMemberEmail = () => {
-		return data?.project.members
+		return projectMembers?.data
 			.filter((member) => {
 				return member.isAccepted === true;
 			})
@@ -220,8 +221,8 @@ const TableProjectContainer = () => {
 	};
 
 	const taskNameEditOnChange = (e) => {
-		setInput({
-			...input,
+		setNewTaskNameInput({
+			...newTaskNameInput,
 			_pid: data?.project._id,
 			[e.currentTarget.name]: e.currentTarget.value,
 		});
@@ -241,7 +242,7 @@ const TableProjectContainer = () => {
 			_pid: pid,
 			_tid: tid,
 			update: {
-				taskName: input.taskName,
+				taskName: newTaskNameInput.newTaskName,
 			},
 		};
 
@@ -404,6 +405,8 @@ const TableProjectContainer = () => {
 				selectedPersonClickHandler={selectedPersonClickHandler}
 				projectTaskData={projectTaskData}
 				projectMembers={projectMembers}
+				input={input}
+				newTaskNameInput={newTaskNameInput}
 			/>
 			<DialogueContainer
 				isActive={confirmTaskDeleteDialogueOpen}

@@ -10,8 +10,10 @@ export const GOOGLE_CLIENT_ID = '934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.a
 // ENABLE FOR PRODUCTION
 // socket connection
 export const SOCKET_OPTIONS = {
-	// fixes the cors error for socket io
-	transports: ['websocket'],
+	// // fixes the cors error for socket io
+	// transports: ['websocket'],
+	// fixes the unstable emiting of data to server
+	transports: ['polling'],
 };
 export const BACKEND_SERVER = 'http://104.236.120.68.xip.io:5000';
 // axios intance
