@@ -17,7 +17,7 @@ properly and communicate with the backend.
 
 I used ***oauth client*** and ***google service account*** for google login and google drive v3 respectively.\
 So you need to create your own credentials in google developer console for ***oauth client for the config.js in the client***.\
-And ***google service account for the config.js in the server***. You only need to download the ***.json file*** that the service account\
+And ***google service account for the config.js in the server***. You only need to download the ***.json file*** that the service account
 provided when you created it and put it inside the server folder root directory.
 
 **Happy coding!**
