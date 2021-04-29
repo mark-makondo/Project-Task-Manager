@@ -98,7 +98,10 @@
 
 		&__content {
 			@include setFlex(column, center, flex-start);
+
 			color: getColors(primary);
+			flex: 1;
+
 			&-name {
 				font-weight: 600;
 			}

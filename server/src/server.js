@@ -39,7 +39,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/auth/user', userRoutes);
 app.use('/api/auth/project', projectRoutes);
 
-// Production
+// production
 app.use(express.static(path.join(__dirname, '../../client/build')));
 
 app.get('*', (req, res) => {

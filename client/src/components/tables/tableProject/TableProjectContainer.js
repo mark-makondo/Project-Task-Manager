@@ -56,7 +56,7 @@ const TableProjectContainer = () => {
 	//#region globally used functions in this js file.
 	const returnIsAcceptedMemberEmail = () => {
 		return projectMembers?.data
-			.filter((member) => {
+			?.filter((member) => {
 				return member.isAccepted === true;
 			})
 			.map((member) => {

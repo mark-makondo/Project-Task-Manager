@@ -21,6 +21,10 @@ exports.create = async (req, res, next) => {
 		let projectName = req.body.projectName;
 		if (!projectName) return res.status(400).send('Project name is required.');
 
+		let companyEmail = req.body.companyEmail;
+		if (!companyEmail) return res.status(400).send('Company email is required.');
+		else if (companyEmail.slice(-9) !== 'gmail.com') return res.status(400).send('Email must be a gmail account.');
+
 		let project = await new Project({
 			projectName: projectName,
 			companyEmail: req.body.companyEmail,
@@ -138,12 +142,11 @@ exports.addMember = async (req, res, next) => {
 		let memberToInviteEmail = req.body.memberToInviteEmail;
 
 		let memberToInvite = await User.find({ email: memberToInviteEmail });
-
 		if (memberToInvite.length === 0) return res.status(400).send('The email is not a valid user.');
 
 		let findMember = await Project.find({ _id: pid, 'members._id': memberToInvite[0]._id });
 		if (findMember.length === 1) return res.status(400).send('User is already a member.');
-		else if (memberToInvite._id === uid) return res.status(400).send('Action not allowed.');
+		else if (memberToInviteEmail === req.user.email) return res.status(400).send('Action not allowed.');
 
 		let project = await Project.findById(pid);
 

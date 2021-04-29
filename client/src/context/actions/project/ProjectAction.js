@@ -66,7 +66,7 @@ export const CreateProjectAction = (input) => async (projectDispatch) => {
 /**
  * Remove project.
  */
-export const RemoveProjectAction = (input) => async (projectDispatch) => {
+export const RemoveProjectAction = (input, history) => async (projectDispatch) => {
 	try {
 		projectDispatch({
 			type: PROJECT_LOADING,
@@ -75,8 +75,8 @@ export const RemoveProjectAction = (input) => async (projectDispatch) => {
 		let userId = input._id;
 		let projectId = input._pid;
 
-		window.location.replace(`/${userId}/dashboard/project-overview`);
-		await axiosInstance().delete(`/project/delete/${projectId}`);
+		let res = await axiosInstance().delete(`/project/delete/${projectId}`);
+		if (res.data) history.push(`/${userId}/dashboard/project-overview`);
 
 		projectDispatch({
 			type: PROJECT_REMOVE,
