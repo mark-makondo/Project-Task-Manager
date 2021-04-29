@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // ui
 import TableSettings from './TableSettings';
@@ -19,7 +20,13 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 	const [detailsIsActive, setDetailsIsActive] = useState(false);
 	const [uploadedModalIsActive, setUploadedModalIsActive] = useState(false);
 
-	const { projectDispatch, projectMembersDispatch } = useContext(Context);
+	const history = useHistory();
+
+	const {
+		projectDispatch,
+		projectMembersState: { projectMembers },
+		projectMembersDispatch,
+	} = useContext(Context);
 
 	const socket = useContext(SocketContext);
 
@@ -34,9 +41,7 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 	//#endregion
 
 	//#region delete project logic
-	useEffect(() => {}, [socket]);
-
-	const deleteProjectClickHandler = (e) => {
+	const deleteProjectClickHandler = () => {
 		setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
 	};
 
@@ -50,15 +55,15 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 		};
 
 		sendDeleteNoticeToMembers();
-		RemoveProjectAction(formatedData)(projectDispatch);
+		RemoveProjectAction(formatedData, history)(projectDispatch);
 
 		setConfirmProjectDeleteDialogueOpen(!confirmProjectDeleteDialogueOpen);
 		localStorage.removeItem('local-tid');
 	};
 
 	const sendDeleteNoticeToMembers = () => {
-		let acceptedMembers = data?.project.members
-			.filter((member) => {
+		let acceptedMembers = projectMembers?.data
+			?.filter((member) => {
 				return member.isAccepted === true;
 			})
 			.map((email) => {
@@ -66,7 +71,6 @@ const TableSettingsContainer = ({ data, isCurrentUserOwner }) => {
 			});
 
 		let emailToNotif = acceptedMembers;
-
 		let type = 'deleted';
 		let projectName = data.project.projectName;
 		let _pid = data.project._id;

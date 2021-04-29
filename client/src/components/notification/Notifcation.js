@@ -54,13 +54,15 @@ const Notification = ({
 
 				<div className='notification-wrapper'>
 					{notifications && notifications.length !== 0 ? (
-						[...notifications].reverse().map((notification) => (
+						[...notifications].reverse().map((notification, i) => (
 							<section
+								key={`${notification._id}-${i}`}
 								onClick={(e) => notifSectionClickHandler(e)}
 								data-nid={notification._id}
 								data-type={notification.type}
-								key={notification._id}
-								className={`section  normal-3 section-${notification._id} ${notification.hasRead && 'marked-as-read'}`}
+								className={`section  normal-3 section-${notification._id} ${
+									notification.hasRead && 'marked-as-read'
+								}`}
 							>
 								<div className='section-wrapper'>
 									{notification.type === 'invite' ? (

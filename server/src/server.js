@@ -1,11 +1,12 @@
-require('dotenv').config();
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '../', '.env') });
 
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const Mongoose = require('./mongodb.js');
 const socket = require('socket.io');
-const path = require('path');
 
 const config = require('../config');
 const userRoutes = require('./routes/UserRouters');
@@ -21,6 +22,8 @@ const io = socket(server, {
 		origin: config.socket.ALL,
 		methods: ['GET', 'POST'],
 	},
+	// production
+	transports: ['polling'],
 });
 
 require('./socket/root')(io);
@@ -36,7 +39,7 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/auth/user', userRoutes);
 app.use('/api/auth/project', projectRoutes);
 
-// Production
+// production
 app.use(express.static(path.join(__dirname, '../../client/build')));
 
 app.get('*', (req, res) => {

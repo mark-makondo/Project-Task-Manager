@@ -13,7 +13,6 @@ import { SocketContext } from '../../../context/SocketContext.js';
 
 const ChatFooterContainer = ({ data }) => {
 	const [message, setMessage] = useState([]);
-	const [isBtnDisable, setIsBtnDisable] = useState(true);
 	const [uploadError, setUploadError] = useState(null);
 	const [uploading, setUploading] = useState(false);
 	const [uploadPercent, setUploadPercent] = useState(0);
@@ -33,8 +32,6 @@ const ChatFooterContainer = ({ data }) => {
 		e.preventDefault();
 
 		setMessage([e.target.value]);
-
-		!!e.target.value ? setIsBtnDisable(false) : setIsBtnDisable(true);
 	};
 
 	const sendMessageAndPost = async (_tid, messageformat) => {
@@ -142,7 +139,6 @@ const ChatFooterContainer = ({ data }) => {
 			messageFormSubmitHandler={messageFormSubmitHandler}
 			dropzoneClickHandler={dropzoneClickHandler}
 			uploadError={uploadError}
-			isBtnDisable={isBtnDisable}
 			uploading={uploading}
 			uploadPercent={uploadPercent}
 		/>

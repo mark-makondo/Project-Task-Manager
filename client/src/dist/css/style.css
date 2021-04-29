@@ -2373,6 +2373,7 @@ ul {
   align-items: flex-start;
   align-content: flex-start;
   color: #2f2e41;
+  flex: 1;
 }
 
 .members-modal-body__content-name {

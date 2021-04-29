@@ -1,8 +1,12 @@
 const { google } = require('googleapis');
 const fs = require('fs');
-const googlePrivateKey = require('../googlePrivateKey.json');
 const mime = require('mime-types');
 const async = require('async');
+
+// Original googlePrivateKey
+const googlePrivateKey = require('../googlePrivateKey.json');
+// // When limit reached for a specifed ammount of time we can use this one.
+// const googlePrivateKey = require('../googlePrivateKeyV2.json');
 
 /**
  * We need to call the 'init' method first before we can
@@ -37,8 +41,9 @@ class GoogleDrive {
 	}
 
 	/**
+	 * @param {String?} folderOnly include the 'folderOnly' if true.
 	 * @param {String?} targetFolderId optional if we want to be specific.
-	 * @param {String?} trashed include the trashed items if true.
+	 * @param {String?} trashed include the 'trashed' items if true.
 	 */
 	async listFiles(folderOnly = false, targetFolderId = null, trashed = false) {
 		try {
@@ -560,7 +565,7 @@ class GoogleDrive {
 module.exports = GoogleDrive;
 
 /**
- * for google drive development only! remove when finished developing.
+ * for google drive development only! remove when finished developing the app.
  */
 const googleDriveTesting = async () => {
 	try {
@@ -574,10 +579,7 @@ const googleDriveTesting = async () => {
 		// 	supportsAllDrives: true,
 		// });
 
-		// let id = '1uHVQTMm6WaGiSFuqd1vm_304_XFwfp5m';
-		// let parentFolderName = 'PTM-606ed6d16e35644970789c28';
-		// let folderName = 'testing';
-
+		// let id = '1DCe7l30S1k3GCrx_FahO0S8TY7281DJQ';
 		// await google.createFolderAndMoveWithPermission(folderName, parentFolderName);
 		// await google.createPermission;
 
@@ -589,9 +591,9 @@ const googleDriveTesting = async () => {
 
 		// let lists = await google.listFiles();
 
-		// await google.findAllAndDelete();
+		await google.findAllAndDelete();
 
-		// console.log(lists);
+		// console.log(link);
 	} catch (error) {
 		console.error(error);
 	}

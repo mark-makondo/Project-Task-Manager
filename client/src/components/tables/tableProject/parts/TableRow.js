@@ -18,6 +18,7 @@ const TaskName = ({
 	taskSaveClickHandler,
 	taskDeleteClickHandler,
 	isCurrentUserOwner,
+	newTaskNameInput,
 }) => {
 	return (
 		<div data-tname={task.taskName} className='table-project__content-tr__task cell'>
@@ -36,8 +37,8 @@ const TaskName = ({
 					autoComplete='off'
 					className='content content--input normal-2'
 					onChange={(e) => taskNameEditOnChange(e)}
-					name='taskName'
-					defaultValue={task.taskName}
+					name='newTaskName'
+					value={newTaskNameInput.newTaskName}
 				/>
 			</div>
 			{isCurrentUserOwner && (
@@ -194,6 +195,7 @@ const TableRow = ({
 	showPersonsDropdown,
 	selectedPersonClickHandler,
 	projectMembers,
+	newTaskNameInput,
 }) => {
 	let calculatedDatePercent = `${getComparedDatePercent(task.created_at, task.deadline)}%`;
 	let getCurrentStatusColor = getStatusColor(!!task.status && task.status);
@@ -211,6 +213,7 @@ const TableRow = ({
 				taskSaveClickHandler={taskSaveClickHandler}
 				taskDeleteClickHandler={taskDeleteClickHandler}
 				isCurrentUserOwner={isCurrentUserOwner}
+				newTaskNameInput={newTaskNameInput}
 			/>
 
 			<Person

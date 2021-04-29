@@ -10,7 +10,6 @@ const ChatFooter = ({
 	messageFormSubmitHandler,
 	dropzoneClickHandler,
 	uploadError,
-	isBtnDisable,
 	uploading,
 	uploadPercent,
 }) => {
@@ -37,13 +36,15 @@ const ChatFooter = ({
 		food_drink: true,
 	};
 
-	// let isMessageEmpty = !!message.filter((x) => x.trim()).length;
+	let isMessageEmpty = message && !!message.filter((x) => x.trim()).length;
 
 	return (
 		<div className='chat-footer'>
 			{uploadError && <span>{uploadError}</span>}
 			<div
-				className={`chat-footer-upload-percent ${uploading ? 'loading' : uploadPercent === 100 ? 'completed' : ''} `}
+				className={`chat-footer-upload-percent ${
+					uploading ? 'loading' : uploadPercent === 100 ? 'completed' : ''
+				} `}
 			></div>
 			<form className='chat-footer-message normal-2' onSubmit={(e) => messageFormSubmitHandler(e)}>
 				<div className='chat-footer-message__input normal-1'>
@@ -75,7 +76,7 @@ const ChatFooter = ({
 						)}
 					</Dropzone>
 				</div>
-				<button disabled={isBtnDisable} type='submit' className='chat-footer-message__send normal-2'>
+				<button disabled={!isMessageEmpty} type='submit' className='chat-footer-message__send normal-2'>
 					<i className='fas fa-paper-plane'></i>
 				</button>
 			</form>

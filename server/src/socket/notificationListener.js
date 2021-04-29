@@ -13,8 +13,8 @@ const notificationListener = (socket, io) => {
 
 	socket.on('send_notif', async (content) => {
 		if (content.notifType === 'acceptInvite' || content.notifType === 'declineInvite') {
+			await updateMember(content, sendStatus, io);
 			await addNotification(content, io);
-			await updateMember(content, sendStatus);
 		} else if (content.notifType === 'deleteProject') {
 			if (content.emailToNotif.length !== 0) await batchAddNotification(content, io);
 		} else {
@@ -103,9 +103,9 @@ const addNotification = async (content, io) => {
 	}
 };
 
-const updateMember = async (content, sendStatus) => {
+const updateMember = async (content, sendStatus, io) => {
 	try {
-		let { dataToPush, notifType } = content;
+		let { dataToPush, notifType, emailToNotif } = content;
 		let { sender, _pid } = dataToPush;
 
 		if (notifType === 'acceptInvite') {
@@ -129,7 +129,13 @@ const updateMember = async (content, sendStatus) => {
 			);
 		}
 
-		await sendStatus({ statusType: 'updateMember', success: true, message: 'Member added to the project.' });
+		await sendStatus({
+			statusType: 'members_updated_broadcast_to_self',
+			success: true,
+			message: 'Member added to the project.',
+		});
+
+		await io.emit('members_updated_broadcast_to_owner', { success: true, emailToNotif, _pid });
 	} catch (error) {
 		console.error(error);
 	}

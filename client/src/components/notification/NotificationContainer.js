@@ -8,6 +8,7 @@ import Notification from './Notifcation.js';
 import Context from '../../context/Context.js';
 import { SocketContext } from '../../context/SocketContext.js';
 import { GetAllProjectAction } from '../../context/actions/project/ProjectAction.js';
+import { ProjectMembersGetAction } from '../../context/actions/project/ProjectMembersAction';
 
 import {
 	GetAllNotifications,
@@ -27,7 +28,7 @@ const NotificationContainer = () => {
 	const history = useHistory();
 
 	const socket = useContext(SocketContext);
-	const { projectDispatch } = useContext(Context);
+	const { projectDispatch, projectMembersDispatch } = useContext(Context);
 	const {
 		userState: {
 			user: { data },
@@ -127,6 +128,16 @@ const NotificationContainer = () => {
 		[data, history, params.userid, notificationDispatch, getAllNotifications, projectDispatch]
 	);
 
+	const responseForAcceptedOrDeclinedMember = useCallback(
+		(result, emailToNotif) => {
+			if (data?.email === emailToNotif) {
+				PushNotification(result)(notificationDispatch);
+				ProjectMembersGetAction(result.project._id)(projectMembersDispatch);
+			}
+		},
+		[data, notificationDispatch, projectMembersDispatch]
+	);
+
 	const userPushNotification = useCallback(
 		(result, emailToNotif) => {
 			if (data?.email === emailToNotif) {
@@ -152,8 +163,10 @@ const NotificationContainer = () => {
 			let { emailToNotif, result, originalData } = content;
 			let { notifType } = originalData;
 
-			if (notifType === 'inviteMembers' || notifType === 'acceptInvite' || notifType === 'declineInvite') {
+			if (notifType === 'inviteMembers') {
 				userPushNotification(result, emailToNotif);
+			} else if (notifType === 'acceptInvite' || notifType === 'declineInvite') {
+				responseForAcceptedOrDeclinedMember(result, emailToNotif);
 			} else if (notifType === 'deleteProject') {
 				responseForDeletedProject(result, emailToNotif);
 			} else if (notifType === 'removedMember') {
@@ -172,20 +185,31 @@ const NotificationContainer = () => {
 		getAllNotifications,
 		responseForRemovedMember,
 		responseForDeletedProject,
-		projectDispatch,
+		responseForAcceptedOrDeclinedMember,
 	]);
 
 	useEffect(() => {
 		socket.on('status', (statusData) => {
 			let { statusType, success } = statusData;
 
-			statusType === 'updateMember' && success && GetAllProjectAction()(projectDispatch);
+			statusType === 'members_updated_broadcast_to_self' && success && GetAllProjectAction()(projectDispatch);
 		});
 		return () => {
 			socket.off('status');
 		};
-	}, [socket, projectDispatch]);
+	}, [socket, projectDispatch, projectMembersDispatch]);
 
+	useEffect(() => {
+		socket.on('members_updated_broadcast_to_owner', (statusData) => {
+			let { success, emailToNotif, _pid } = statusData;
+
+			emailToNotif === data?.email && success && ProjectMembersGetAction(_pid)(projectMembersDispatch);
+		});
+
+		return () => {
+			socket.off('members_updated_broadcast_to_owner');
+		};
+	}, [socket, projectMembersDispatch, data?.email]);
 	//#endregion
 
 	//#region notification accept and decline logic.
