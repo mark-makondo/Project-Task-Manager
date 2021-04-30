@@ -15,6 +15,10 @@ export const SOCKET_OPTIONS = {
 	// fixes the unstable emiting of data to server also firefox compatibility
 	transports: ['polling'],
 };
-export const BACKEND_SERVER = 'http://104.236.120.68.xip.io:5000';
+
+// export const BACKEND_SERVER = 'http://104.236.120.68.xip.io:5000';
+// alternative if xip.io is down
+export const BACKEND_SERVER = 'http://104.236.120.68.nip.io:5000';
+
 // axios instance
 export const AXIOS_SERVER = '';
