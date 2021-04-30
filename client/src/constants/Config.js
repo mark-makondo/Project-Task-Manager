@@ -1,4 +1,4 @@
-export const GOOGLE_CLIENT_ID = '934331962195-0k9qksgpq7j703f84o6ocf6t0unps4ll.apps.googleusercontent.com';
+export const GOOGLE_CLIENT_ID = '934331962195-07tm801pc16s9a59n2pvcdokmsr1odah.apps.googleusercontent.com';
 
 // // ENABLE FOR DEVELOPMENT
 // // socket connection
